@@ -10,7 +10,7 @@ public class DatabaseController {
 	 * Static Attributes
 	 */
 	public static String JDBC_DRIVER = "com.mysql.jdbc.Driver", DATABASE_URL = "jdbc:mysql://localhost:3306/",
-			DATABASE_NAME = "infodeo2", DATABASE_USERNAME = "root", DATABASE_PASS = "";
+			DATABASE_NAME = "fullvicie", DATABASE_USERNAME = "root", DATABASE_PASS = "";
 	
 	public static Connection DATABASE_CONNECTION = null;
 	public static Statement DATABASE_STATEMENT = null;	
@@ -20,7 +20,7 @@ public class DatabaseController {
 	 */
 	public static ErrorType connect(){
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			//Class.forName("com.mysql.jdbc.Driver");
 			disconnect();			
 	        DATABASE_CONNECTION = DriverManager.getConnection(DATABASE_URL + DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASS);
 	        DATABASE_STATEMENT = DATABASE_CONNECTION.createStatement();		
@@ -34,7 +34,7 @@ public class DatabaseController {
 	
 	public static ErrorType disconnect(){
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			//Class.forName("com.mysql.jdbc.Driver");
 			if(DATABASE_STATEMENT != null) {
 				DATABASE_STATEMENT.close();
 				DATABASE_STATEMENT = null;

@@ -160,7 +160,7 @@ public class UserSqlDao implements IDao<User>{
 		User user = null;
 		try {
 			user = new User();
-			user.setId(rs.getString(ID_COLUMN));
+			user.setId(rs.getInt(ID_COLUMN));
 			user.setUsername(rs.getString(USERNAME_COLUMN));
 			user.setEmail(rs.getString(EMAIL_COLUMN));
 			user.setPassword(rs.getString(PASSWORD_COLUMN));

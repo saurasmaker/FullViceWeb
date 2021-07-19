@@ -20,15 +20,17 @@ public class Forum implements IPojo{
 	public static final String PARAM_FORUM_ID = "PARAM_FORUM_ID", PARAM_FORUM_NAME = "PARAM_FORUM_NAME", PARAM_FORUM_DESCRIPTION = "PARAM_FORUM_DESCRIPTION",
 			PARAM_FORUM_TAGS = "PARAM_FORUM_TAGS", PARAM_FORUM_CREATION_DATE = "PARAM_FORUM_CREATION_DATE",
 			PARAM_FORUM_CREATION_TIME = "PARAM_FORUM_CREATION_TIME", PARAM_FORUM_LATEST_ANSWER_DATE = "PARAM_FORUM_LATEST_ANSWER_DATE",
-			PARAM_FORUM_LATEST_ANSWER_TIME = "PARAM_FORUM_LATEST_ANSWER_TIME", PARAM_FORUM_DELETE_DATE = "PARAM_FORUM_DELETE_DATE",
-			PARAM_FORUM_DELETE_TIME = "PARAM_FORUM_DELETE_TIME", PARAM_FORUM_FORUM_CATEGORY_ID = "PARAM_FORUM_FORUM_CATEGORY_ID",
-			PARAM_FORUM_USER_ID = "PARAM_FORUM_USER_ID";
+			PARAM_FORUM_LATEST_ANSWER_TIME = "PARAM_FORUM_LATEST_ANSWER_TIME", PARAM_FORUM_DELETED = "PARAM_FORUM_DELETED",
+			PARAM_FORUM_DELETE_DATE = "PARAM_FORUM_DELETE_DATE", PARAM_FORUM_DELETE_TIME = "PARAM_FORUM_DELETE_TIME",
+			PARAM_FORUM_FORUM_CATEGORY_ID = "PARAM_FORUM_FORUM_CATEGORY_ID", PARAM_FORUM_USER_ID = "PARAM_FORUM_USER_ID";
 
 	
 	/*
 	 * Attributes
 	 */
-	private String id, name, description, tags, forumCategoryId, userId;
+	private int id, forumCategoryId, userId;
+	private String name, description, tags;
+	private boolean deleted;
 	private Date creationDate, latestAnswerDate, deleteDate;
 	private Time creationTime, latestAnswerTime, deleteTime;
 	
@@ -41,7 +43,9 @@ public class Forum implements IPojo{
 	}
 	
 	public Forum(HttpServletRequest request) {
-		this.id = request.getParameter(PARAM_FORUM_ID);
+		try{this.id = Integer.parseInt(request.getParameter(PARAM_FORUM_ID));}
+		catch(Exception t) {this.id = -1;}
+		
 		this.name = request.getParameter(PARAM_FORUM_NAME);
 		this.description = request.getParameter(PARAM_FORUM_DESCRIPTION);
 		this.tags = request.getParameter(PARAM_FORUM_TAGS);
@@ -58,14 +62,19 @@ public class Forum implements IPojo{
 		try{this.latestAnswerTime = Time.valueOf(request.getParameter(PARAM_FORUM_LATEST_ANSWER_TIME));}
 		catch(Exception t) {this.latestAnswerTime = Time.valueOf(LocalTime.now());}
 		
+		this.deleted = request.getParameter(PARAM_FORUM_DELETED) != null ? true : false;
+		
 		try{this.deleteDate = Date.valueOf(request.getParameter(PARAM_FORUM_DELETE_DATE));}
 		catch(Exception t) {this.deleteDate = Date.valueOf(LocalDate.now());}
 		
 		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_FORUM_DELETE_TIME));}
 		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
 		
-		this.forumCategoryId = request.getParameter(PARAM_FORUM_FORUM_CATEGORY_ID);
-		this.userId = request.getParameter(PARAM_FORUM_USER_ID);
+		try{this.forumCategoryId = Integer.parseInt(request.getParameter(PARAM_FORUM_FORUM_CATEGORY_ID));}
+		catch(Exception t) {this.id = -1;}
+		
+		try{this.userId = Integer.parseInt(request.getParameter(PARAM_FORUM_USER_ID));}
+		catch(Exception t) {this.id = -1;}
 	}
 	
 	
@@ -88,10 +97,11 @@ public class Forum implements IPojo{
 		jObject.put("name", this.name);
 		jObject.put("description", this.description);
 		jObject.put("tags", this.tags);
-		jObject.put("creation_date", this.creationDate);
-		jObject.put("creation_time", this.creationTime);
-		jObject.put("latest_answer_date", this.latestAnswerDate);
-		jObject.put("latest_answer_time", this.latestAnswerTime);
+		jObject.put("creationDate", this.creationDate);
+		jObject.put("creationTime", this.creationTime);
+		jObject.put("latestAnswerDate", this.latestAnswerDate);
+		jObject.put("latestAnswerTime", this.latestAnswerTime);
+		jObject.put("deleted", deleted);
 		jObject.put("delete_date", this.deleteDate);
 		jObject.put("delete_time", this.deleteTime);
 		
@@ -103,10 +113,10 @@ public class Forum implements IPojo{
 	/*
 	 * Getters & Setters
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -135,18 +145,18 @@ public class Forum implements IPojo{
 	}
 
 	
-	public String getForumCategoryId() {
+	public int getForumCategoryId() {
 		return forumCategoryId;
 	}
-	public void setForumCategoryId(String forumCategoryId) {
+	public void setForumCategoryId(int forumCategoryId) {
 		this.forumCategoryId = forumCategoryId;
 	}
 
 	
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 

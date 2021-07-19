@@ -30,7 +30,8 @@ public class User implements IPojo{
 	/*
 	 * Attributes
 	 */
-	private String id, username, email, passwrd;
+	private int id;
+	private String username, email, passwrd;
 	private Date lastLogoutDate, signUpDate;
 	private Time lastLogoutTime, signUpTime;
 	private Boolean moderator, admin;
@@ -44,7 +45,9 @@ public class User implements IPojo{
 	}
 	
 	public User(HttpServletRequest request) {
-		this.id = request.getParameter(PARAM_USER_ID);
+		try{this.id = Integer.parseInt(request.getParameter(PARAM_USER_ID));}
+		catch(Exception t) {this.id = -1;}
+		
 		this.username = request.getParameter(PARAM_USER_USERNAME);
 		this.email = request.getParameter(PARAM_USER_EMAIL);
 		this.passwrd = request.getParameter(PARAM_USER_PASSWORD);
@@ -99,10 +102,10 @@ public class User implements IPojo{
 	/*
 	 * Getters & Setters
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	

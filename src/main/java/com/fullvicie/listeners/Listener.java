@@ -23,7 +23,6 @@ public class Listener implements ServletContextListener, ServletRequestListener 
      * Default constructor. 
      */
     public Listener() {
-        // TODO Auto-generated constructor stub
     }
 
 
@@ -38,7 +37,6 @@ public class Listener implements ServletContextListener, ServletRequestListener 
 
 	@Override
 	public void requestDestroyed(ServletRequestEvent sre) {
-		// TODO Auto-generated method stub
 		
 	}
     

@@ -15,7 +15,7 @@
 			<div id="login-form" class="modal-body">
 				<form action="<%=request.getContextPath() %>/Controller" method="post">
 					
-					<input type="hidden" name="<%=ActionsController.PARAM_SELECT_ACTION %>" value="<%=Login.PARAM_ACTION %>"/>
+					<input type="hidden" name="<%=ActionsController.PARAM_SELECT_ACTION %>" value="<%=Login.PARAM_LOGIN_ACTION %>"/>
 					
 					<div class="form-group">
 						<i class="fa fa-user"></i>
@@ -41,7 +41,7 @@
 			<div id="signup-form" class="modal-body" style="display: none">
 				<form action="" method="post">
 					
-					<input type="hidden" name="<%=ActionsController.PARAM_SELECT_ACTION %>" value="<%=Signup.PARAM_ACTION %>"/>
+					<input type="hidden" name="<%=ActionsController.PARAM_SELECT_ACTION %>" value="<%=Signup.PARAM_SIGNUP_ACTION %>"/>
 					
 					<div class="form-group">
 						<i class="fa fa-user"></i>

@@ -19,7 +19,8 @@ public class ForumCategory implements IPojo{
 	/*
 	 * Attributes
 	 */
-	private String id, name, description;
+	private int id;
+	private String name, description;
 	
 
 	/*
@@ -30,7 +31,9 @@ public class ForumCategory implements IPojo{
 	}
 	
 	public ForumCategory(HttpServletRequest request){
-		this.id = request.getParameter(PARAM_FORUM_CATEGORY_ID);
+		try{this.id = Integer.parseInt(request.getParameter(PARAM_FORUM_CATEGORY_ID));}
+		catch(Exception t) {this.id = -1;}
+		
 		this.name = request.getParameter(PARAM_FORUM_CATEGORY_NAME);
 		this.description = request.getParameter(PARAM_FORUM_CATEGORY_DESCRIPTION);
 	}
@@ -60,10 +63,10 @@ public class ForumCategory implements IPojo{
 	/*
 	 * Getters & Setters
 	 */
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
