@@ -12,7 +12,7 @@ import com.fullvicie.interfaces.IPojo;
 public class ForumMessage implements IPojo{
 
 	/*
-	 * Static Attributres
+	 * Static Attributes
 	 */
 	public static final String PARAM_FORUM_MESSGAE_ID = "PARAM_FORUM_MESSGAE_ID", PARAM_FORUM_MESSAGE_MESSAGE = "PARAM_FORUM_MESSAGE_MESSAGE",
 			PARAM_FORUM_MESSAGE_MADE_DATE = "PARAM_FORUM_MESSAGE_MADE_DATE", PARAM_FORUM_MESSAGE_MADE_TIME = "PARAM_FORUM_MESSAGE_MADE_TIME",
@@ -20,6 +20,8 @@ public class ForumMessage implements IPojo{
 			PARAM_FORUM_MESSAGE_DELETE_DATE = "PARAM_FORUM_MESSAGE_DELETE_DATE", PARAM_FORUM_MESSAGE_DELETE_TIME = "PARAM_FORUM_MESSAGE_DELETE_TIME",
 			PARAM_FORUM_MESSAGE_DELETED = "PARAM_FORUM_MESSAGE_DELETED";
 
+	public static final String ATTR_FORUM_MESSAGE_OBJ = "ATTR_FORUM_MESSAGE_OBJ";
+	
 	
 	/*
 	 * Attributes
@@ -42,6 +44,7 @@ public class ForumMessage implements IPojo{
 	public ForumMessage(HttpServletRequest request) {
 		try{this.id = Integer.parseInt(request.getParameter(PARAM_FORUM_MESSGAE_ID));}
 		catch(Exception t) {this.id = -1;}
+		
 		this.message = request.getParameter(PARAM_FORUM_MESSAGE_MESSAGE);
 		
 		try {}

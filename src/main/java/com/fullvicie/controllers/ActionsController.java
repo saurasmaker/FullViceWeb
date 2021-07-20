@@ -46,7 +46,7 @@ public class ActionsController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		url = request.getContextPath();
-		User user = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED);
+		User user = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		String selectedAction = request.getParameter(PARAM_SELECT_ACTION);
 						
 		/*

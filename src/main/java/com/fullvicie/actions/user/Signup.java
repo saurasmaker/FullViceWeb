@@ -28,7 +28,7 @@ public class Signup implements IAction{
 		}
 		else {
 			user = dao.read(user.getUsername(), SearchBy.USERNAME);
-			request.getSession().setAttribute(User.ATR_USER_LOGGED, user);
+			request.getSession().setAttribute(User.ATR_USER_LOGGED_OBJ, user);
 			return "/index.jsp";
 		}
 	}

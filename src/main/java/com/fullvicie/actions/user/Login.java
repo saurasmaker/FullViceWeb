@@ -45,7 +45,7 @@ public class Login implements IAction{
 				
 		if(userFinded != null) {
 			if(userToCheck.getPassword().equals(userFinded.getPassword())) {
-				request.getSession().setAttribute(User.ATR_USER_LOGGED, userFinded);
+				request.getSession().setAttribute(User.ATR_USER_LOGGED_OBJ, userFinded);
 				return "/index.jsp";
 			}
 			else

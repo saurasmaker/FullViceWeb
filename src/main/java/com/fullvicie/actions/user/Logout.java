@@ -17,7 +17,7 @@ public class Logout implements IAction{
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		request.getSession().removeAttribute(User.ATR_USER_LOGGED);
+		request.getSession().removeAttribute(User.ATR_USER_LOGGED_OBJ);
 		
 		return "/index.jsp";
 	}

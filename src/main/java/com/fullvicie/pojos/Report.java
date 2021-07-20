@@ -10,6 +10,8 @@ public class Report implements IPojo{
 
 	public static final String PARAM_REPORT_ID = "PARAM_REPORT_ID";
 
+	public static final String ATTR_REPORT_OBJ = "ATTR_REPORT_OBJ";
+	
 	public Report(HttpServletRequest request) {
 		
 	}

@@ -8,12 +8,46 @@ import com.fullvicie.interfaces.IPojo;
 
 public class PostLike implements IPojo{
 
-	public static final String PARAM_POST_LIKE_ID = "PARAM_POST_LIKE_ID";
+	/*
+	 * Static Attributes
+	 */
+	public static final String PARAM_POST_LIKE_ID = "PARAM_POST_LIKE_ID", PARAM_POST_LIKE_DISLIKE = "PARAM_POST_LIKE_DISLIKE", 
+			PARAM_POST_LIKE_POST_ID = "PARAM_POST_LIKE_POST_ID", PARAM_POST_LIKE_USER_ID = "PARAM_POST_LIKE_USER_ID";
 
-	public PostLike(HttpServletRequest request) {
+	public static final String ATTR_POST_LIKE_OBJ = "ATTR_POST_LIKE_OBJ";
+	
+	
+	/*
+	 * Attributes
+	 */
+	private int id, postId, userId;
+	private boolean dislike;
+	
+	
+	/*
+	 * Constructors
+	 */
+	public PostLike() {
 		
 	}
 	
+	public PostLike(HttpServletRequest request) {
+		try{this.id = Integer.parseInt(request.getParameter(PARAM_POST_LIKE_ID));}
+		catch(Exception t) {this.id = -1;}
+		
+		this.dislike = request.getParameter(PARAM_POST_LIKE_DISLIKE)!=null ? true : false;
+		
+		try{this.userId = Integer.parseInt(request.getParameter(PARAM_POST_LIKE_USER_ID));}
+		catch(Exception t) {this.id = -1;}
+		
+		try{this.postId = Integer.parseInt(request.getParameter(PARAM_POST_LIKE_POST_ID));}
+		catch(Exception t) {this.id = -1;}
+	}
+	
+	
+	/*
+	 * Methods
+	 */
 	@Override
 	public String toJavaScriptFunction() {
 		// TODO Auto-generated method stub
@@ -24,6 +58,41 @@ public class PostLike implements IPojo{
 	public JSONObject toJSONObject() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	
+	/*
+	 * Getters & Setters
+	 */
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	
+	public int getPostId() {
+		return postId;
+	}
+	public void setPostId(int postId) {
+		this.postId = postId;
+	}
+
+	
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	
+	public boolean isDislike() {
+		return dislike;
+	}
+	public void setDislike(boolean dislike) {
+		this.dislike = dislike;
 	}
 
 }
