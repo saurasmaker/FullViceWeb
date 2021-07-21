@@ -18,6 +18,7 @@ public class Post implements IPojo{
 	 */
 	public static final String PARAM_POST_ID = "PARAM_POST_ID", PARAM_POST_NAME = "PARAM_POST_NAME", PARAM_POST_DESCRIPTION = "PARAM_POST_DESCRIPTION",
 			PARAM_POST_TAGS = "PARAM_POST_TAGS", PARAM_POST_CREATION_DATE = "PARAM_POST_CREATION_DATE", PARAM_POST_CREATION_TIME = "PARAM_POST_CREATION_TIME",
+			PARAM_POST_DELETED = "PARAM_POST_DELETED", PARAM_POST_DELETE_DATE = "PARAM_POST_DELETE_DATE", PARAM_POST_DELETE_TIME = "PARAM_POST_DELETE_TIME",
 			PARAM_POST_LIKES = "PARAM_POST_LIKES", PARAM_POST_DISLIKES = "PARAM_POST_DISLIKES", PARAM_POST_USER_ID = "PARAM_POST_USER_ID",
 			PARAM_POST_POST_CATEGORY_ID = "PARAM_POST_POST_CATEGORY_ID";
 
@@ -29,8 +30,10 @@ public class Post implements IPojo{
 	 */
 	private int id, likes, dislikes, userId, postCategoryId;
 	private String name, description, tags;
-	private Date creationDate;
-	private Time creationTime;
+	private boolean deleted;
+	private Date creationDate, deleteDate;
+	private Time creationTime, deleteTime;
+	
 	
 	
 	/*
@@ -49,6 +52,14 @@ public class Post implements IPojo{
 		
 		try{this.creationTime = Time.valueOf(request.getParameter(PARAM_POST_CREATION_TIME));}
 		catch(Exception t) {this.creationTime = Time.valueOf(LocalTime.now());}
+		
+		this.deleted = request.getParameter(PARAM_POST_DELETED) != null ? true : false;
+		
+		try{this.deleteDate = Date.valueOf(request.getParameter(PARAM_POST_DELETE_DATE));}
+		catch(Exception t) {this.deleteDate = Date.valueOf(LocalDate.now());}
+		
+		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_POST_DELETE_TIME));}
+		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
 		
 		try{this.likes = Integer.parseInt(request.getParameter(PARAM_POST_LIKES));}
 		catch(Exception t) {this.id = 0;}
@@ -70,14 +81,31 @@ public class Post implements IPojo{
 	 */
 	@Override
 	public String toJavaScriptFunction() {
-		// TODO Auto-generated method stub
-		return null;
+		return "'" + this.id + "', '" + this.name + "', '" + this.description + "', '" + this.tags + "', '" + this.creationDate
+			+ "', '" + this.creationTime + "', '" + this.deleted  + "', '" + this.deleteDate  + "', '" + this.deleteTime
+			+ "', '" + this.likes + "', '" + this.dislikes  + "', '" + this.userId  + "', '" + this.postCategoryId + "'";
 	}
 
 	@Override
 	public JSONObject toJSONObject() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		JSONObject jObject = new JSONObject();
+		
+		jObject.put("id", id);
+		jObject.put("name", this.name);
+		jObject.put("description", this.description);
+		jObject.put("tags", this.tags);
+		jObject.put("creationDate", this.creationDate);
+		jObject.put("creationTime", this.creationTime);
+		jObject.put("deleted", this.deleted);
+		jObject.put("deleteDate", this.deleteDate);
+		jObject.put("deleteTime", this.deleteTime);
+		jObject.put("likes", this.likes);
+		jObject.put("dislikes", this.dislikes);
+		jObject.put("userId", this.userId);
+		jObject.put("postCategoryId", this.postCategoryId);
+		
+		return jObject;
 	}
 
 	
@@ -164,5 +192,26 @@ public class Post implements IPojo{
 	}
 
 	
-	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+
+	public Date getDeleteDate() {
+		return deleteDate;
+	}
+	public void setDeleteDate(Date deleteDate) {
+		this.deleteDate = deleteDate;
+	}
+
+
+	public Time getDeleteTime() {
+		return deleteTime;
+	}
+	public void setDeleteTime(Time deleteTime) {
+		this.deleteTime = deleteTime;
+	}
 }

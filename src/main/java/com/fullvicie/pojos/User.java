@@ -21,6 +21,7 @@ public class User implements IPojo{
 			PARAM_USER_EMAIL = "PARAM_USER_EMAIL", PARAM_USER_PASSWORD = "PARAM_USER_PASSWORD", PARAM_USER_REPEATPASSWORD="PARAM_USER_REPEATPASSWORD",
 			PARAM_USER_SIGNUPDATE = "PARAM_USER_SIGNUPDATE", PARAM_USER_SIGNUPTIME = "PARAM_USER_SIGNUPTIME",
 			PARAM_USER_LASTLOGOUTDATE = "PARAM_USER_LASTLOGOUTDATE", PARAM_USER_LASTLOGOUTTIME = "PARAM_USER_LASTLOGOUTTIME",
+			PARAM_USER_DELETED = "PARAM_USER_DELETED", PARAM_USER_DELETE_DATE = "PARAM_USER_DELETE_DATE", PARAM_USER_DELETE_TIME = "PARAM_USER_DELETE_TIME",
 			PARAM_USER_ISADMIN = "PARAM_USER_ISADMIN", PARAM_USER_ISMODERATOR="PARAM_USER_ISMODERATOR";
 	
 	public static final String ATTR_USER_OBJ = "ATTR_USER_OBJ", ATR_USERS_LIST = "ATR_USERS_LIST", ATR_USER_LOGGED_OBJ = "ATR_USER_LOGGED_OBJ";
@@ -32,9 +33,9 @@ public class User implements IPojo{
 	 */
 	private int id;
 	private String username, email, passwrd;
-	private Date lastLogoutDate, signUpDate;
-	private Time lastLogoutTime, signUpTime;
-	private Boolean moderator, admin;
+	private Date lastLogoutDate, signUpDate, deleteDate;
+	private Time lastLogoutTime, signUpTime, deleteTime;
+	private Boolean deleted, moderator, admin;
 	
 	
 	/*
@@ -64,6 +65,14 @@ public class User implements IPojo{
 		try{this.lastLogoutTime = Time.valueOf(request.getParameter(PARAM_USER_LASTLOGOUTTIME));}
 		catch(Exception t) {this.lastLogoutTime = Time.valueOf(LocalTime.now());}
 
+		this.deleted = request.getParameter(PARAM_USER_DELETED) != null ? true : false;
+		
+		try{this.deleteDate = Date.valueOf(request.getParameter(PARAM_USER_DELETE_DATE));}
+		catch(Exception t) {this.deleteDate = Date.valueOf(LocalDate.now());}
+		
+		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_USER_DELETE_TIME));}
+		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
+		
 		this.admin = request.getParameter(PARAM_USER_ISADMIN)!=null ? true : false;
 		this.moderator = request.getParameter(PARAM_USER_ISMODERATOR)!=null ? true : false;
 	}
@@ -75,8 +84,9 @@ public class User implements IPojo{
 	 */
 	@Override
 	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.username + "', '" + this.email + "', '" + this.passwrd + "', '"  + 
-				this.signUpDate + "', '" + this.signUpTime + "', '" + this.lastLogoutDate + "', '" + this.lastLogoutTime + "', '" + this.admin + "'";
+		return "'" + this.id + "', '" + this.username + "', '" + this.email + "', '" + this.passwrd + "', '"  + this.signUpDate
+				+ "', '" + this.signUpTime + "', '" + this.lastLogoutDate + "', '" + this.lastLogoutTime + "', '" + this.deleted
+				 + "', '" + this.deleteDate  + "', '" + this.deleteTime  + "', '" + this.moderator  + "', '" + this.admin + "'";
 	}
 	
 	@Override
@@ -92,6 +102,9 @@ public class User implements IPojo{
 		jObject.put("sign_up_time", this.signUpTime);
 		jObject.put("last_logout_date", this.lastLogoutDate);
 		jObject.put("last_logout_time", this.lastLogoutTime);
+		jObject.put("deleted", this.deleted);
+		jObject.put("deleteDate", this.deleteDate);
+		jObject.put("deleteTime", this.deleteTime);
 		jObject.put("moderator", this.moderator);
 		jObject.put("admin", this.admin);
 		
@@ -125,12 +138,14 @@ public class User implements IPojo{
 		this.passwrd = password;
 	}
 
+	
 	public String getEmail() {
 		return email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 	
 	public Date getLastLogoutDate() {
 		return lastLogoutDate;
@@ -139,12 +154,14 @@ public class User implements IPojo{
 		this.lastLogoutDate = lastLogoutDate;
 	}
 
+	
 	public Date getSignUpDate() {
 		return signUpDate;
 	}
 	public void setSignUpDate(Date signUpDate) {
 		this.signUpDate = signUpDate;
 	}
+	
 	
 	public Boolean isAdmin() {
 		return this.admin;
@@ -153,35 +170,68 @@ public class User implements IPojo{
 		this.admin = admin;
 	}
 	
+	
 	public Boolean isModerator() {
 		return this.moderator;
 	}
-	
 	public void setModerator(Boolean moderator) {
 		this.moderator = moderator;
 	}
 	
+	
 	public Time getSignUpTime() {
 		return signUpTime;
 	}
-
-
-
 	public void setSignUpTime(Time signUpTime) {
 		this.signUpTime = signUpTime;
 	}
 
 
-
 	public Time getLastLogoutTime() {
 		return lastLogoutTime;
 	}
-
-
-
 	public void setLastLogoutTime(Time lastLogoutTime) {
 		this.lastLogoutTime = lastLogoutTime;
 	}
 	
+	
+	public String getPasswrd() {
+		return passwrd;
+	}
+	public void setPasswrd(String passwrd) {
+		this.passwrd = passwrd;
+	}
+
+	
+	public Date getDeleteDate() {
+		return deleteDate;
+	}
+	public void setDeleteDate(Date deleteDate) {
+		this.deleteDate = deleteDate;
+	}
+
+	
+	public Time getDeleteTime() {
+		return deleteTime;
+	}
+	public void setDeleteTime(Time deleteTime) {
+		this.deleteTime = deleteTime;
+	}
+
+	
+	public Boolean getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	
+	public Boolean getModerator() {
+		return moderator;
+	}
+	public Boolean getAdmin() {
+		return admin;
+	}
 	
 }

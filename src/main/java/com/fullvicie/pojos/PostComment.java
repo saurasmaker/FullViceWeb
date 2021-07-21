@@ -19,8 +19,10 @@ public class PostComment implements IPojo{
 	public static final String PARAM_POST_COMMENT_ID = "PARAM_POST_COMMENT_ID", PARAM_POST_COMMENT_MESSAGE = "PARAM_POST_COMMENT_MESSAGE",
 			PARAM_POST_COMMENT_LIKES = "PARAM_POST_COMMENT_LIKES", PARAM_POST_COMMENT_DISLIKES = "PARAM_POST_COMMENT_DISLIKES",
 			PARAM_POST_COMMENT_MADE_DATE  = "PARAM_POST_COMMENT_MADE_DATE", PARAM_POST_COMMENT_MADE_TIME = "PARAM_POST_COMMENT_MADE_TIME",
-			PARAM_POST_COMMENT_LAST_EDIT_DATE = "PARAM_POST_COMMENT_LAST_EDIT_DATE", PARAM_POST_COMMENT_LAST_EDIT_TIME = "PARAM_POST_COMMENT_LAST_EDIT_TIME",
-			PARAM_POST_COMMENT_POST_ID = "PARAM_POST_COMMENT_POST_ID", PARAM_POST_COMMENT_USER_ID = "PARAM_POST_COMMENT_USER_ID";
+			PARAM_POST_COMMENT_DELETED = "PARAM_POST_COMMENT_DELETED", PARAM_POST_COMMENT_DELETE_DATE = "PARAM_POST_COMMENT_DELETE_DATE",
+			PARAM_POST_COMMENT_DELETE_TIME = "PARAM_POST_COMMENT_DELETE_TIME", PARAM_POST_COMMENT_LAST_EDIT_DATE = "PARAM_POST_COMMENT_LAST_EDIT_DATE",
+			PARAM_POST_COMMENT_LAST_EDIT_TIME = "PARAM_POST_COMMENT_LAST_EDIT_TIME", PARAM_POST_COMMENT_POST_ID = "PARAM_POST_COMMENT_POST_ID",
+			PARAM_POST_COMMENT_USER_ID = "PARAM_POST_COMMENT_USER_ID";
 
 	public static final String ATTR_POST_COMMENT_OBJ = "ATTR_POST_COMMENT_OBJ";
 	
@@ -30,8 +32,9 @@ public class PostComment implements IPojo{
 	 */
 	private int id, likes, dislikes, postId, userId;
 	private String message;
-	private Date madeDate, lastEditDate;
-	private Time madeTime, lastEditTime;
+	private boolean deleted;
+	private Date madeDate, lastEditDate, deleteDate;
+	private Time madeTime, lastEditTime, deleteTime;
 	
 	
 	
@@ -59,6 +62,14 @@ public class PostComment implements IPojo{
 		try{this.madeTime = Time.valueOf(request.getParameter(PARAM_POST_COMMENT_MADE_TIME));}
 		catch(Exception t) {this.madeTime = Time.valueOf(LocalTime.now());}
 		
+		this.deleted = request.getParameter(PARAM_POST_COMMENT_DELETED) != null ? true : false;
+		
+		try{this.deleteDate = Date.valueOf(request.getParameter(PARAM_POST_COMMENT_DELETE_DATE));}
+		catch(Exception t) {this.deleteDate = Date.valueOf(LocalDate.now());}
+		
+		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_POST_COMMENT_DELETE_TIME));}
+		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
+		
 		try{this.lastEditDate = Date.valueOf(request.getParameter(PARAM_POST_COMMENT_LAST_EDIT_DATE));}
 		catch(Exception t) {this.lastEditDate = Date.valueOf(LocalDate.now());}
 		
@@ -79,14 +90,32 @@ public class PostComment implements IPojo{
 	 */
 	@Override
 	public String toJavaScriptFunction() {
-		// TODO Auto-generated method stub
-		return null;
+		return "'" + this.id + "', '" + this.message + "', '" + this.likes + "', '" + this.dislikes + "', '" + this.madeDate 
+			+ "', '" + this.madeTime + "', '" + this.deleted  + "', '" + this.deleteDate  + "', '" + this.deleteTime
+			+ "', '" + this.lastEditDate + "', '" + this.lastEditDate + "', '" + this.lastEditTime  + "', '" + this.postId
+			+ "', '" + this.userId + "'";
 	}
 
 	@Override
 	public JSONObject toJSONObject() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		JSONObject jObject = new JSONObject();
+		
+		jObject.put("id", id);
+		jObject.put("message", this.message);
+		jObject.put("likes", this.likes);
+		jObject.put("dislikes", this.dislikes);
+		jObject.put("madeDate", this.madeDate);
+		jObject.put("madeTime", this.madeTime);
+		jObject.put("lastEditTime", this.deleted);
+		jObject.put("deleteDate", this.deleteDate);
+		jObject.put("deleteTime", this.deleteTime);
+		jObject.put("lastEditDate", this.lastEditDate);
+		jObject.put("lastEditTime", this.lastEditTime);
+		jObject.put("postId", this.postId);
+		jObject.put("userId", this.userId);
+		
+		return jObject;
 	}
 
 	
@@ -171,6 +200,30 @@ public class PostComment implements IPojo{
 	}
 	public void setLastEditTime(Time lastEditTime) {
 		this.lastEditTime = lastEditTime;
+	}
+	
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
+	
+	public Date getDeleteDate() {
+		return deleteDate;
+	}
+	public void setDeleteDate(Date deleteDate) {
+		this.deleteDate = deleteDate;
+	}
+	
+	
+	public Time getDeleteTime() {
+		return deleteTime;
+	}
+	public void setDeleteTime(Time deleteTime) {
+		this.deleteTime = deleteTime;
 	}
 	
 }

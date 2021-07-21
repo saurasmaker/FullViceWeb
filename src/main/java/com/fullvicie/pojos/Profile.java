@@ -13,7 +13,9 @@ public class Profile implements IPojo{
 	/*
 	 * Static Attributes
 	 */
-	public static final String PARAM_PROFILE_ID = "PARAM_PROFILE_ID", PARAM_PROFILE_NAME = "PARAM_PROFILE_NAME", PARAM_PROFILE_SURNAMES = "PARAM_PROFILE_SURNAMES";
+	public static final String PARAM_PROFILE_ID = "PARAM_PROFILE_ID", PARAM_PROFILE_NAME = "PARAM_PROFILE_NAME", PARAM_PROFILE_SURNAMES = "PARAM_PROFILE_SURNAMES",
+			PARAM_PROFILE_BIOGRAPHY = "PARAM_PROFILE_BIOGRAPHY", PARAM_PROFILE_BIRTHDAY = "PARAM_PROFILE_BIRTHDAY", PARAM_PROFILE_BASE64_PICTURE = "PARAM_PROFILE_BASE64_PICTURE",
+			PARAM_PROFILE_USER_ID = "PARAM_PROFILE_USER_ID";
 	
 	public static final String PARAM_PROFILE_OBJ = "PARAM_PROFILE_OBJ";
 
@@ -22,8 +24,9 @@ public class Profile implements IPojo{
 	 * Attributes
 	 */
 	private int id, userId;
-	private String name, surnames, biography;
+	private String name, surnames, biography, base64Picture;
 	private Date birthday;
+	
 	
 	/*
 	 * Constructors
@@ -33,6 +36,16 @@ public class Profile implements IPojo{
 	}
 	
 	public Profile(HttpServletRequest request) {
+		try{this.id = Integer.parseInt(request.getParameter(PARAM_PROFILE_ID));}
+		catch(Exception t) {this.id = -1;}
+		
+		this.name = request.getParameter(PARAM_PROFILE_NAME);
+		this.surnames = request.getParameter(PARAM_PROFILE_SURNAMES);
+		this.biography = request.getParameter(PARAM_PROFILE_BIOGRAPHY);
+		this.base64Picture = request.getParameter(PARAM_PROFILE_BASE64_PICTURE);
+		
+		try{this.userId = Integer.parseInt(request.getParameter(PARAM_PROFILE_USER_ID));}
+		catch(Exception t) {this.userId = -1;}
 		
 	}
 	
@@ -42,14 +55,24 @@ public class Profile implements IPojo{
 	 */
 	@Override
 	public String toJavaScriptFunction() {
-		// TODO Auto-generated method stub
-		return null;
+		return "'" + this.id + "', '" + this.name + "', '" + this.surnames + "', '" + this.biography
+			+ "', '" + this.birthday  + "', '" + this.base64Picture  + "', '" + this.userId + "'";
 	}
 
 	@Override
 	public JSONObject toJSONObject() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		JSONObject jObject = new JSONObject();
+		
+		jObject.put("id", id);
+		jObject.put("name", this.name);
+		jObject.put("surnames", this.surnames);
+		jObject.put("biography", this.biography);
+		jObject.put("birthday", this.birthday);
+		jObject.put("base64Picture", this.base64Picture);
+		jObject.put("userId", this.userId);
+		
+		return jObject;
 	}
 
 
@@ -101,6 +124,14 @@ public class Profile implements IPojo{
 	}
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	
+	public String getPicture() {
+		return base64Picture;
+	}
+	public void setPicture(String base64Picture) {
+		this.base64Picture = base64Picture;
 	}
 	
 	

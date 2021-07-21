@@ -45,14 +45,19 @@ public class PostCategory implements IPojo{
 	 */
 	@Override
 	public String toJavaScriptFunction() {
-		// TODO Auto-generated method stub
-		return null;
+		return "'" + this.id + "', '" + this.name + "', '" + this.description + "'";
 	}
 
 	@Override
 	public JSONObject toJSONObject() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		JSONObject jObject = new JSONObject();
+		
+		jObject.put("id", id);
+		jObject.put("name", this.name);
+		jObject.put("description", this.description);
+		
+		return jObject;
 	}
 
 	

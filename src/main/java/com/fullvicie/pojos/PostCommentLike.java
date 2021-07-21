@@ -46,14 +46,19 @@ public class PostCommentLike implements IPojo{
 	 */
 	@Override
 	public String toJavaScriptFunction() {
-		// TODO Auto-generated method stub
-		return null;
+		return "'" + this.id + "', '" + this.dislike + "', '" + this.postCommentId + "', '" + this.userId + "'";
 	}
 
 	@Override
 	public JSONObject toJSONObject() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject jObject = new JSONObject();
+		
+		jObject.put("id", id);
+		jObject.put("dislike", this.dislike);
+		jObject.put("postCommentId", this.postCommentId);
+		jObject.put("userId", this.userId);
+		
+		return jObject;
 	}
 
 	

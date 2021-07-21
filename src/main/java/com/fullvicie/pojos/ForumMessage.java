@@ -28,7 +28,7 @@ public class ForumMessage implements IPojo{
 	 */
 	private int id, forumId, userId;
 	private String  message;
-	private Date madeDate, lasEditDate, deleteDate;
+	private Date madeDate, lastEditDate, deleteDate;
 	private boolean deleted;
 	private Time madeTime, lastEditTime, deleteTime;
 	private int likes, dislikes;
@@ -57,14 +57,32 @@ public class ForumMessage implements IPojo{
 	 */
 	@Override
 	public String toJavaScriptFunction() {
-		// TODO Auto-generated method stub
-		return null;
+		return "'" + this.id + "', '" + this.message + "', '" + this.madeDate + "', '" + this.madeTime
+				+ "', '" + this.lastEditDate + "', '" + this.lastEditTime + "', '" + this.deleted
+				+ "', '" + this.deleteDate + "', '" + this.deleteTime + "', '" + this.likes
+				+ "', '" + this.dislikes + "', '" + this.forumId + "', '" + this.userId + "'";
 	}
 
 	@Override
 	public JSONObject toJSONObject() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		JSONObject jObject = new JSONObject();
+		
+		jObject.put("id", id);
+		jObject.put("message", this.message);
+		jObject.put("madeDate", this.madeDate);
+		jObject.put("madeTime", this.madeTime);
+		jObject.put("lastEditDate", this.lastEditDate);
+		jObject.put("lastEditTime", this.lastEditTime);
+		jObject.put("deleted", this.deleted);
+		jObject.put("deleteDate", this.deleteDate);
+		jObject.put("deleteTime", this.deleteTime);
+		jObject.put("likes", this.likes);
+		jObject.put("dislikes", this.dislikes);
+		jObject.put("forumId", this.forumId);
+		jObject.put("userId", this.userId);
+		
+		return jObject;
 	}
 
 	
@@ -112,10 +130,10 @@ public class ForumMessage implements IPojo{
 
 	
 	public Date getLasEditDate() {
-		return lasEditDate;
+		return lastEditDate;
 	}
-	public void setLasEditDate(Date lasEditDate) {
-		this.lasEditDate = lasEditDate;
+	public void setLastEditDate(Date lastEditDate) {
+		this.lastEditDate = lastEditDate;
 	}
 
 	
