@@ -20,7 +20,7 @@ public class DatabaseController {
 	 */
 	public static ErrorType connect(){
 		try {
-			//Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			disconnect();			
 	        DATABASE_CONNECTION = DriverManager.getConnection(DATABASE_URL + DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASS);
 	        DATABASE_STATEMENT = DATABASE_CONNECTION.createStatement();		
@@ -34,7 +34,7 @@ public class DatabaseController {
 	
 	public static ErrorType disconnect(){
 		try {
-			//Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			if(DATABASE_STATEMENT != null) {
 				DATABASE_STATEMENT.close();
 				DATABASE_STATEMENT = null;
