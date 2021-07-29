@@ -6,8 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.fullvicie.controllers.DatabaseController;
-import com.fullvicie.enums.ErrorType;
-import com.fullvicie.enums.SearchBy;
+import com.fullvicie.enums.*;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.ForumMessageLike;
 
@@ -19,10 +18,10 @@ public class ForumMessageLikeSqlDao implements IDao<ForumMessageLike>{
 	public ErrorType create(ForumMessageLike fml) {
 		try {
 			return executeQueryWithParameters("INSERT INTO " + TABLE_NAME
-					+ "(" + DISLIKE_COLUMN + ", " + USER_ID_COLUMN + ", " + FORUM_MESSAGE_ID_COLUMN + ") VALUES (?, ?)", fml);	
+					+ "(" + DISLIKE_COLUMN + ", " + USER_ID_COLUMN + ", " + FORUM_MESSAGE_ID_COLUMN + ") VALUES (?, ?, ?)", fml);	
 		} catch(Exception e) {
 			e.printStackTrace();
-			return ErrorType.CREATE_FORUM_CATEGORY_ERROR;
+			return ErrorType.CREATE_FORUM_MESSAGE_LIKE_ERROR;
 		}
 	}
 
@@ -52,15 +51,14 @@ public class ForumMessageLikeSqlDao implements IDao<ForumMessageLike>{
 	@Override
 	public ErrorType update(String search, SearchBy searchBy, ForumMessageLike fc) {
 		try {
-			String updateQuery = "UPDATE users SET " + DISLIKE_COLUMN + " = ?, "
-					+ USER_ID_COLUMN + " = ?, "
-					+ FORUM_MESSAGE_ID_COLUMN + " = ? WHERE ";
+			String updateQuery = "UPDATE " + TABLE_NAME + " SET " + DISLIKE_COLUMN + " = ?, "
+					+ USER_ID_COLUMN + " = ?, " + FORUM_MESSAGE_ID_COLUMN + " = ? WHERE ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 			executeQueryWithParameters(updateQuery, fc);
 		} catch(Exception e) {
 			e.printStackTrace();
-			return ErrorType.UPDATE_FORUM_CATEGORY_ERROR;
+			return ErrorType.UPDATE_FORUM_MESSAGE_LIKE_ERROR;
 		}
 		
 		return ErrorType.NO_ERROR;
@@ -74,7 +72,7 @@ public class ForumMessageLikeSqlDao implements IDao<ForumMessageLike>{
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
 		} catch (SQLException e)  {
 			e.printStackTrace();
-			return ErrorType.DELETE_FORUM_CATEGORY_ERROR;
+			return ErrorType.DELETE_FORUM_MESSAGE_LIKE_ERROR;
 		}	
 		
 		return ErrorType.NO_ERROR;

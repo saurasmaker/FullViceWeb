@@ -179,6 +179,14 @@ public class Forum implements IPojo{
 	}
 
 	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+	
+	
 	public Date getDeleteDate() {
 		return deleteDate;
 	}

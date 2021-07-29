@@ -6,8 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.fullvicie.controllers.DatabaseController;
-import com.fullvicie.enums.ErrorType;
-import com.fullvicie.enums.SearchBy;
+import com.fullvicie.enums.*;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.ForumMessage;
 
@@ -19,7 +18,7 @@ public class ForumMessageSqlDao implements IDao<ForumMessage>{
 			FORUM_ID_COLUMN = "forum_id", USER_ID_COLUMN = "user_id";
 	
 	@Override
-	public ErrorType create(ForumMessage fml) {
+	public ErrorType create(ForumMessage fm) {
 		try {
 			return executeQueryWithParameters("INSERT INTO " + TABLE_NAME
 					+ "(" + MESSAGE_COLUMN + ", " + MADE_DATE_COLUMN + ", "  + MADE_TIME_COLUMN
@@ -27,7 +26,7 @@ public class ForumMessageSqlDao implements IDao<ForumMessage>{
 					+ ", " + DELETED_COLUMN + ", " + DELETE_DATE_COLUMN + ", " + DELETE_TIME_COLUMN
 					+ ", " + LIKES_COLUMN + ", " + DISLIKES_COLUMN
 					+ ", " + FORUM_ID_COLUMN + ", " + USER_ID_COLUMN
-					+ ") VALUES (?, ?)", fml);	
+					+ ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", fm);	
 		} catch(Exception e) {
 			e.printStackTrace();
 			return ErrorType.CREATE_FORUM_MESSAGE_ERROR;
@@ -36,7 +35,7 @@ public class ForumMessageSqlDao implements IDao<ForumMessage>{
 
 	@Override
 	public ForumMessage read(String search, SearchBy searchBy) {
-		ForumMessage fc = null;
+		ForumMessage fm = null;
 		ResultSet rs = null;
 		
 		String selectQuery = "SELECT * FROM " + TABLE_NAME + "WHERE "; 
@@ -45,7 +44,7 @@ public class ForumMessageSqlDao implements IDao<ForumMessage>{
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
 			if(rs.next()) {
 				if(rs.getRow() == 1) {
-					fc = setForumMessageAttributes(rs);
+					fm = setForumMessageAttributes(rs);
 				}
 			}
 			rs.close();
@@ -53,14 +52,14 @@ public class ForumMessageSqlDao implements IDao<ForumMessage>{
 			e.printStackTrace();
 		}	
 			
-		return fc;
+		return fm;
 	}
 	
 
 	@Override
 	public ErrorType update(String search, SearchBy searchBy, ForumMessage fc) {
 		try {
-			String updateQuery = "UPDATE users SET " + MESSAGE_COLUMN + " = ?, "
+			String updateQuery = "UPDATE " + TABLE_NAME + " SET " + MESSAGE_COLUMN + " = ?, "
 				+ MADE_DATE_COLUMN + " = ?, " + MADE_TIME_COLUMN + " = ?, " + LAST_EDIT_DATE_COLUMN + " = ?, "
 				+ LAST_EDIT_TIME_COLUMN + " = ?, " + DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, "
 				+ DELETE_TIME_COLUMN + " = ?, " + LIKES_COLUMN + " = ?, " + DISLIKES_COLUMN + " = ?, "
@@ -147,6 +146,18 @@ public class ForumMessageSqlDao implements IDao<ForumMessage>{
 		try {
 			fml = new ForumMessage();
 			fml.setId(rs.getInt(ID_COLUMN));
+			fml.setMessage(rs.getString(MESSAGE_COLUMN));
+			fml.setMadeDate(rs.getDate(MADE_DATE_COLUMN));
+			fml.setMadeTime(rs.getTime(MADE_TIME_COLUMN));
+			fml.setLastEditDate(rs.getDate(LAST_EDIT_DATE_COLUMN));
+			fml.setLastEditTime(rs.getTime(LAST_EDIT_TIME_COLUMN));
+			fml.setDeleted(rs.getBoolean(DELETED_COLUMN));
+			fml.setDeleteDate(rs.getDate(DELETE_DATE_COLUMN));
+			fml.setDeleteTime(rs.getTime(DELETE_TIME_COLUMN));
+			fml.setLikes(rs.getInt(LIKES_COLUMN));
+			fml.setDislikes(rs.getInt(DISLIKES_COLUMN));
+			fml.setForumId(rs.getInt(FORUM_ID_COLUMN));
+			fml.setUserId(rs.getInt(USER_ID_COLUMN));
 
 		} catch (SQLException e) {
 			e.printStackTrace();

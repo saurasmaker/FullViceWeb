@@ -37,8 +37,12 @@ public class Post implements IPojo{
 	
 	
 	/*
-	 * Contructors
+	 * Constructors
 	 */
+	public Post() {
+		
+	}
+	
 	public Post(HttpServletRequest request) {
 		try{this.id = Integer.parseInt(request.getParameter(PARAM_POST_ID));}
 		catch(Exception t) {this.id = -1;}

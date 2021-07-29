@@ -12,7 +12,7 @@ public class PostCommentLike implements IPojo{
 	 * Static Attributes
 	 */
 	public static final String PARAM_POST_COMMENT_LIKE_ID = "PARAM_POST_COMMENT_LIKE_ID", PARAM_POST_COMMENT_LIKE_DISLIKE = "PARAM_POST_COMMENT_LIKE_DISLIKE",
-			PARAM_POST_COMMENT_LIKE_POST_COMMENT_ID = "PARAM-POST_COMMENT_LIKE_POST_COMMENT_ID", PARAM_POST_COMMENT_LIKE_USER_ID = "PARAM_POST_COMMENT_LIKE_USER_ID";
+			PARAM_POST_COMMENT_LIKE_POST_COMMENT_ID = "PARAM_POST_COMMENT_LIKE_POST_COMMENT_ID", PARAM_POST_COMMENT_LIKE_USER_ID = "PARAM_POST_COMMENT_LIKE_USER_ID";
 
 	public static final String ATTR_POST_COMMENT_LIKE_OBJ = "ATTR_POST_COMMENT_LIKE_OBJ";
 	
@@ -27,6 +27,9 @@ public class PostCommentLike implements IPojo{
 	/*
 	 * Constructors
 	 */
+	public PostCommentLike() {
+		
+	}
 	public PostCommentLike(HttpServletRequest request) {
 		try{this.id = Integer.parseInt(request.getParameter(PARAM_POST_COMMENT_LIKE_ID));}
 		catch(Exception t) {this.id = -1;}

@@ -52,7 +52,7 @@ public class ForumCategorySqlDao implements IDao<ForumCategory>{
 	@Override
 	public ErrorType update(String search, SearchBy searchBy, ForumCategory fc) {
 		try {
-			String updateQuery = "UPDATE users SET " + NAME_COLUMN + " = ?, "
+			String updateQuery = "UPDATE " + TABLE_NAME + " SET " + NAME_COLUMN + " = ?, "
 					+ DESCRIPTION_COLUMN + " = ? WHERE ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
