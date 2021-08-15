@@ -8,11 +8,15 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.fullvicie.enums.ErrorType;
 
 /**
  * Servlet Filter implementation class FilterInaccessible
  */
-@WebFilter("/FilterInaccessible")
+@WebFilter({"/mod/*", "/private/*"})
 public class FilterInaccessible implements Filter {
 
     /**
@@ -33,11 +37,8 @@ public class FilterInaccessible implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// place your code here
-
-		// pass the request along the filter chain
-		chain.doFilter(request, response);
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.ACCESS_DENIED_ERROR); 
 	}
 
 	/**

@@ -47,7 +47,7 @@ public class Login implements IAction{
 		    	userFinded = dao.read(userToCheck.getUsername(), SearchBy.USERNAME);
 		}
 		else {
-			return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE="+ErrorType.LOGIN_ERROR;
+			return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE="+ErrorType.LOGIN_ERROR;
 		}
 				
 		if(userFinded != null && !userFinded.getDeleted()) {
@@ -56,10 +56,10 @@ public class Login implements IAction{
 				return request.getContextPath()+"/index.jsp";
 			}
 			else
-				return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE="+ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
+				return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE="+ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
 		}
 		else {
-			return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE="+ErrorType.USER_DOES_NOT_EXIST_ERROR;
+			return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE="+ErrorType.USER_DOES_NOT_EXIST_ERROR;
 		}
 		
 	}

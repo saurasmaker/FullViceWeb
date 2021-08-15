@@ -27,7 +27,7 @@ public class Signup implements IAction{
 		
 		ErrorType errorType = udao.create(user);
 		if(errorType != ErrorType.NO_ERROR) {		
-			return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE=" + errorType;
+			return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE=" + errorType;
 		}
 		else {
 			user = udao.read(user.getUsername(), SearchBy.USERNAME);

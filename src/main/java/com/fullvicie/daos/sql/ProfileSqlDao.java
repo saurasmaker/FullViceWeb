@@ -169,17 +169,30 @@ public static int USER_COUNT = 0;
 	 */
 	private ErrorType executeQueryWithParameters(String query, Profile profile) {
 		PreparedStatement preparedStatement = null;
+		
+		Profile actualProfile = read(String.valueOf(profile.getId()), SearchBy.ID);
+		
 		try {
 			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(query);
-			preparedStatement.setString(1, profile.getName());
-			preparedStatement.setString(2, profile.getSurnames());
-			preparedStatement.setString(3, profile.getBiography());
-			preparedStatement.setDate(4, profile.getBirthday());
-			preparedStatement.setInt(5, profile.getUserId());
+			
+			if(profile.getName() != null) preparedStatement.setString(1, profile.getName());
+			else preparedStatement.setString(1, actualProfile.getName());
+				
+			if(profile.getSurnames() != null) preparedStatement.setString(2, profile.getSurnames());
+			else preparedStatement.setString(2, actualProfile.getSurnames());
+			
+			if(profile.getBiography() != null) preparedStatement.setString(3, profile.getBiography());
+			else preparedStatement.setString(3, actualProfile.getBiography());
+			
+			if(profile.getBiography() != null) preparedStatement.setDate(4, profile.getBirthday());
+			else preparedStatement.setDate(4, actualProfile.getBirthday());
+			
+			if(profile.getUserId() != -1) preparedStatement.setInt(5, profile.getUserId());
+			else preparedStatement.setInt(5, actualProfile.getUserId());
 			
 			preparedStatement.execute();
 			preparedStatement.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ErrorType.DATABASE_STATEMENT_ERROR;
 		}

@@ -16,9 +16,7 @@
 		
 		<!-- My Scripts -->
 		
-	
-	
-	
+
 		<!-- My Styles -->
 		<link type="text/css" rel="stylesheet" href = "styles/show-login-form.css"/>
 		<link type="text/css" rel="stylesheet" href = "styles/carousel.css"/>

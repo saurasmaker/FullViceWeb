@@ -26,7 +26,7 @@ public class Logout implements IAction{
 		
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(u==null)
-			return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE=" + ErrorType.ACCESS_DENIED_ERROR;
+			return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE=" + ErrorType.ACCESS_DENIED_ERROR;
 		
 		new UserSqlDao().updateLastLogoutDatetime(String.valueOf(u.getId()), SearchBy.ID, Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 		request.getSession().removeAttribute(User.ATR_USER_LOGGED_OBJ);

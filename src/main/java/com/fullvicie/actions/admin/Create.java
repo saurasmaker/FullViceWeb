@@ -22,7 +22,7 @@ public class Create implements IAction{
 		
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(!u.isAdmin() && !u.isModerator())
-			return "/mod/error.jsp?ERROR_TYPE=" + ErrorType.ACCESS_DENIED_ERROR;
+			return "/pages/error.jsp?ERROR_TYPE=" + ErrorType.ACCESS_DENIED_ERROR;
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -98,7 +98,7 @@ public class Create implements IAction{
 		
 		
 		if(et != ErrorType.NO_ERROR)
-			return "/mod/error.jsp?ERROR_TYPE=" + et;
+			return "/pages/error.jsp?ERROR_TYPE=" + et;
 		else
 			return url;
 	}

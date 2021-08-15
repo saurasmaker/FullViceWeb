@@ -1,11 +1,11 @@
-<%@page import="com.fullvicie.actions.user.ChangeUserPicture"%>
+<%@page import="com.fullvicie.actions.user.UpdateUserPicture"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
-<%@ page import="com.fullvicie.controllers.ActionsController, com.fullvicie.actions.admin.Update" %>
-<%@ page import="com.fullvicie.pojos.User, com.fullvicie.pojos.Profile" %>
+<%@ page import="com.fullvicie.controllers.ActionsController,com.fullvicie.actions.admin.Update" %>
+<%@ page import="com.fullvicie.pojos.User,com.fullvicie.pojos.Profile" %>
 <%@ page import="com.fullvicie.enums.*" %>
-<%@ page import="com.fullvicie.daos.sql.ProfileSqlDao" %>
+<%@ page import="com.fullvicie.daos.sql.ProfileSqlDao,com.fullvicie.daos.sql.UserSqlDao" %>
  
 <!DOCTYPE html>
 <html>
@@ -16,27 +16,26 @@
 	</head>
 	
 	<%
-	
-	Profile profile = null;
-	try {
-		User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-		profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-		if(profile==null){
+		Profile profile = null;
+			try {
+				User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+				user = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
+				profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
+				if(profile==null){
 			profile = new Profile();
 			profile.setUserId(user.getId());
 			(new ProfileSqlDao()).create(profile);
 			profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-		}
-		session.setAttribute(Profile.ATTR_PROFILE_OBJ, profile);
-	}
-	catch(Exception e){
-		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/mod/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
-	}
-	
-	if(profile==null)
-		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/mod/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
-	
-	%>
+				}
+				session.setAttribute(Profile.ATTR_PROFILE_OBJ, profile);
+			}
+			catch(Exception e){
+				((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
+			}
+			
+			if(profile==null)
+				((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pagesd/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
+		%>
 	
 	
 	
@@ -51,10 +50,10 @@
   			<div class="row">
 	  			<div class="col-8">
 		  			
-		  			<form id = "update-user-form" class = "form-group" action="<%= request.getContextPath() %>/ActionsController" method = "POST" >
+		  			<form id = "update-user-form" class = "form-group" action="<%=request.getContextPath()%>/ActionsController" method = "POST" >
 		             
-			            <input id="user-input-action" type='hidden' name='<%= ActionsController.PARAM_SELECT_ACTION %>' value='<%= Update.PARAM_UPDATE_ACTION %>'/>
-						<input id="user-input-object-class" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS %>" value="<%=User.class.getName() %>" />
+			            <input id="user-input-action" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=Update.PARAM_UPDATE_ACTION%>'/>
+						<input id="user-input-object-class" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS%>" value="<%=User.class.getName()%>" />
 						<input id="user-input-id" type = "hidden" name="<%=User.PARAM_USER_ID %>" value="${ATR_USER_LOGGED_OBJ.id}" />
 
 						<label for="user-input-username"><i class="fas fa-user"></i> Username: </label>
@@ -82,8 +81,8 @@
 		        <div class="col-4">
 		        	<img  class="img-fluid rounded" src="data:image/png;base64, ${ATR_USER_LOGGED_OBJ.base64Picture}" alt="${ATR_USER_LOGGED_OBJ.username}'s picture."/>
 		        
-		        	<form id = "change-user-picture-form" class = "form-group" enctype="multipart/form-data" action="<%= request.getContextPath() %>/ActionsController" method="POST">
-						<input id="user-input-action" type='hidden' name='<%= ActionsController.PARAM_SELECT_ACTION %>' value='<%= ChangeUserPicture.PARAM_CHANGE_USER_PICTURE_ACTION %>'/>
+		        	<form id = "change-user-picture-form" class = "form-group" enctype="multipart/form-data" action="<%=request.getContextPath()%>/ActionsController" method="POST">
+						<input id="user-input-action" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=UpdateUserPicture.PARAM_CHANGE_USER_PICTURE_ACTION%>'/>
 						
 						<label for="user-input-picture"><i class="fas fa-image"></i> Picture: </label>
 						<p><input id = "user-input-picture" type = "file" accept="image/*" class="form-control" name="<%=User.PART_USER_PICTURE %>"></p>												

@@ -48,7 +48,7 @@ public class FilterUser implements Filter {
 			chain.doFilter(request, response);
 		}
 		else {
-			((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + "/mod/error.jsp?ERROR_TYPE="+ErrorType.ACCESS_DENIED_ERROR); 
+			((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.ACCESS_DENIED_ERROR); 
 		}	
 	}
 

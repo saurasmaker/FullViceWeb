@@ -12,7 +12,7 @@ import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
 import com.fullvicie.pojos.User;
 
-public class ChangeUserPicture implements IAction{
+public class UpdateUserPicture implements IAction{
 
 	public static final String PARAM_CHANGE_USER_PICTURE_ACTION = "PARAM_CHANGE_USER_PICTURE_ACTION";
 	
@@ -28,6 +28,8 @@ public class ChangeUserPicture implements IAction{
 			if(u!=null) {
 				UserSqlDao usd = new UserSqlDao();
 				usd.updatePicture(String.valueOf(u.getId()), SearchBy.ID, request.getPart(User.PART_USER_PICTURE).getInputStream());
+				u = usd.read(String.valueOf(u.getId()), SearchBy.ID); 
+				request.getSession().setAttribute(User.ATR_USER_LOGGED_OBJ, u);
 			}
 			
 			return url;
@@ -36,7 +38,7 @@ public class ChangeUserPicture implements IAction{
 			
 		}
 		
-		return "/mod/error.jsp?ERROR_TYPE="+ErrorType.USER_DOES_NOT_EXIST_ERROR;
+		return "/pages/error.jsp?ERROR_TYPE="+ErrorType.USER_DOES_NOT_EXIST_ERROR;
 	}
 
 }

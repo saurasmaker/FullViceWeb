@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.actions.user.*;
+import com.fullvicie.enums.PermissionType;
+import com.fullvicie.pojos.User;
 import com.fullvicie.actions.moderator.*;
 import com.fullvicie.actions.admin.*;
 
@@ -56,8 +58,8 @@ public class ActionsController extends HttpServlet {
 			url = (new Signup()).execute(request, response);
 			break;
 
-		case ChangeUserPicture.PARAM_CHANGE_USER_PICTURE_ACTION:
-			url = (new ChangeUserPicture()).execute(request, response);
+		case UpdateUserPicture.PARAM_CHANGE_USER_PICTURE_ACTION:
+			url = (new UpdateUserPicture()).execute(request, response);
 			break;
 			
 		case Create.PARAM_CREATE_ACTION:
@@ -85,4 +87,40 @@ public class ActionsController extends HttpServlet {
 		doGet(request, response);
 	}
 
+	
+	/*
+	 * Tool Methods
+	 */
+	public static PermissionType checkPermissions(User sessionUser, int ownerId, PermissionType ... permissionTypes) {
+		
+		for(int i = 0; i < permissionTypes.length; ++i) {
+						
+			switch(permissionTypes[i]) {
+			
+			case ADMINISTRATOR_PERMISSION:
+				if(sessionUser.getAdmin()) return PermissionType.ADMINISTRATOR_PERMISSION;
+				break;
+				
+			case MODERATOR_PERMISSION:
+				if(sessionUser.getModerator()) return PermissionType.MODERATOR_PERMISSION;
+				break;
+				
+			case OWNER_PERMISSION:
+				if(sessionUser.getId() == ownerId) return PermissionType.OWNER_PERMISSION;
+				break;
+				
+			case WHOEVER_PERMISSION:
+				return PermissionType.WHOEVER_PERMISSION;
+				
+			case NO_PERMISSION:
+				return PermissionType.NO_PERMISSION;
+				
+			default:
+				return PermissionType.NO_PERMISSION;
+			
+			}
+		}
+		
+		return PermissionType.NO_PERMISSION;
+	}
 }
