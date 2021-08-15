@@ -9,20 +9,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fullvicie.actions.admin.Create;
-import com.fullvicie.actions.admin.Delete;
-import com.fullvicie.actions.admin.Read;
-import com.fullvicie.actions.admin.Update;
-import com.fullvicie.actions.user.Login;
-import com.fullvicie.actions.user.Logout;
-import com.fullvicie.actions.user.Signup;
-import com.fullvicie.pojos.User;
+import com.fullvicie.actions.user.*;
+import com.fullvicie.actions.moderator.*;
+import com.fullvicie.actions.admin.*;
 
 
 /**
  * Servlet implementation class Controller
  */
-@WebServlet({"/Controller","/controller", "/CONTROLLER"})
+@WebServlet({"/ActionsController","/actionscontroller", "/ACTIONSCONTROLLER", "/ACTIONS_CONTROLLER"})
 @MultipartConfig
 public class ActionsController extends HttpServlet {
 	
@@ -45,62 +40,46 @@ public class ActionsController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		url = request.getContextPath();
-		User user = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		String selectedAction = request.getParameter(PARAM_SELECT_ACTION);
-						
-		/*
-		 * For no logged Users
-		 */
+
 		switch(selectedAction) {
 		
 		case Logout.PARAM_LOGOUT_ACTION:
-			url += (new Logout()).execute(request, response);
+			url = (new Logout()).execute(request, response);
 			break;
 			
 		case Login.PARAM_LOGIN_ACTION:
-			url += (new Login()).execute(request, response);
+			url = (new Login()).execute(request, response);
 			break;
 			
 		case Signup.PARAM_SIGNUP_ACTION:
-			url += (new Signup()).execute(request, response);
+			url = (new Signup()).execute(request, response);
 			break;
-		}
-		
-		
-		/*
-		 * For logged Users
-		 */
-		if(user!=null) {
-			switch(selectedAction) {
+
+		case ChangeUserPicture.PARAM_CHANGE_USER_PICTURE_ACTION:
+			url = (new ChangeUserPicture()).execute(request, response);
+			break;
 			
-			}
+		case Create.PARAM_CREATE_ACTION:
+			url = (new Create()).execute(request, response);
+			break;
+				
+		case Read.PARAM_READ_ACTION:
+			url += (new Read()).execute(request, response);
+			break;
 			
+		case Update.PARAM_UPDATE_ACTION:
+			url = (new Update()).execute(request, response);
+			break;
 			
-			/*
-			 * For admin Users
-			 */
-			if(user.isAdmin())
-				switch(selectedAction) {
-					
-				case Create.PARAM_CREATE_ACTION:
-					url += (new Create()).execute(request, response);
-					break;
-						
-				case Read.PARAM_READ_ACTION:
-					url += (new Read()).execute(request, response);
-					break;
-					
-				case Update.PARAM_UPDATE_ACTION:
-					url += (new Update()).execute(request, response);
-					break;
-					
-				case Delete.PARAM_DELETE_ACTION:
-					url += (new Delete()).execute(request, response);
-					break;
-						
-				}
-		
+		case Delete.PARAM_DELETE_ACTION:
+			url = (new Delete()).execute(request, response);
+			break;
+			
+		case PseudoDelete.PARAM_PSEUDODELETE_ACTION:
+			url += (new PseudoDelete()).execute(request, response);
+			break;
+				
 		}
 		
 		doGet(request, response);

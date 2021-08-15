@@ -34,9 +34,17 @@ public class ReportSqlDao implements IDao<Report>{
 	}
 
 	@Override
+	public ErrorType pseudoDelete(String search, SearchBy searchBy) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public ArrayList<Report> list() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 }

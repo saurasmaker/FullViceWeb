@@ -19,12 +19,17 @@ public class PostSqlDao implements IDao<Post>{
 	@Override
 	public ErrorType create(Post post) {
 		try {
-			return executeQueryWithParameters("INSERT INTO " + TABLE_NAME
-					+ "(" + NAME_COLUMN + ", " + DESCRIPTION_COLUMN + ", "  + TAGS_COLUMN
-					+ ", " + CREATION_DATE_COLUMN + ", " + CREATION_TIME_COLUMN
-					+ ", " + DELETED_COLUMN
-					+ ", " + DELETE_DATE_COLUMN + ", " + DELETE_TIME_COLUMN
-					+ ", " + POST_CATEGORY_ID_COLUMN + ", " + USER_ID_COLUMN
+			return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "(" 
+					+ NAME_COLUMN + ", " 
+					+ DESCRIPTION_COLUMN + ", "  
+					+ TAGS_COLUMN + ", " 
+					+ CREATION_DATE_COLUMN + ", " 
+					+ CREATION_TIME_COLUMN + ", " 
+					+ DELETED_COLUMN + ", " 
+					+ DELETE_DATE_COLUMN + ", " 
+					+ DELETE_TIME_COLUMN + ", " 
+					+ POST_CATEGORY_ID_COLUMN + ", " 
+					+ USER_ID_COLUMN
 					+ ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", post);	
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -86,6 +91,12 @@ public class PostSqlDao implements IDao<Post>{
 		return ErrorType.NO_ERROR;
 	}
 
+	@Override
+	public ErrorType pseudoDelete(String search, SearchBy searchBy) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public ArrayList<Post> list() {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
@@ -158,4 +169,6 @@ public class PostSqlDao implements IDao<Post>{
 		
 		return post;
 	}
+
+	
 }

@@ -13,33 +13,31 @@
 			</div>
 			
 			<div id="login-form" class="modal-body">
-				<form action="<%=request.getContextPath() %>/Controller" method="post">
+				<form name="loginForm" action="<%=request.getContextPath() %>/ActionsController" method="post" onsubmit="return doCaptcha()">
 					
 					<input type="hidden" name="<%=ActionsController.PARAM_SELECT_ACTION %>" value="<%=Login.PARAM_LOGIN_ACTION %>"/>
 					
 					<div class="form-group">
 						<i class="fa fa-user"></i>
-						<input type="text" class="form-control" name="<%=User.PARAM_USER_USERNAME %>" placeholder="Username" required/>
+						<input type="text" id="input-username-login-form" class="form-control" name="<%=User.PARAM_USER_USERNAME %>" placeholder="Username" required/>
 					</div>
 					<br/>
 					
 					<div class="form-group">
 						<i class="fa fa-lock"></i>
-						<input type="password" class="form-control password_input" name="<%=User.PARAM_USER_PASSWORD %>" placeholder="Password" required/>					
+						<input type="password" id="input-password-login-form" class="form-control password_input" name="<%=User.PARAM_USER_PASSWORD %>" placeholder="Password" required/>					
 					</div>
 					<br/>
-					
-					<div class="form-group">
+					<div align="center" class="form-group">
 						<input type="submit" class="btn btn-primary btn-block btn-lg" value="Login"/>
 					</div>
-					<br/>
 
 				</form>
 			</div>
 			
 			
 			<div id="signup-form" class="modal-body" style="display: none">
-				<form action="" method="post">
+				<form name="signupForm" action="<%=request.getContextPath() %>/ActionsController" method="post" onsubmit="return doCaptcha()">
 					
 					<input type="hidden" name="<%=ActionsController.PARAM_SELECT_ACTION %>" value="<%=Signup.PARAM_SIGNUP_ACTION %>"/>
 					
@@ -66,17 +64,19 @@
 						<input type="password" class="form-control password_input" name="<%=User.PARAM_USER_REPEATPASSWORD %>" placeholder="Repeat password" required/>					
 					</div>
 					<br/>
-					
-					<div class="form-group">
+					<div align="center" class="form-group">
 						<input type="submit" class="btn btn-primary btn-block btn-lg" value="Signup"/>
 					</div>
-					<br/>
 					
 				</form>
 			</div>
 			
+			<br/>
+			<div id="status" align="center" style="color: red;"></div>	
+			<br/>
+			<div align="center" class="g-recaptcha" data-sitekey="6LfiutUbAAAAAHFGeKgtXQi2q1fyOYKNGKk3JRuo"></div>
 			
-			
+			<br/>
 			<div class="modal-footer">
 				<input id="checkbox-showpassword" type = "checkbox" onclick="showPassIn('exampleModal')"/>
 				<label for="checkbox-showpassword">Show password</label>

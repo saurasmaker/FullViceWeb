@@ -13,6 +13,7 @@ import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
 import com.fullvicie.pojos.User;
+import com.fullvicie.tools.Encryptor;
 
 
 public class Login implements IAction{
@@ -24,14 +25,20 @@ public class Login implements IAction{
 	
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+				
 		User userToCheck = new User();
 		userToCheck.setUsername(request.getParameter(User.PARAM_USER_USERNAME));
 		userToCheck.setPassword(request.getParameter(User.PARAM_USER_PASSWORD));
 		
 		User userFinded = null; 		
 		Pattern pattern = Pattern.compile(emailPattern);
+				
 		if (userToCheck.getUsername() != null) {
+			
+			// Encrypt password
+			userToCheck.setPassword(Encryptor.encrypt(userToCheck.getPassword()));
+			
+			// Logic to login 
 			UserSqlDao dao = new UserSqlDao();
 		    Matcher matcher = pattern.matcher(userToCheck.getUsername());
 		    if (matcher.matches()) 
@@ -40,19 +47,19 @@ public class Login implements IAction{
 		    	userFinded = dao.read(userToCheck.getUsername(), SearchBy.USERNAME);
 		}
 		else {
-			return "/mod/error.jsp?ERROR_TYPE="+ErrorType.LOGIN_ERROR;
+			return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE="+ErrorType.LOGIN_ERROR;
 		}
 				
-		if(userFinded != null) {
+		if(userFinded != null && !userFinded.getDeleted()) {
 			if(userToCheck.getPassword().equals(userFinded.getPassword())) {
 				request.getSession().setAttribute(User.ATR_USER_LOGGED_OBJ, userFinded);
-				return "/index.jsp";
+				return request.getContextPath()+"/index.jsp";
 			}
 			else
-				return "/mod/error.jsp?ERROR_TYPE="+ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
+				return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE="+ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
 		}
 		else {
-			return "/mod/error.jsp?ERROR_TYPE="+ErrorType.USER_DOES_NOT_EXIST_ERROR;
+			return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE="+ErrorType.USER_DOES_NOT_EXIST_ERROR;
 		}
 		
 	}

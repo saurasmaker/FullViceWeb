@@ -17,7 +17,7 @@ public class Profile implements IPojo{
 			PARAM_PROFILE_BIOGRAPHY = "PARAM_PROFILE_BIOGRAPHY", PARAM_PROFILE_BIRTHDAY = "PARAM_PROFILE_BIRTHDAY", PARAM_PROFILE_BASE64_PICTURE = "PARAM_PROFILE_BASE64_PICTURE",
 			PARAM_PROFILE_USER_ID = "PARAM_PROFILE_USER_ID";
 	
-	public static final String PARAM_PROFILE_OBJ = "PARAM_PROFILE_OBJ";
+	public static final String ATTR_PROFILE_OBJ = "ATTR_PROFILE_OBJ";
 
 	
 	/*
@@ -42,7 +42,6 @@ public class Profile implements IPojo{
 		this.name = request.getParameter(PARAM_PROFILE_NAME);
 		this.surnames = request.getParameter(PARAM_PROFILE_SURNAMES);
 		this.biography = request.getParameter(PARAM_PROFILE_BIOGRAPHY);
-		this.base64Picture = request.getParameter(PARAM_PROFILE_BASE64_PICTURE);
 		
 		try{this.userId = Integer.parseInt(request.getParameter(PARAM_PROFILE_USER_ID));}
 		catch(Exception t) {this.userId = -1;}

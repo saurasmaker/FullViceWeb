@@ -1,3 +1,5 @@
+var label = document.getElementById("signup-login-label");
+
 function showPassIn(form) {
   var f = document.getElementById(form);
   var e = f.getElementsByClassName("password_input");
@@ -12,7 +14,6 @@ function showPassIn(form) {
 
 function showSignUpForm(){
     
-    var label = document.getElementById("signup-login-label");
     var divLogin = document.getElementById("login-form");
     var divSignup = document.getElementById("signup-form");
 
@@ -29,3 +30,15 @@ function showSignUpForm(){
         divSignup.style.display = "block";
     }
 }
+
+function doCaptcha() {
+    var response = grecaptcha.getResponse();
+
+    if(response.length!=0){
+        return true;
+    }
+    else{
+        document.getElementById('status').innerHTML="Debes aceptar el captcha.";
+        return false;
+    }
+};

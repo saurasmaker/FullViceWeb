@@ -9,7 +9,7 @@
 <header>
   	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
     	<div class="container-xl">
-	    	<a class="navbar-brand" href="<%=request.getContextPath() %>/index.jsp">Full Vicie</a>
+	    	<a class="navbar-brand" href="../../index.jsp">Full Vicie</a>
 	    	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -17,25 +17,24 @@
       
       		<div class="collapse navbar-collapse" id="navbarToggler">
         
+        
         		<!-- Navbar MENU section -->
         		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          			<li class="nav-item">
-            			<a class="nav-link disabled" aria-current="page" href="pages/communities.jsp">Communities</a>
-          			</li>
-          			<li class="nav-item">
-            			<a class="nav-link disabled" href="pages/projects.jsp">Projects</a>
-          			</li>
           			<li class="nav-item dropdown">
-            			<a class="nav-link dropdown-toggle" href="pages/forums.jsp" id="dropdown07XL" data-bs-toggle="dropdown" data-hover="dropdown" aria-expanded="false">Forums</a>
+            			<a class="nav-link dropdown-toggle" href="pages/forums.jsp" id="dropdown07XL" data-bs-toggle="dropdown" data-hover="dropdown" aria-expanded="false">Index</a>
              			<ul class="dropdown-menu" aria-labelledby="dropdown07XL">
-			                <li><a class="dropdown-item" href="#">Video Games</a></li>
-			                <li><a class="dropdown-item" href="#">Series</a></li>
-			                <li><a class="dropdown-item" href="#">Films</a></li>
-			                <li><a class="dropdown-item" href="#">Books</a></li>
-			                <li><a class="dropdown-item" href="#">Table games</a></li>
-			                <li><a class="dropdown-item" href="#">E-SPORTS</a></li>
-			                <li class="dropdown-divider"/>
-			                <li><a class="dropdown-item" href="#">Forums</a></li>
+			                <li><a class="dropdown-item" href="#events-title">Events</a></li>
+			                <li><a class="dropdown-item" href="#featured-covers-title">Featured Covers</a></li>
+			                <li><a class="dropdown-item" href="#forums-title">Forums</a></li>
+			                <li><a class="dropdown-item" href="#forum-categories-title">Forum Categories</a></li>
+			                <li><a class="dropdown-item" href="#forum-messages-title">Forum Messages</a></li>
+			                <li><a class="dropdown-item" href="#posts-title">Posts</a></li>
+			                <li><a class="dropdown-item" href="#post-categories-title">Post Categories</a></li>
+			                <li><a class="dropdown-item" href="#post-comments-title">Post Comments</a></li>
+			                <li><a class="dropdown-item" href="#profiles-title">Profiles</a></li>
+			                <li><a class="dropdown-item" href="#reports-title">Reports</a></li>
+			                <li><a class="dropdown-item" href="#teams-title">Teams</a></li>
+			                <li><a class="dropdown-item" href="#users-title">Users</a></li>
             			</ul>
           			</li>
         		</ul>
@@ -91,7 +90,7 @@
 
 			            	<c:if test='${sessionScope.ATR_USER_LOGGED_OBJ.admin == true}'>
 			            		<li class="nav-item">
-		                			<a class="nav-link" href = "<%=request.getContextPath() %>/secured/admin/admin_page.jsp">Administrar<span class="sr-only">(current)</span></a>
+		                			<a class="nav-link" href = "<%=request.getContextPath() %>/secured/admin/admin_page.jsp">Administer<span class="sr-only">(current)</span></a>
 		            			</li>
 			            	</c:if>
 	        			</c:otherwise>

@@ -90,6 +90,12 @@ public class ForumMessageSqlDao implements IDao<ForumMessage>{
 	}
 
 	@Override
+	public ErrorType pseudoDelete(String search, SearchBy searchBy) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public ArrayList<ForumMessage> list() {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;

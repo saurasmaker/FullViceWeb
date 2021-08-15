@@ -14,6 +14,7 @@ public interface IDao <Pojo> {
 	public Pojo read(String search, SearchBy searchBy);
 	public ErrorType update(String search, SearchBy searchBy, Pojo pojo);
 	public ErrorType delete(String search, SearchBy searchBy);
+	public ErrorType pseudoDelete(String search, SearchBy searchBy);
 	public ArrayList<Pojo> list();
 	
 	
@@ -38,6 +39,10 @@ public interface IDao <Pojo> {
 			
 		case EMAIL:
 			s += "email = '";	
+			break;
+			
+		case USER_ID:
+			s += "user_id = '";	
 			break;
 			
 		default:

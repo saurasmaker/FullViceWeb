@@ -20,12 +20,15 @@ public class Create implements IAction{
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-ErrorType et = ErrorType.NO_ERROR;
+		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
+		if(!u.isAdmin() && !u.isModerator())
+			return "/mod/error.jsp?ERROR_TYPE=" + ErrorType.ACCESS_DENIED_ERROR;
 		
-		String url = "/secured/admin_page.jsp";
+		ErrorType et = ErrorType.NO_ERROR;
+		
+		String url = request.getHeader("referer");
 		String objectClass = request.getParameter(ActionsController.PARAM_OBJECT_CLASS);		
 					
-		
 		if(objectClass != null)
 		switch(objectClass) {
 		

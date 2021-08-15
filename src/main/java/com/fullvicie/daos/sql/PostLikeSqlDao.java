@@ -34,6 +34,12 @@ public class PostLikeSqlDao implements IDao<PostLike>{
 	}
 
 	@Override
+	public ErrorType pseudoDelete(String search, SearchBy searchBy) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public ArrayList<PostLike> list() {
 		// TODO Auto-generated method stub
 		return null;

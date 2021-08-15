@@ -1,14 +1,21 @@
 package com.fullvicie.listeners;
 
-import javax.servlet.ServletContext;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 import com.fullvicie.controllers.DatabaseController;
 import com.fullvicie.daos.sql.UserSqlDao;
+import com.fullvicie.enums.SearchBy;
 import com.fullvicie.pojos.User;
 
 
@@ -17,7 +24,7 @@ import com.fullvicie.pojos.User;
  *
  */
 @WebListener
-public class Listener implements ServletContextListener, ServletRequestListener {
+public class Listener implements ServletContextListener, ServletRequestListener, HttpSessionListener{
 
     /**
      * Default constructor. 
@@ -28,10 +35,7 @@ public class Listener implements ServletContextListener, ServletRequestListener 
 
     @Override
     public void requestInitialized(ServletRequestEvent arg0)  { 
-    	if(DatabaseController.DATABASE_CONNECTION == null) {
-    		System.out.println(DatabaseController.connect());
-    		System.out.println(initializeLists(arg0.getServletContext()));
-    	}
+   
     }
 
 
@@ -42,10 +46,7 @@ public class Listener implements ServletContextListener, ServletRequestListener 
     
 	@Override
     public void contextInitialized(ServletContextEvent arg0)  { 
-    	if(DatabaseController.DATABASE_CONNECTION == null) {
-    		System.out.println(DatabaseController.connect());
-    		System.out.println(initializeLists(arg0.getServletContext()));
-    	}
+    	System.out.println(DatabaseController.connect());
     }
 
 
@@ -53,15 +54,21 @@ public class Listener implements ServletContextListener, ServletRequestListener 
 	public void contextDestroyed(ServletContextEvent sce) {
 		System.out.println(DatabaseController.disconnect());
 	}
+
 	
-	private String initializeLists(ServletContext sc) {
+	@Override
+	public void sessionCreated(HttpSessionEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+
+	@Override
+	public void sessionDestroyed(HttpSessionEvent arg0) {
 		try {
-			sc.setAttribute(User.ATR_USERS_LIST, (new UserSqlDao()).list());
-			
-			return "LISTS INITIALIZATED";
-		}catch(Exception t) {
-			return "ERROR INITIALIZATING LISTS";
-		}
+			User u = (User) arg0.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
+			new UserSqlDao().updateLastLogoutDatetime(String.valueOf(u.getId()), SearchBy.ID, Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+			arg0.getSession().removeAttribute(User.ATR_USER_LOGGED_OBJ);
+		}catch(Exception e) {}
 	}
 
 	
