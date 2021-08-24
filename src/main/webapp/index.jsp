@@ -7,38 +7,34 @@
 <html>
 	<head>
 		<title>Full Vicie</title>
-		<jsp:include page="mod/head.html"/> 
-		
-		<!-- Recaptcha Google -->
-		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-		<!-- Anuncios Google -->
-		<script data-ad-client="ca-pub-5731524801665513" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-		
-		<!-- My Scripts -->
 		
 	
 	
 	
 		<!-- My Styles -->
-		<link type="text/css" rel="stylesheet" href = "styles/show-login-form.css"/>
-		<link type="text/css" rel="stylesheet" href = "styles/carousel.css"/>
+		<link type="text/css" rel="stylesheet" href="secured/styles/reset.css"/>
+		<link type="text/css" rel="stylesheet" href="secured/styles/my-styles.css"/>
+		<link type="text/css" rel="stylesheet" href="secured/styles/carousel.css"/>
 		
+		<!-- My Scripts -->		
+		
+		
+		<jsp:include page="secured/mod/head.html"/> 
+
 	</head>
 	
-	<body style="background-color: #161616">
+	<body class="dark-body">
 		
-		<jsp:include page="mod/cookies_advise.html"/> 
-		<jsp:include page="mod/login_popup.jsp"/>
-		<jsp:include page="mod/header.jsp"/>
-		<jsp:include page="mod/carousel.jsp"/>
+		<jsp:include page="secured/mod/cookies-advise.html"/> 
+		<jsp:include page="secured/mod/login-popup.jsp"/>
+		<jsp:include page="secured/mod/header.jsp"/>
+		<jsp:include page="secured/mod/carousel.jsp"/>
 		
 		<div class="container text-white bg-dark">
   			
 		</div>
 		
-		
-		
-		<jsp:include page="mod/footer.jsp"/>
+		<jsp:include page="secured/mod/footer.jsp"/>
 	
 	</body>
 </html>

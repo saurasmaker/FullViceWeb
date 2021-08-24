@@ -3,8 +3,17 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="ISO-8859-1">
 		<title>Full Vicie - Forums</title>
+		
+		<!-- My Styles -->
+		<link type="text/css" rel="stylesheet" href="../../styles/reset.css" />
+		<link type="text/css" rel="stylesheet" href="../../styles/my-styles.css">
+		
+		<!-- My Scripts -->
+		
+		
+		
+		<jsp:include page="../secured/mod/head.html"/> 
 	</head>
 	<body>
 	

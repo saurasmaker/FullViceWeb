@@ -87,4 +87,4 @@
 	</div>
 </div>     
 
-<script src = "js/login-form.js"></script>
+<script src = "../js/login-form.js"></script>

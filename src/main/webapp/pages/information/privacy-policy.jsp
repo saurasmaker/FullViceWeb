@@ -2,11 +2,14 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<title>FV - ${sessionScope.ATR_USER_LOGGED_OBJ} - Teams</title>
-</head>
-<body>
 
-</body>
+	<head>
+		<title>FV - Privacy Policy</title>
+		<jsp:include page="../../secured/mod/head.html"/> 
+	</head>
+	
+	<body>
+	
+	</body>
+	
 </html>

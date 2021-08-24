@@ -8,18 +8,25 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<jsp:include page="../../mod/head.html"/> 
-		
-		<!-- Styles -->
-		<link rel = "stylesheet" href = "../../styles/mystyle.css"/>
-		
 		<title>Full Vicie - Administer</title>
+		
+		<!-- My Styles -->
+		<link type="text/css" rel="stylesheet" href="../../styles/reset.css" />
+		<link type="text/css" rel="stylesheet" href="../../styles/my-styles.css">
+		
+		<!-- My Scripts -->
+		
+		
+		
+		<jsp:include page="../../secured/mod/head.html"/> 
+		
+		
 	</head>
 	
 
 	<body>
 		<div class = "general container">
-			<jsp:include page="admin_header.jsp" />		
+			<jsp:include page="admin-header.jsp" />		
 			<br/><br/><br/>
 			<div class = "content row">
 				<div class = "col-12">
@@ -28,12 +35,12 @@
 					<br/>
 				</div>
 				
-				<jsp:include page="users_admin.jsp"/>
+				<jsp:include page="users-admin.jsp"/>
 			
 			</div>
 
 		</div>
-		<jsp:include page="../../mod/footer.jsp" />
+		<jsp:include page="../../secured/mod/footer.jsp" />
 		
 		<script type="text/javascript" src="../../js/adminCRUD.js"></script>
 	</body>

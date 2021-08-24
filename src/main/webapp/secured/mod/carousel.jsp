@@ -8,7 +8,7 @@
   <div class="carousel-inner">
   
     <div class="carousel-item active">
-      <img src="multimedia/img/a7fcaa43650adc892c401956a08dc32a.jpg" class="d-block w-100 carousel-image" alt="img1"  style = "object-fit: cover">
+      <img src="../multimedia/img/a7fcaa43650adc892c401956a08dc32a.jpg" class="d-block w-100 carousel-image" alt="img1"  style = "object-fit: cover">
       <div class="carousel-caption d-none d-md-block">
         <h5>Welcome to Full Vicie</h5>
         <p>Full Vicie is a video game community where you can participate in competitions and events, look for other players to play a game with, find people with the same righteous as you... </p>
@@ -16,7 +16,7 @@
     </div>
     
     <div class="carousel-item">
-      <img src="multimedia/img/20516-afterlives-ardenweald-4k-desktop-wallpapers.jpg" class="d-block w-100 carousel-image" alt="img2" style = "object-fit: cover">
+      <img src="../multimedia/img/20516-afterlives-ardenweald-4k-desktop-wallpapers.jpg" class="d-block w-100 carousel-image" alt="img2" style = "object-fit: cover">
       <div class="carousel-caption d-none d-md-block">
         <h5>Second slide label</h5>
         <p>Some representative placeholder content for the second slide.</p>
@@ -24,7 +24,7 @@
     </div>
     
     <div class="carousel-item">
-      <img src="multimedia/img/1579461169_preview_Recent Best.jpg" class="d-block w-100 carousel-image" alt="img3"  style = "object-fit: cover">
+      <img src="../multimedia/img/1579461169_preview_Recent Best.jpg" class="d-block w-100 carousel-image" alt="img3"  style = "object-fit: cover">
       <div class="carousel-caption d-none d-md-block">
         <h5>Third slide label</h5>
         <p>Some representative placeholder content for the third slide.</p>
@@ -42,3 +42,4 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
+

@@ -17,7 +17,7 @@ import com.fullvicie.actions.admin.*;
 /**
  * Servlet implementation class Controller
  */
-@WebServlet({"/ActionsController","/actionscontroller", "/ACTIONSCONTROLLER", "/ACTIONS_CONTROLLER"})
+@WebServlet({"/ActionsController","/actionscontroller", "/ACTIONSCONSTROLLER", "/ACTIONS_CONTROLLER"})
 @MultipartConfig
 public class ActionsController extends HttpServlet {
 	
