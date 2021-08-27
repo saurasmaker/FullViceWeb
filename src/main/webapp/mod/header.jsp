@@ -75,9 +75,9 @@
 									${sessionScope.ATR_USER_LOGGED_OBJ.username}
 								</a>
 			             		<ul class="dropdown-menu" aria-labelledby="dropdown07XL">
-			             			<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user-notifications.jsp">Notifications</a></li>
-			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user-profile.jsp">Profile</a></li>
-			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user-teams.jsp">Teams</a></li>
+			             			<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/notifications.jsp">Notifications</a></li>
+			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/profile.jsp">Profile</a></li>
+			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/teams.jsp">Teams</a></li>
 			                		<li class="dropdown-divider"></li>
 			                		<li>
 										<form action= "<%= request.getContextPath() %>/ActionsController" method="post">
@@ -91,7 +91,7 @@
 
 			            	<c:if test='${sessionScope.ATR_USER_LOGGED_OBJ.admin == true}'>
 			            		<li class="nav-item">
-		                			<a class="nav-link" href = "<%=request.getContextPath() %>/pages/admin/admin-page.jsp">Administrar<span class="sr-only">(current)</span></a>
+		                			<a class="nav-link" href = "<%=request.getContextPath() %>/pages/admin/admin-page.jsp">Administer<span class="sr-only">(current)</span></a>
 		            			</li>
 			            	</c:if>
 	        			</c:otherwise>
@@ -104,5 +104,7 @@
     	</div>
     
   	</nav>
+
+	<jsp:include page="../mod/login-popup.jsp"/>
 
 </header>

@@ -16,25 +16,28 @@
 	
 	<%
 		Profile profile = null;
-			try {
-				User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-				user = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
-				profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-				if(profile==null){
-			profile = new Profile();
-			profile.setUserId(user.getId());
-			(new ProfileSqlDao()).create(profile);
+		try {
+			User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+			user = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
 			profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-				}
-				session.setAttribute(Profile.ATTR_PROFILE_OBJ, profile);
-			}
-			catch(Exception e){
-				((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
+			if(profile==null){
+				profile = new Profile();
+				profile.setUserId(user.getId());
+				(new ProfileSqlDao()).create(profile);
+				profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
 			}
 			
-			if(profile==null)
-				((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pagesd/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
-		%>
+			session.setAttribute(User.ATR_USER_LOGGED_OBJ, user);
+			session.setAttribute(Profile.ATTR_PROFILE_OBJ, profile);
+			
+		}
+		catch(Exception e){
+			((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
+		}
+		
+		if(profile==null)
+			((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
+	%>
 	
 	
 	

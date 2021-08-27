@@ -19,7 +19,7 @@ public class Read implements IAction{
 
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(!u.isAdmin() && !u.isModerator())
-			return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
 		return null;
 	}

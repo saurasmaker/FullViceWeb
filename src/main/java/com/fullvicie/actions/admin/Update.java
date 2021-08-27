@@ -40,8 +40,10 @@ public class Update implements IAction{
 			
 			Forum forum =  new Forum(request);
 			
-			if(!checkPermissions(sessionUser, forum.getUserId(),
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.OWNER_PERMISSION))
+			PermissionType ptForum = checkPermissions(sessionUser, forum.getUserId(),
+					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptForum == PermissionType.NO_PERMISSION)
 					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ForumSqlDao()).update(request.getParameter(Forum.PARAM_FORUM_ID), SearchBy.ID, forum);
@@ -55,9 +57,11 @@ public class Update implements IAction{
 		 */
 		case "com.fullvicie.pojos.ForumCategory":
 			
-			if(!checkPermissions(sessionUser, NO_OWNER,
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION))
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			PermissionType ptForumCategory = checkPermissions(sessionUser, NO_OWNER,
+					PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptForumCategory == PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ForumCategorySqlDao()).update(request.getParameter(ForumCategory.PARAM_FORUM_CATEGORY_ID), SearchBy.ID, new ForumCategory(request));
 			url += "#forum-categories-title";
@@ -72,9 +76,11 @@ public class Update implements IAction{
 			
 			ForumMessage forumMessage =  new ForumMessage(request);
 			
-			if(!checkPermissions(sessionUser, forumMessage.getUserId(),
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.OWNER_PERMISSION))
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			PermissionType ptForumMessage = checkPermissions(sessionUser, forumMessage.getUserId(),
+					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptForumMessage == PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ForumMessageSqlDao()).update(request.getParameter(ForumMessage.PARAM_FORUM_MESSGAE_ID), SearchBy.ID, forumMessage);
 			url += "#forum-messages-title";
@@ -99,9 +105,11 @@ public class Update implements IAction{
 			
 			Post post =  new Post(request);
 			
-			if(!checkPermissions(sessionUser, post.getUserId(),
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.OWNER_PERMISSION))
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			PermissionType ptPost = checkPermissions(sessionUser, post.getUserId(),
+					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptPost == PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new PostSqlDao()).update(request.getParameter(Post.PARAM_POST_ID), SearchBy.ID, post);
 			url += "#posts-title";
@@ -113,10 +121,12 @@ public class Update implements IAction{
 		 * POST CATEGORY
 		 */
 		case "com.fullvicie.pojos.PostCategory":
-						
-			if(!checkPermissions(sessionUser, NO_OWNER,
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION))
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					
+			PermissionType ptPostCategory = checkPermissions(sessionUser, NO_OWNER,
+					PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptPostCategory == PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new PostCategorySqlDao()).update(request.getParameter(PostCategory.PARAM_POST_CATEGORY_ID), SearchBy.ID, new PostCategory(request));
 			url += "#post-categories-title";
@@ -131,9 +141,11 @@ public class Update implements IAction{
 			
 			PostComment postComment =  new PostComment(request);
 			
-			if(!checkPermissions(sessionUser, postComment.getUserId(),
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.OWNER_PERMISSION))
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			PermissionType ptComment = checkPermissions(sessionUser, postComment.getUserId(),
+					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptComment == PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new PostCommentSqlDao()).update(request.getParameter(PostComment.PARAM_POST_COMMENT_ID), SearchBy.ID, postComment);
 			url += "#post-comments-title";
@@ -166,9 +178,12 @@ public class Update implements IAction{
 		 */
 		case "com.fullvicie.pojos.Profile":
 			Profile profile = new Profile(request);
-			if(!checkPermissions(sessionUser, profile.getUserId(),
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.OWNER_PERMISSION)) {
-				return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			
+			PermissionType ptProfile = checkPermissions(sessionUser, profile.getUserId(),
+					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptProfile == PermissionType.NO_PERMISSION) {
+				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			}
 			
 			et = (new ProfileSqlDao()).update(request.getParameter(Profile.PARAM_PROFILE_ID), SearchBy.ID, profile) ;
@@ -182,9 +197,11 @@ public class Update implements IAction{
 		 */
 		case "com.fullvicie.pojos.Report":
 			
-			if(!checkPermissions(sessionUser, NO_OWNER,
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION))
-				return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			PermissionType ptReport = checkPermissions(sessionUser, NO_OWNER,
+					PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptReport==PermissionType.NO_PERMISSION)
+				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ReportSqlDao()).update(request.getParameter(Report.PARAM_REPORT_ID), SearchBy.ID, new Report(request));
 			url += "#reports-title";
@@ -197,26 +214,32 @@ public class Update implements IAction{
 		case "com.fullvicie.pojos.User":
 			User user = new User(request);
 			
-			if(!checkPermissions(sessionUser, user.getId(),
-					PermissionType.ADMINISTRATOR_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.OWNER_PERMISSION))
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			PermissionType ptUser = checkPermissions(sessionUser, user.getId(),
+					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
-			if(user.getPassword().isEmpty())
-				user.setPassword(new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID).getPassword());
+			if(ptUser==PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			
+			else if(ptUser==PermissionType.OWNER_PERMISSION) {
+				User actualUser = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
+				user.setAdmin(actualUser.getAdmin());
+				user.setModerator(actualUser.getModerator());
+				user.setDeleted(actualUser.getDeleted());
+			}
 			
 			et = (new UserSqlDao()).update(request.getParameter(User.PARAM_USER_ID), SearchBy.ID, user);
 			url += "#users-title";
 			break;
 			
 			
-		//ERROR NO EXISTS THAT UPDATE ACTION
+		//ERROR: NO EXISTS THAT UPDATE ACTION
 		default:
 			
 			break;
 		}
 		
 		if(et != ErrorType.NO_ERROR)
-			url = ActionsController.ERROR_PAGE + et;
+			url = request.getContextPath() + ActionsController.ERROR_PAGE + et;
 		
 		return url;
 	}
@@ -226,25 +249,28 @@ public class Update implements IAction{
 	/*
 	 * Tool methods
 	 */
-	private boolean checkPermissions(User sessionUser, int ownerId, PermissionType ... permissionTypes) {
-		
-		for(int i = 0; i < permissionTypes.length-1; ++i) {
+	private PermissionType checkPermissions(User sessionUser, int ownerId, PermissionType ... permissionTypes) {
+				
+		for(int i = 0; i < permissionTypes.length; ++i) {
 						
 			switch(permissionTypes[i]) {
 			case ADMINISTRATOR_PERMISSION:
-				if(sessionUser.getAdmin()) return true;
+				if(sessionUser.getAdmin()) return PermissionType.ADMINISTRATOR_PERMISSION;
 				break;
 			case MODERATOR_PERMISSION:
-				if(sessionUser.getModerator()) return true;
+				if(sessionUser.getModerator()) return PermissionType.MODERATOR_PERMISSION;
 				break;
 			case OWNER_PERMISSION:
-				if(sessionUser.getId() == ownerId) return true;
+				if(sessionUser.getId() == ownerId) return PermissionType.OWNER_PERMISSION;
 				break;
 			case WHOEVER_PERMISSION:
-				return true;
+				return PermissionType.WHOEVER_PERMISSION;
+			default:
+				return PermissionType.NO_PERMISSION;
 			}
 		}
+		return PermissionType.NO_PERMISSION;
 		
-		return false;
+	
 	}
 }

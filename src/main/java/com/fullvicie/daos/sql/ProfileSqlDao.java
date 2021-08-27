@@ -83,10 +83,10 @@ public static int USER_COUNT = 0;
 			executeQueryWithParameters(updateQuery, profile);
 		} catch(Exception e) {
 			e.printStackTrace();
-			return ErrorType.UPDATE_USER_ERROR;
+			return ErrorType.UPDATE_PROFILE_ERROR;
 		}
 		else
-			return ErrorType.USER_NULL_ERROR;
+			return ErrorType.PROFILE_NULL_ERROR;
 		
 		return ErrorType.NO_ERROR;
 	}

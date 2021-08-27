@@ -25,7 +25,7 @@ public class Delete implements IAction{
 
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(!u.isAdmin() && !u.isModerator())
-			return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -101,7 +101,7 @@ public class Delete implements IAction{
 		}
 		
 		if(et != ErrorType.NO_ERROR)
-			url = ActionsController.ERROR_PAGE + et;
+			url = request.getContextPath() + ActionsController.ERROR_PAGE + et;
 		
 		return url;
 		

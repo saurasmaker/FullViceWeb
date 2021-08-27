@@ -16,10 +16,9 @@
 	<body class="dark-body">
 		
 		<jsp:include page="mod/cookies-advise.jsp"/> 
-		<jsp:include page="mod/login-popup.jsp"/>
 		<jsp:include page="mod/header.jsp"/>
 		<jsp:include page="mod/carousel.jsp"/>
-				
+			
 		<div class="container text-white bg-dark">
   			<p><a href="<%=request.getContextPath() %>/multimedia/img/a7fcaa43650adc892c401956a08dc32a.jpg">asdfsdfghsfgj</a></p>
 		</div>

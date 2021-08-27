@@ -120,7 +120,7 @@ public class PseudoDelete implements IAction{
 		}
 		
 		if(et != ErrorType.NO_ERROR)
-			url = request.getContextPath()+"/mod/error.jsp?ERROR_TYPE=" + et;
+			url = request.getContextPath() + ActionsController.ERROR_PAGE + et;
 		
 		return url;
 		

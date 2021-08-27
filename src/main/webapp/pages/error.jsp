@@ -18,7 +18,6 @@
 		
 		<div class="container text-white rounded bg-dark">
 			<p><%=request.getParameter("ERROR_TYPE") %></p>
-			<p><a href="<%=request.getContextPath() %>/index.jsp">go back</a></p>
 		</div>
 		
 		<jsp:include page="../mod/footer.jsp"/>

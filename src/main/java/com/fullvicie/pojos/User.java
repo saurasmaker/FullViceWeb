@@ -80,7 +80,9 @@ public class User implements IPojo{
 		this.moderator = request.getParameter(PARAM_USER_ISMODERATOR)!=null ? true : false;
 				
 		// Encrypt password
-		this.passwrd = Encryptor.encrypt(this.passwrd);
+		if(!this.passwrd.isEmpty())
+			this.passwrd = Encryptor.encrypt(this.passwrd);
+		else this.passwrd = null;
 	}
 	
 	

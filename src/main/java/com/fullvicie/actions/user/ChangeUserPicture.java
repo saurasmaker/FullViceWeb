@@ -37,7 +37,7 @@ public class ChangeUserPicture implements IAction{
 			
 		}
 		
-		return ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
+		return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
 	}
 
 }
