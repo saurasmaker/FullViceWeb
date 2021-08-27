@@ -9,7 +9,18 @@
 	</head>
 	
 	<body class="dark-body">
-	
+		<jsp:include page="../../mod/header.jsp"/>
+		<br/><br/><br/>
+		
+		<div class="container text-white rounded bg-dark">
+			<h2>Privacy policy</h2>
+ 			<div class="row">
+ 			
+ 			
+ 			</div>
+		</div>
+		<br/>
+		<jsp:include page="../../mod/footer.jsp"/>
 	</body>
 	
 </html>

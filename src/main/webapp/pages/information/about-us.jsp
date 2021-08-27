@@ -30,7 +30,8 @@
 				In addition, you can participate in tournaments and leagues of competitive titles such as League of Legends, Valorant, Clash Royale, CS: GO, etc.
 			</p>
 		</div>
-		
+		<br/>
+		<jsp:include page="../../mod/footer.jsp"/>
 	</body>
 	
 </html>
