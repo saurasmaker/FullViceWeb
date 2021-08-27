@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.daos.sql.UserSqlDao;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
@@ -26,12 +27,12 @@ public class Logout implements IAction{
 		
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(u==null)
-			return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE=" + ErrorType.ACCESS_DENIED_ERROR;
+			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
 		new UserSqlDao().updateLastLogoutDatetime(String.valueOf(u.getId()), SearchBy.ID, Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 		request.getSession().removeAttribute(User.ATR_USER_LOGGED_OBJ);
 		
-		return request.getContextPath()+"/index.jsp";
+		return request.getContextPath() + ActionsController.INDEX_PAGE;
 	}
 	
 }

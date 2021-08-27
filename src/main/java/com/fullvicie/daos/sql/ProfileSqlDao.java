@@ -168,10 +168,10 @@ public static int USER_COUNT = 0;
 	 * Tool Methods
 	 */
 	private ErrorType executeQueryWithParameters(String query, Profile profile) {
+		
 		PreparedStatement preparedStatement = null;
-		
 		Profile actualProfile = read(String.valueOf(profile.getId()), SearchBy.ID);
-		
+
 		try {
 			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(query);
 			
@@ -184,12 +184,12 @@ public static int USER_COUNT = 0;
 			if(profile.getBiography() != null) preparedStatement.setString(3, profile.getBiography());
 			else preparedStatement.setString(3, actualProfile.getBiography());
 			
-			if(profile.getBiography() != null) preparedStatement.setDate(4, profile.getBirthday());
+			if(profile.getBirthday() != null) preparedStatement.setDate(4, profile.getBirthday());
 			else preparedStatement.setDate(4, actualProfile.getBirthday());
 			
 			if(profile.getUserId() != -1) preparedStatement.setInt(5, profile.getUserId());
 			else preparedStatement.setInt(5, actualProfile.getUserId());
-			
+	
 			preparedStatement.execute();
 			preparedStatement.close();
 		} catch (Exception e) {

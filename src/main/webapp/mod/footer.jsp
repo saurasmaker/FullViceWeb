@@ -41,9 +41,6 @@
       <!-- Section: Text -->
       <section class="mb-4">
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum
-          repellat quaerat voluptatibus placeat nam, commodi optio pariatur est quia magnam
-          eum harum corrupti dicta, aliquam sequi voluptate quas.
         </p>
       </section>
       <!-- Section: Text -->
@@ -79,19 +76,19 @@
   
             <ul class="list-unstyled mb-0">
               <li>
-                <a href="<%= request.getContextPath() %>/pages/information/about-us.jsp" class="text-white">About Us</a>
+                <a href="<%=request.getContextPath() %>/pages/information/about-us.jsp" class="text-white">About Us</a>
               </li>
               <li>
-                <a href="<%= request.getContextPath() %>/pages/information/delivery-information.jsp" class="text-white">Delivery Information</a>
+                <a href="<%=request.getContextPath() %>/pages/information/delivery-information.jsp" class="text-white">Delivery Information</a>
               </li>
               <li>
-                <a href="<%= request.getContextPath() %>/pages/information/privacy-policy.jsp" class="text-white">Privacy Policy</a>
+                <a href="<%=request.getContextPath() %>/pages/information/privacy-policy.jsp" class="text-white">Privacy Policy</a>
               </li>
               <li>
-                <a href="<%= request.getContextPath() %>/pages/information/terms-and-conditions.jsp" class="text-white">Terms and Conditions</a>
+                <a href="<%=request.getContextPath() %>/pages/information/terms-and-conditions.jsp" class="text-white">Terms & Conditions</a>
               </li>
               <li>
-                <a href="<%= request.getContextPath() %>/pges/information/contact-us.jsp" class="text-white">Contact Us</a>
+                <a href="<%=request.getContextPath() %>/pages/information/contact-us.jsp" class="text-white">Contact Us</a>
               </li>
             </ul>
           </div>
@@ -148,9 +145,10 @@
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      © 2021 Copyright:
+      ï¿½ 2021 Copyright:
       <a class="text-white" href="http://fullvicie.sytes.net/FullVicie_Web/">Full Vicie</a>
     </div>
     <!-- Copyright -->
   </footer>
   <!-- Footer -->
+

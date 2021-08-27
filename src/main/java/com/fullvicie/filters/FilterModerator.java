@@ -8,11 +8,18 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.fullvicie.controllers.ActionsController;
+import com.fullvicie.enums.ErrorType;
+import com.fullvicie.pojos.User;
 
 /**
  * Servlet Filter implementation class FilterModerator
  */
-@WebFilter("/FilterModerator")
+@WebFilter("/pages/moderator/*")
 public class FilterModerator implements Filter {
 
     /**
@@ -33,11 +40,20 @@ public class FilterModerator implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// place your code here
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		HttpSession httpSession = httpRequest.getSession();
+		
+		User user = (User) httpSession.getAttribute(User.ATR_USER_LOGGED_OBJ);
 
-		// pass the request along the filter chain
-		chain.doFilter(request, response);
+		/*
+		 * Doing filter
+		 */
+		if(user != null && user.isModerator()){
+			chain.doFilter(request, response);
+		}
+		else {
+			((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR); 
+		}	
 	}
 
 	/**

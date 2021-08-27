@@ -87,4 +87,4 @@
 	</div>
 </div>     
 
-<script src = "js/login-form.js"></script>
+<script src = "<%=request.getContextPath() %>/js/login-form.js"></script>

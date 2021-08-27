@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.daos.sql.UserSqlDao;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
@@ -47,19 +48,20 @@ public class Login implements IAction{
 		    	userFinded = dao.read(userToCheck.getUsername(), SearchBy.USERNAME);
 		}
 		else {
-			return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE="+ErrorType.LOGIN_ERROR;
+			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.LOGIN_ERROR;
 		}
 				
 		if(userFinded != null && !userFinded.getDeleted()) {
 			if(userToCheck.getPassword().equals(userFinded.getPassword())) {
 				request.getSession().setAttribute(User.ATR_USER_LOGGED_OBJ, userFinded);
-				return request.getContextPath()+"/index.jsp";
+				return request.getContextPath() + ActionsController.INDEX_PAGE;
 			}
 			else
-				return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE="+ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
+
+				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
 		}
 		else {
-			return request.getContextPath()+"/pages/error.jsp?ERROR_TYPE="+ErrorType.USER_DOES_NOT_EXIST_ERROR;
+			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
 		}
 		
 	}

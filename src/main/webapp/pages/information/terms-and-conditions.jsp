@@ -5,10 +5,10 @@
 
 	<head>
 		<title>FV - Terms and Conditions</title>
-		<jsp:include page="../..//mod/head.html"/> 
+		<jsp:include page="../../mod/head.jsp"/> 
 	</head>
 	
-	<body>
+	<body class="dark-body">
 	
 	</body>
 </html>

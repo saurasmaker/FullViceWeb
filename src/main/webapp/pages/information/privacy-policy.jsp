@@ -5,10 +5,10 @@
 
 	<head>
 		<title>FV - Privacy Policy</title>
-		<jsp:include page="../..//mod/head.html"/> 
+		<jsp:include page="../../mod/head.jsp"/> 
 	</head>
 	
-	<body>
+	<body class="dark-body">
 	
 	</body>
 	

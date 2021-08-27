@@ -10,13 +10,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.enums.ErrorType;
 
 /**
  * Servlet Filter implementation class FilterInaccessible
  */
-@WebFilter({"/mod/*", "/private/*"})
+
+
+@WebFilter("/secured/*")
 public class FilterInaccessible implements Filter {
 
     /**
@@ -38,7 +40,7 @@ public class FilterInaccessible implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.ACCESS_DENIED_ERROR); 
+		((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR); 
 	}
 
 	/**
