@@ -19,7 +19,7 @@ import com.fullvicie.pojos.User;
 /**
  * Servlet Filter implementation class FilterSecured
  */
-@WebFilter("/pages/admin/*")
+@WebFilter("/secured/*")
 public class FilterAdmin implements Filter {
 
 	

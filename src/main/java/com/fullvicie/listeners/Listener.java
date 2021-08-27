@@ -58,7 +58,7 @@ public class Listener implements ServletContextListener, ServletRequestListener,
 	
 	@Override
 	public void sessionCreated(HttpSessionEvent arg0) {
-		System.out.println(DatabaseController.connect());
+		// TODO Auto-generated method stub
 	}
 
 

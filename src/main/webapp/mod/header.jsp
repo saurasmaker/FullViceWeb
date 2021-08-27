@@ -75,9 +75,9 @@
 									${sessionScope.ATR_USER_LOGGED_OBJ.username}
 								</a>
 			             		<ul class="dropdown-menu" aria-labelledby="dropdown07XL">
-			             			<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user-notifications.jsp">Notifications</a></li>
-			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user-profile.jsp">Profile</a></li>
-			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user-teams.jsp">Teams</a></li>
+			             			<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user_notifications.jsp">Notifications</a></li>
+			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user_profile.jsp">Profile</a></li>
+			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user_teams.jsp">Teams</a></li>
 			                		<li class="dropdown-divider"></li>
 			                		<li>
 										<form action= "<%= request.getContextPath() %>/ActionsController" method="post">
@@ -91,7 +91,11 @@
 
 			            	<c:if test='${sessionScope.ATR_USER_LOGGED_OBJ.admin == true}'>
 			            		<li class="nav-item">
+<<<<<<< HEAD:src/main/webapp/mod/header.jsp
 		                			<a class="nav-link" href = "<%=request.getContextPath() %>/pages/admin/admin-page.jsp">Administrar<span class="sr-only">(current)</span></a>
+=======
+		                			<a class="nav-link" href = "<%=request.getContextPath() %>/secured/admin/admin_page.jsp">Administrar<span class="sr-only">(current)</span></a>
+>>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/header.jsp
 		            			</li>
 			            	</c:if>
 	        			</c:otherwise>

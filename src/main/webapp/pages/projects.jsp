@@ -4,9 +4,13 @@
 
 <html>
 	<head>
+		<meta charset="ISO-8859-1">
 		<title>Full Vicie - Projects</title>
+<<<<<<< HEAD
 		<jsp:include page="../mod/head.jsp"/> 
 		
+=======
+>>>>>>> parent of 7294c19 (a)
 	</head>
 	
 	<body>

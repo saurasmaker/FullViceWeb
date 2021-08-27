@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+<<<<<<< HEAD:src/main/webapp/pages/admin/admin-page.jsp
 		<title>Full Vicie - Administer</title>
 		
 		<!-- My Styles -->
@@ -19,14 +20,20 @@
 		
 		
 		<jsp:include page="../../mod/head.jsp"/> 
+=======
+		<jsp:include page="../../mod/head.html"/> 
+>>>>>>> parent of 7294c19 (a):src/main/webapp/secured/admin/admin_page.jsp
 		
+		<!-- Styles -->
+		<link rel = "stylesheet" href = "../../styles/mystyle.css"/>
 		
+		<title>Full Vicie - Administer</title>
 	</head>
 	
 
 	<body>
 		<div class = "general container">
-			<jsp:include page="admin-header.jsp" />		
+			<jsp:include page="admin_header.jsp" />		
 			<br/><br/><br/>
 			<div class = "content row">
 				<div class = "col-12">
@@ -35,7 +42,7 @@
 					<br/>
 				</div>
 				
-				<jsp:include page="users-admin.jsp"/>
+				<jsp:include page="users_admin.jsp"/>
 			
 			</div>
 

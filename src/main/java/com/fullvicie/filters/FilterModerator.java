@@ -19,7 +19,7 @@ import com.fullvicie.pojos.User;
 /**
  * Servlet Filter implementation class FilterModerator
  */
-@WebFilter("/pages/moderator/*")
+@WebFilter("/FilterModerator")
 public class FilterModerator implements Filter {
 
     /**

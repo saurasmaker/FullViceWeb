@@ -174,6 +174,7 @@ public static int USER_COUNT = 0;
 
 		try {
 			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(query);
+<<<<<<< HEAD
 			
 			if(profile.getName() != null) preparedStatement.setString(1, profile.getName());
 			else preparedStatement.setString(1, actualProfile.getName());
@@ -190,6 +191,14 @@ public static int USER_COUNT = 0;
 			if(profile.getUserId() != -1) preparedStatement.setInt(5, profile.getUserId());
 			else preparedStatement.setInt(5, actualProfile.getUserId());
 	
+=======
+			preparedStatement.setString(1, profile.getName());
+			preparedStatement.setString(2, profile.getSurnames());
+			preparedStatement.setString(3, profile.getBiography());
+			preparedStatement.setDate(4, profile.getBirthday());
+			preparedStatement.setInt(5, profile.getUserId());
+			
+>>>>>>> parent of 7294c19 (a)
 			preparedStatement.execute();
 			preparedStatement.close();
 		} catch (Exception e) {
