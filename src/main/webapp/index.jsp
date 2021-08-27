@@ -8,11 +8,14 @@
 	<head>
 		<title>Full Vicie</title>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/styles/carousel.css"/>
 
 		<jsp:include page="mod/head.jsp"/> 
 =======
+=======
+>>>>>>> parent of 7294c19 (a)
 		<jsp:include page="mod/head.html"/> 
 		
 		<!-- Recaptcha Google -->
@@ -29,11 +32,15 @@
 		<link type="text/css" rel="stylesheet" href = "styles/show-login-form.css"/>
 		<link type="text/css" rel="stylesheet" href = "styles/carousel.css"/>
 		
+<<<<<<< HEAD
+>>>>>>> parent of 7294c19 (a)
+=======
 >>>>>>> parent of 7294c19 (a)
 	</head>
 	
 	<body style="background-color: #161616">
 		
+<<<<<<< HEAD
 <<<<<<< HEAD
 		<jsp:include page="mod/cookies-advise.jsp"/> 
 		<jsp:include page="mod/login-popup.jsp"/>
@@ -41,6 +48,8 @@
 		<jsp:include page="mod/carousel.jsp"/>
 				
 =======
+=======
+>>>>>>> parent of 7294c19 (a)
 		<jsp:include page="mod/cookies_advise.html"/> 
 		<jsp:include page="mod/login_popup.jsp"/>
 		<jsp:include page="mod/header.jsp"/>
@@ -52,6 +61,11 @@
 		</div>
 		
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		
+		
+>>>>>>> parent of 7294c19 (a)
 =======
 		
 		

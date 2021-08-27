@@ -6,6 +6,7 @@
 		<meta charset="ISO-8859-1">
 		<title>Full Vicie - Forums</title>
 <<<<<<< HEAD
+<<<<<<< HEAD
 		<jsp:include page="../mod/head.jsp"/> 
 	</head>
 	<body>
@@ -20,6 +21,8 @@
 		
 		</div>
 =======
+=======
+>>>>>>> parent of 7294c19 (a)
 	</head>
 	<body>
 	

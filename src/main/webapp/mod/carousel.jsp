@@ -9,7 +9,11 @@
   
     <div class="carousel-item active">
 <<<<<<< HEAD:src/main/webapp/mod/carousel.jsp
+<<<<<<< HEAD:src/main/webapp/mod/carousel.jsp
       <img src="<%=request.getContextPath() %>/multimedia/img/a7fcaa43650adc892c401956a08dc32a.jpg" class="d-block w-100 carousel-image" alt="img1"  style = "object-fit: cover">
+=======
+      <img src="multimedia/img/a7fcaa43650adc892c401956a08dc32a.jpg" class="d-block w-100 carousel-image" alt="img1"  style = "object-fit: cover">
+>>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/carousel.jsp
 =======
       <img src="multimedia/img/a7fcaa43650adc892c401956a08dc32a.jpg" class="d-block w-100 carousel-image" alt="img1"  style = "object-fit: cover">
 >>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/carousel.jsp
@@ -21,7 +25,11 @@
     
     <div class="carousel-item">
 <<<<<<< HEAD:src/main/webapp/mod/carousel.jsp
+<<<<<<< HEAD:src/main/webapp/mod/carousel.jsp
       <img src="<%=request.getContextPath() %>/multimedia/img/20516-afterlives-ardenweald-4k-desktop-wallpapers.jpg" class="d-block w-100 carousel-image" alt="img2" style = "object-fit: cover">
+=======
+      <img src="multimedia/img/20516-afterlives-ardenweald-4k-desktop-wallpapers.jpg" class="d-block w-100 carousel-image" alt="img2" style = "object-fit: cover">
+>>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/carousel.jsp
 =======
       <img src="multimedia/img/20516-afterlives-ardenweald-4k-desktop-wallpapers.jpg" class="d-block w-100 carousel-image" alt="img2" style = "object-fit: cover">
 >>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/carousel.jsp
@@ -33,7 +41,11 @@
     
     <div class="carousel-item">
 <<<<<<< HEAD:src/main/webapp/mod/carousel.jsp
+<<<<<<< HEAD:src/main/webapp/mod/carousel.jsp
       <img src="<%=request.getContextPath() %>/multimedia/img/1579461169_preview_Recent Best.jpg" class="d-block w-100 carousel-image" alt="img3"  style = "object-fit: cover">
+=======
+      <img src="multimedia/img/1579461169_preview_Recent Best.jpg" class="d-block w-100 carousel-image" alt="img3"  style = "object-fit: cover">
+>>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/carousel.jsp
 =======
       <img src="multimedia/img/1579461169_preview_Recent Best.jpg" class="d-block w-100 carousel-image" alt="img3"  style = "object-fit: cover">
 >>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/carousel.jsp
