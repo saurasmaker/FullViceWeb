@@ -57,7 +57,6 @@ public class Login implements IAction{
 				return request.getContextPath() + ActionsController.INDEX_PAGE;
 			}
 			else
-
 				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
 		}
 		else {

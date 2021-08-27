@@ -3,11 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="ISO-8859-1">
 		<title>Full Vicie - Forums</title>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		<jsp:include page="../mod/head.jsp"/> 
 	</head>
 	<body>
@@ -21,14 +17,5 @@
  			</div>
 		
 		</div>
-=======
-=======
->>>>>>> parent of 7294c19 (a)
-=======
->>>>>>> parent of 7294c19 (a)
-	</head>
-	<body>
-	
->>>>>>> parent of 7294c19 (a)
 	</body>
 </html>

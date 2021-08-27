@@ -145,7 +145,7 @@
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      ï¿½ 2021 Copyright:
+      © 2021 Copyright:
       <a class="text-white" href="http://fullvicie.sytes.net/FullVicie_Web/">Full Vicie</a>
     </div>
     <!-- Copyright -->

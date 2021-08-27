@@ -6,13 +6,22 @@
     
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-	<%=request.getParameter("ERROR_TYPE") %>
-	<br/>
-	<a href="../index.jsp">go back</a>
-</body>
+	<head>
+		<title>FV - Error</title>
+		<jsp:include page="../mod/head.jsp"/> 
+	</head>
+	
+	<body class="dark-body">
+	
+		<jsp:include page="../mod/header.jsp"/>
+		<br/><br/><br/>
+		
+		<div class="container text-white rounded bg-dark">
+			<p><%=request.getParameter("ERROR_TYPE") %></p>
+			<p><a href="<%=request.getContextPath() %>/index.jsp">go back</a></p>
+		</div>
+		
+		<jsp:include page="../mod/footer.jsp"/>
+		
+	</body>
 </html>

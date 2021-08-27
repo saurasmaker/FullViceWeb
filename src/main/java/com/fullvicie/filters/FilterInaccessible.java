@@ -10,27 +10,16 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.enums.ErrorType;
 
 /**
  * Servlet Filter implementation class FilterInaccessible
  */
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 
 @WebFilter("/secured/*")
-=======
-@WebFilter("/FilterInaccessible")
->>>>>>> parent of 7294c19 (a)
-=======
-@WebFilter("/FilterInaccessible")
->>>>>>> parent of 7294c19 (a)
-=======
-@WebFilter("/FilterInaccessible")
->>>>>>> parent of 7294c19 (a)
+
 public class FilterInaccessible implements Filter {
 
     /**

@@ -43,6 +43,9 @@ public class Profile implements IPojo{
 		this.surnames = request.getParameter(PARAM_PROFILE_SURNAMES);
 		this.biography = request.getParameter(PARAM_PROFILE_BIOGRAPHY);
 		
+		try{ this.birthday = Date.valueOf(request.getParameter(PARAM_PROFILE_BIRTHDAY)); }
+		catch(Exception t) { this.birthday = null; }
+		
 		try{this.userId = Integer.parseInt(request.getParameter(PARAM_PROFILE_USER_ID));}
 		catch(Exception t) {this.userId = -1;}
 		
