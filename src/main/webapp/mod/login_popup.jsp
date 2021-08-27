@@ -89,7 +89,12 @@
 
 <<<<<<< HEAD:src/main/webapp/mod/login-popup.jsp
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+<<<<<<< HEAD:src/main/webapp/mod/login-popup.jsp
+>>>>>>> parent of 7294c19 (a)
+=======
+<<<<<<< HEAD:src/main/webapp/mod/login-popup.jsp
 <<<<<<< HEAD:src/main/webapp/mod/login-popup.jsp
 >>>>>>> parent of 7294c19 (a)
 <script src = "<%=request.getContextPath() %>/js/login-form.js"></script>
@@ -97,7 +102,16 @@
 <script src = "js/login-form.js"></script>
 >>>>>>> parent of 7294c19 (a):src/main/webapp/mod/login_popup.jsp
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+<script src = "js/login-form.js"></script>
+>>>>>>> parent of 7294c19 (a):src/main/webapp/mod/login_popup.jsp
+>>>>>>> parent of 7294c19 (a)
+=======
+=======
+<script src = "js/login-form.js"></script>
+>>>>>>> parent of 7294c19 (a):src/main/webapp/mod/login_popup.jsp
 =======
 <script src = "js/login-form.js"></script>
 >>>>>>> parent of 7294c19 (a):src/main/webapp/mod/login_popup.jsp

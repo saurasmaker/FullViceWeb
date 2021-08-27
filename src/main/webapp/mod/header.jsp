@@ -93,7 +93,11 @@
 			            		<li class="nav-item">
 <<<<<<< HEAD:src/main/webapp/mod/header.jsp
 <<<<<<< HEAD:src/main/webapp/mod/header.jsp
+<<<<<<< HEAD:src/main/webapp/mod/header.jsp
 		                			<a class="nav-link" href = "<%=request.getContextPath() %>/pages/admin/admin-page.jsp">Administrar<span class="sr-only">(current)</span></a>
+=======
+		                			<a class="nav-link" href = "<%=request.getContextPath() %>/secured/admin/admin_page.jsp">Administrar<span class="sr-only">(current)</span></a>
+>>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/header.jsp
 =======
 		                			<a class="nav-link" href = "<%=request.getContextPath() %>/secured/admin/admin_page.jsp">Administrar<span class="sr-only">(current)</span></a>
 >>>>>>> parent of 7294c19 (a):src/main/webapp/secured/mod/header.jsp

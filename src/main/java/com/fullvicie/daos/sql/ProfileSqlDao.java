@@ -176,6 +176,7 @@ public static int USER_COUNT = 0;
 			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(query);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			
 			if(profile.getName() != null) preparedStatement.setString(1, profile.getName());
 			else preparedStatement.setString(1, actualProfile.getName());
@@ -193,6 +194,8 @@ public static int USER_COUNT = 0;
 			else preparedStatement.setInt(5, actualProfile.getUserId());
 	
 =======
+=======
+>>>>>>> parent of 7294c19 (a)
 =======
 >>>>>>> parent of 7294c19 (a)
 			preparedStatement.setString(1, profile.getName());

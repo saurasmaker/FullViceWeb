@@ -10,8 +10,12 @@
 </div>
 <<<<<<< HEAD:src/main/webapp/mod/cookies-advise.jsp
 <<<<<<< HEAD:src/main/webapp/mod/cookies-advise.jsp
+<<<<<<< HEAD:src/main/webapp/mod/cookies-advise.jsp
 
 <script src = "<%=request.getContextPath() %>/js/cookies-alert.js"></script>
+=======
+<script src = "js/cookiealert.js"></script>
+>>>>>>> parent of 7294c19 (a):src/main/webapp/mod/cookies_advise.html
 =======
 <script src = "js/cookiealert.js"></script>
 >>>>>>> parent of 7294c19 (a):src/main/webapp/mod/cookies_advise.html

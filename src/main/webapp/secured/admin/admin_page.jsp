@@ -9,6 +9,7 @@
 <html>
 	<head>
 <<<<<<< HEAD:src/main/webapp/secured/admin/admin_page.jsp
+<<<<<<< HEAD:src/main/webapp/secured/admin/admin_page.jsp
 <<<<<<< HEAD:src/main/webapp/pages/admin/admin-page.jsp
 		<title>Full Vicie - Administer</title>
 		
@@ -24,6 +25,9 @@
 =======
 		<jsp:include page="../../mod/head.html"/> 
 >>>>>>> parent of 7294c19 (a):src/main/webapp/secured/admin/admin_page.jsp
+=======
+		<jsp:include page="../../mod/head.html"/> 
+>>>>>>> parent of 7294c19 (a):src/main/webapp/pages/admin/admin-page.jsp
 =======
 		<jsp:include page="../../mod/head.html"/> 
 >>>>>>> parent of 7294c19 (a):src/main/webapp/pages/admin/admin-page.jsp

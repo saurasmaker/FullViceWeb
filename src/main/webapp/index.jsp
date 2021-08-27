@@ -9,11 +9,14 @@
 		<title>Full Vicie</title>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/styles/carousel.css"/>
 
 		<jsp:include page="mod/head.jsp"/> 
 =======
+=======
+>>>>>>> parent of 7294c19 (a)
 =======
 >>>>>>> parent of 7294c19 (a)
 		<jsp:include page="mod/head.html"/> 
@@ -33,6 +36,9 @@
 		<link type="text/css" rel="stylesheet" href = "styles/carousel.css"/>
 		
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 7294c19 (a)
+=======
 >>>>>>> parent of 7294c19 (a)
 =======
 >>>>>>> parent of 7294c19 (a)
@@ -42,12 +48,15 @@
 		
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		<jsp:include page="mod/cookies-advise.jsp"/> 
 		<jsp:include page="mod/login-popup.jsp"/>
 		<jsp:include page="mod/header.jsp"/>
 		<jsp:include page="mod/carousel.jsp"/>
 				
 =======
+=======
+>>>>>>> parent of 7294c19 (a)
 =======
 >>>>>>> parent of 7294c19 (a)
 		<jsp:include page="mod/cookies_advise.html"/> 
@@ -62,6 +71,11 @@
 		
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		
+		
+>>>>>>> parent of 7294c19 (a)
 =======
 		
 		

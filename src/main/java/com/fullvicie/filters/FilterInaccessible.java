@@ -18,9 +18,13 @@ import com.fullvicie.enums.ErrorType;
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 @WebFilter("/secured/*")
+=======
+@WebFilter("/FilterInaccessible")
+>>>>>>> parent of 7294c19 (a)
 =======
 @WebFilter("/FilterInaccessible")
 >>>>>>> parent of 7294c19 (a)
