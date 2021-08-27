@@ -79,19 +79,19 @@
   
             <ul class="list-unstyled mb-0">
               <li>
-                <a href="#!" class="text-white">About Us</a>
+                <a href="<%=request.getContextPath() %>/pages/information/about-us.jsp" class="text-white">About Us</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Delivery Information</a>
+                <a href="<%=request.getContextPath() %>/pages/information/delivery-information.jsp" class="text-white">Delivery Information</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Privacy Policy</a>
+                <a href="<%=request.getContextPath() %>/pages/information/privacy-policy.jsp" class="text-white">Privacy Policy</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Terms & Conditions</a>
+                <a href="<%=request.getContextPath() %>/pages/information/terms-and-conditions.jsp" class="text-white">Terms & Conditions</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Contact Us</a>
+                <a href="<%=request.getContextPath() %>/pages/information/contact-us.jsp" class="text-white">Contact Us</a>
               </li>
             </ul>
           </div>

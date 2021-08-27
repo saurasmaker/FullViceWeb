@@ -11,7 +11,7 @@
 	</head>
 	
 	
-	<body>
+	<body class="dark-body">
 	
 		<jsp:include page="../../secured/mod/header.jsp"/>
 		<br/><br/><br/>

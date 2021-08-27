@@ -9,7 +9,7 @@
 		<jsp:include page="../../secured/mod/head.html" /> 
 	</head>
 	
-	<body>
+	<body class="dark-body">
 	
 	</body>
 </html>

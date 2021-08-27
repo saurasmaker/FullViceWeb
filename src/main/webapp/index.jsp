@@ -12,9 +12,9 @@
 	
 	
 		<!-- My Styles -->
-		<link type="text/css" rel="stylesheet" href="secured/styles/reset.css"/>
-		<link type="text/css" rel="stylesheet" href="secured/styles/my-styles.css"/>
-		<link type="text/css" rel="stylesheet" href="secured/styles/carousel.css"/>
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/reset.css"/>
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/my-styles.css"/>
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/carousel.css"/>
 		
 		<!-- My Scripts -->		
 		
@@ -25,7 +25,7 @@
 	
 	<body class="dark-body">
 		
-		<jsp:include page="secured/mod/cookies-advise.html"/> 
+		<jsp:include page="secured/mod/cookies-advise.jsp"/> 
 		<jsp:include page="secured/mod/login-popup.jsp"/>
 		<jsp:include page="secured/mod/header.jsp"/>
 		<jsp:include page="secured/mod/carousel.jsp"/>

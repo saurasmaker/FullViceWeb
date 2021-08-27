@@ -12,11 +12,9 @@ import javax.servlet.annotation.WebFilter;
 /**
  * Servlet Filter implementation class FilterInaccessible
  */
-<<<<<<< Updated upstream
-@WebFilter("/FilterInaccessible")
-=======
+
 @WebFilter("/secured/*")
->>>>>>> Stashed changes
+
 public class FilterInaccessible implements Filter {
 
     /**

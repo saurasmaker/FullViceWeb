@@ -10,4 +10,4 @@
 
 </div>
 
-<script src = "../js/cookiealert.js"></script>
+<script src = "<%=request.getContextPath() %>/secured/js/cookies-alert.js"></script>

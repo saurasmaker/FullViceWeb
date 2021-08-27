@@ -1,4 +1,4 @@
-<%@page import="com.fullvicie.actions.user.UpdateUserPicture"%>
+<%@page import="com.fullvicie.actions.user.ChangeUserPicture"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
@@ -13,8 +13,8 @@
 		<title>FV - ${sessionScope.ATR_USER_LOGGED_OBJ.username}'s profile</title>
 		
 		<!-- My Styles -->
-		<link type="text/css" rel="stylesheet" href="../../secured/styles/reset.css"/>
-		<link type="text/css" rel="stylesheet" href="../../secured/styles/my-styles.css">
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/reset.css"/>
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/my-styles.css">
 		
 		<!-- My Scripts -->
 		
@@ -137,7 +137,7 @@
 		        	<img  class="img-fluid rounded" src="data:image/png;base64, ${ATR_USER_LOGGED_OBJ.base64Picture}" alt="${ATR_USER_LOGGED_OBJ.username}'s picture."/>
 		        	<br/>
 		        	<form id = "change-user-picture-form" class = "form-group" enctype="multipart/form-data" action="<%=request.getContextPath()%>/ActionsController" method="POST">
-						<input id="user-input-action" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=UpdateUserPicture.PARAM_CHANGE_USER_PICTURE_ACTION%>'/>
+						<input id="user-input-action" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=ChangeUserPicture.PARAM_CHANGE_USER_PICTURE_ACTION%>'/>
 				        <p><input id = "user-input-picture" type = "file" accept="image/*" class="form-control" name="<%=User.PART_USER_PICTURE %>"></p>
 				        <input id="user-input-change-picture" type="submit" class="btn btn-primary" value="Change"/>
 					</form>
@@ -164,7 +164,7 @@
 		
 		<jsp:include page="../../secured/mod/footer.jsp"/>
 		
-		<script type="text/javascript" src="../../js/profile_tools.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/secured/js/profile-tools.js"></script>
 		
 	</body>
 </html>
