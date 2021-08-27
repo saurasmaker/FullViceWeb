@@ -11,16 +11,7 @@
 <html>
 	<head>
 		<title>FV - ${sessionScope.ATR_USER_LOGGED_OBJ.username}'s profile</title>
-		
-		<!-- My Styles -->
-		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/reset.css"/>
-		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/my-styles.css">
-		
-		<!-- My Scripts -->
-		
-		
-		
-		<jsp:include page="../../secured/mod/head.html"/> 
+		<jsp:include page="../../mod/head.jsp"/> 
 	</head>
 	
 	<%
@@ -50,7 +41,7 @@
 	
 	<body class="dark-body">
 		
-		<jsp:include page="../../secured/mod/header.jsp"/>
+		<jsp:include page="../../mod/header.jsp"/>
 		<br/><br/><br/>
 		<div class="container text-white rounded bg-dark">
   			
@@ -162,9 +153,9 @@
 		
 		<br/>
 		
-		<jsp:include page="../../secured/mod/footer.jsp"/>
+		<jsp:include page="../../mod/footer.jsp"/>
 		
-		<script type="text/javascript" src="<%=request.getContextPath() %>/secured/js/profile-tools.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath() %>/js/profile-tools.js"></script>
 		
 	</body>
 </html>

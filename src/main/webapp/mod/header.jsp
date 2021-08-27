@@ -6,8 +6,8 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 
 
-<header>
-  	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+<header class="text-responsive">
+  	<nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm fixed-top navbar-dark bg-dark">
     	<div class="container-xl">
 	    	<a class="navbar-brand" href="<%=request.getContextPath() %>/index.jsp">Full Vicie</a>
 	    	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@
 
 			            	<c:if test='${sessionScope.ATR_USER_LOGGED_OBJ.admin == true}'>
 			            		<li class="nav-item">
-		                			<a class="nav-link" href = "<%=request.getContextPath() %>/secured/admin/admin-page.jsp">Administrar<span class="sr-only">(current)</span></a>
+		                			<a class="nav-link" href = "<%=request.getContextPath() %>/pages/admin/admin-page.jsp">Administrar<span class="sr-only">(current)</span></a>
 		            			</li>
 			            	</c:if>
 	        			</c:otherwise>

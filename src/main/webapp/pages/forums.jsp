@@ -4,18 +4,18 @@
 <html>
 	<head>
 		<title>Full Vicie - Forums</title>
-		
-		<!-- My Styles -->
-		<link type="text/css" rel="stylesheet" href="../../styles/reset.css" />
-		<link type="text/css" rel="stylesheet" href="../../styles/my-styles.css">
-		
-		<!-- My Scripts -->
-		
-		
-		
-		<jsp:include page="../secured/mod/head.html"/> 
+		<jsp:include page="../mod/head.jsp"/> 
 	</head>
 	<body>
-	
+		<jsp:include page="../mod/header.jsp"/>
+		<br/><br/><br/>
+		
+		<div class="container text-white rounded bg-dark">
+		
+			<h2>Forums</h2>
+ 			<div class="row">
+ 			</div>
+		
+		</div>
 	</body>
 </html>

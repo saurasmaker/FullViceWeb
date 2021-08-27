@@ -44,7 +44,7 @@ public class PseudoDelete implements IAction{
 
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(!u.isAdmin() && !u.isModerator())
-			return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE=" + ErrorType.ACCESS_DENIED_ERROR;
+			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		

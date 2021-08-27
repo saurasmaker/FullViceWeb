@@ -7,6 +7,15 @@
 		<title>Full Vicie - Communities</title>
 	</head>
 	<body>
-	
+		<jsp:include page="../mod/header.jsp"/>
+		<br/><br/><br/>
+		
+		<div class="container text-white rounded bg-dark">
+		
+			<h2>Communities</h2>
+ 			<div class="row">
+ 			</div>
+		
+		</div>
 	</body>
 </html>

@@ -5,7 +5,7 @@
 
 	<head>
 		<title>FV - Terms and Conditions</title>
-		<jsp:include page="../../secured/mod/head.html"/> 
+		<jsp:include page="../../mod/head.jsp"/> 
 	</head>
 	
 	<body class="dark-body">

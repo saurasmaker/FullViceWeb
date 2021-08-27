@@ -7,13 +7,13 @@
 
 	<head>
 		<title>FV - About Us</title>
-		<jsp:include page="../../secured/mod/head.html"/> 
+		<jsp:include page="../../mod/head.jsp"/> 
 	</head>
 	
 	
 	<body class="dark-body">
 	
-		<jsp:include page="../../secured/mod/header.jsp"/>
+		<jsp:include page="../../mod/header.jsp"/>
 		<br/><br/><br/>
 		<div class="container text-white rounded bg-dark">
 			<h2>About Us</h2>

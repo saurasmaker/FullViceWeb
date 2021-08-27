@@ -5,8 +5,7 @@
 
 	<head>
 		<title>FV - Delivery Information</title>
-		
-		<jsp:include page="../../secured/mod/head.html" /> 
+		<jsp:include page="../../mod/head.jsp" /> 
 	</head>
 	
 	<body class="dark-body">

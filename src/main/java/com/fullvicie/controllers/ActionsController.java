@@ -23,7 +23,8 @@ public class ActionsController extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 
-	public static final String PARAM_OBJECT_CLASS = "PARAM_OBJECT_CLASS", PARAM_SELECT_ACTION = "PARAM_SELECT_ACTION";
+	public static final String PARAM_OBJECT_CLASS = "PARAM_OBJECT_CLASS", PARAM_SELECT_ACTION = "PARAM_SELECT_ACTION",
+			INDEX_PAGE = "/index.jsp", ERROR_PAGE = "/pages/error.jsp?ERROR_TYPE=";
 
 	private String url;
 
@@ -65,7 +66,7 @@ public class ActionsController extends HttpServlet {
 			break;
 				
 		case Read.PARAM_READ_ACTION:
-			url += (new Read()).execute(request, response);
+			url = (new Read()).execute(request, response);
 			break;
 			
 		case Update.PARAM_UPDATE_ACTION:

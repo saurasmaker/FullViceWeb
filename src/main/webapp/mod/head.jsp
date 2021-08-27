@@ -1,6 +1,6 @@
 
 
-	<link rel="shortcut icon" href="img/FVIcon.png">
+	<link rel="shortcut icon" href="<%=request.getContextPath() %>/multimedia/img/FVIcon.png">
 	
 	<!-- Meta -->
 	<meta name = "author" content="Iván Saura Cuadrado"/>
@@ -9,6 +9,9 @@
 	<meta charset = "UTF-8">
 	<meta name = "google-site-verification" content="s96oPszhEhIeqhFe-UzwLtKgd7KblgCvYhFOpZuirnc"/>
 
+	
+	<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/styles/reset.css"/>
+	
 	
 	<!-- Bootstrap 5 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
@@ -21,3 +24,9 @@
 	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	<!-- Anuncios Google -->
 	<script data-ad-client="ca-pub-5731524801665513" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	
+	<!-- My Styles -->
+	<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/styles/my-styles.css">
+	
+	

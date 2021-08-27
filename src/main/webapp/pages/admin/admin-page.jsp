@@ -18,7 +18,7 @@
 		
 		
 		
-		<jsp:include page="../../secured/mod/head.html"/> 
+		<jsp:include page="../../mod/head.jsp"/> 
 		
 		
 	</head>
@@ -40,7 +40,7 @@
 			</div>
 
 		</div>
-		<jsp:include page="../../secured/mod/footer.jsp" />
+		<jsp:include page="../../mod/footer.jsp" />
 		
 		<script type="text/javascript" src="../../js/adminCRUD.js"></script>
 	</body>

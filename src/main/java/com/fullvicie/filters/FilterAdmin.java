@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.pojos.User;
 
@@ -54,7 +55,7 @@ public class FilterAdmin implements Filter {
 			chain.doFilter(request, response);
 		}
 		else {
-			((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + "/mod/error.jsp?ERROR_TYPE="+ErrorType.ACCESS_DENIED_ERROR); 
+			((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR); 
 		}				
 	}
 

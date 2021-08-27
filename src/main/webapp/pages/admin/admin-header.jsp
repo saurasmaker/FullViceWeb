@@ -90,7 +90,7 @@
 
 			            	<c:if test='${sessionScope.ATR_USER_LOGGED_OBJ.admin == true}'>
 			            		<li class="nav-item">
-		                			<a class="nav-link" href = "<%=request.getContextPath() %>/secured/admin/admin_page.jsp">Administer<span class="sr-only">(current)</span></a>
+		                			<a class="nav-link" href = "<%=request.getContextPath() %>/pages/admin/admin-page.jsp">Administer<span class="sr-only">(current)</span></a>
 		            			</li>
 			            	</c:if>
 	        			</c:otherwise>

@@ -8,6 +8,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.fullvicie.controllers.ActionsController;
+import com.fullvicie.enums.ErrorType;
 
 /**
  * Servlet Filter implementation class FilterInaccessible
@@ -35,11 +40,8 @@ public class FilterInaccessible implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// place your code here
-
-		// pass the request along the filter chain
-		chain.doFilter(request, response);
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		((HttpServletResponse)response).sendRedirect(httpRequest.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR); 
 	}
 
 	/**

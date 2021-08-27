@@ -7,34 +7,27 @@
 <html>
 	<head>
 		<title>Full Vicie</title>
-		
-	
-	
-	
-		<!-- My Styles -->
-		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/reset.css"/>
-		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/my-styles.css"/>
-		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/secured/styles/carousel.css"/>
-		
-		<!-- My Scripts -->		
-		
-		
-		<jsp:include page="secured/mod/head.html"/> 
 
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/styles/carousel.css"/>
+
+		<jsp:include page="mod/head.jsp"/> 
 	</head>
 	
 	<body class="dark-body">
 		
-		<jsp:include page="secured/mod/cookies-advise.jsp"/> 
-		<jsp:include page="secured/mod/login-popup.jsp"/>
-		<jsp:include page="secured/mod/header.jsp"/>
-		<jsp:include page="secured/mod/carousel.jsp"/>
-		
+		<jsp:include page="mod/cookies-advise.jsp"/> 
+		<jsp:include page="mod/login-popup.jsp"/>
+		<jsp:include page="mod/header.jsp"/>
+		<jsp:include page="mod/carousel.jsp"/>
+				
 		<div class="container text-white bg-dark">
-  			
+  			<p><a href="<%=request.getContextPath() %>/multimedia/img/a7fcaa43650adc892c401956a08dc32a.jpg">asdfsdfghsfgj</a></p>
 		</div>
 		
-		<jsp:include page="secured/mod/footer.jsp"/>
+		<jsp:include page="mod/footer.jsp"/>
 	
 	</body>
 </html>
+
+
+	

@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.daos.sql.UserSqlDao;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
@@ -36,7 +37,7 @@ public class ChangeUserPicture implements IAction{
 			
 		}
 		
-		return "/mod/error.jsp?ERROR_TYPE="+ErrorType.USER_DOES_NOT_EXIST_ERROR;
+		return ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
 	}
 
 }

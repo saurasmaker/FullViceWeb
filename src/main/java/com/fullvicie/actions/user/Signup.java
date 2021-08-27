@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.daos.sql.ProfileSqlDao;
 import com.fullvicie.daos.sql.UserSqlDao;
 import com.fullvicie.enums.ErrorType;
@@ -27,7 +28,7 @@ public class Signup implements IAction{
 		
 		ErrorType errorType = udao.create(user);
 		if(errorType != ErrorType.NO_ERROR) {		
-			return request.getContextPath()+"/mod/error.jsp?ERROR_TYPE=" + errorType;
+			return request.getContextPath() + ActionsController.ERROR_PAGE + errorType;
 		}
 		else {
 			user = udao.read(user.getUsername(), SearchBy.USERNAME);
@@ -39,7 +40,7 @@ public class Signup implements IAction{
 			}
 
 			request.getSession().setAttribute(User.ATR_USER_LOGGED_OBJ, user);
-			return request.getContextPath()+"/index.jsp";
+			return request.getContextPath() + ActionsController.INDEX_PAGE;
 		}
 	}
 }
