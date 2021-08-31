@@ -43,9 +43,9 @@ public class UserSqlDao implements IDao<User>{
 			return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + " (" 
 					+ USERNAME_COLUMN + ", " 
 					+ EMAIL_COLUMN + ", "
+					+ PASSWORD_COLUMN + ", "
 					+ SIGN_UP_DATE_COLUMN + ", " 
 					+ SIGN_UP_TIME_COLUMN + ", "  
-					+ PASSWORD_COLUMN + ", " 
 					+ LAST_LOGOUT_DATE_COLUMN + ", " 
 					+ LAST_LOGOUT_TIME_COLUMN + ", " 
 					+ DELETED_COLUMN + ", "
@@ -121,7 +121,7 @@ public class UserSqlDao implements IDao<User>{
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
 		
-		String deleteQuery = "DELETE FROM users WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME + " WHERE ";
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
@@ -201,8 +201,10 @@ public class UserSqlDao implements IDao<User>{
 			// Prepare & Execute Statement
 			PreparedStatement preparedStatement = null;
 			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(updateQuery);
+			
 			preparedStatement.setDate(1, logoutDate);
 			preparedStatement.setTime(2, logoutTime);
+			
 			preparedStatement.execute();
 			preparedStatement.close();
 		} catch(Exception e) {
@@ -247,33 +249,42 @@ public class UserSqlDao implements IDao<User>{
 			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(query);
 			
 			if(user.getUsername()!=null) preparedStatement.setString(1, user.getUsername());
-			else preparedStatement.setString(1, actualUser.getUsername());
+			else if(actualUser!=null) preparedStatement.setString(1, actualUser.getUsername());
+			else preparedStatement.setString(1, null);
 			
 			if(user.getEmail()!=null) preparedStatement.setString(2, user.getEmail());
-			else preparedStatement.setString(2, actualUser.getEmail());
+			else if(actualUser!=null) preparedStatement.setString(2, actualUser.getEmail());
+			else preparedStatement.setString(2, null);
 			
 			if(user.getPassword()!=null) preparedStatement.setString(3, user.getPassword());
-			else preparedStatement.setString(3, actualUser.getPassword());
+			else if(actualUser!=null) preparedStatement.setString(3, actualUser.getPassword());
+			else preparedStatement.setString(3, null);
 			
 			if(user.getSignUpDate()!=null) preparedStatement.setDate(4, user.getSignUpDate());
-			else preparedStatement.setDate(4, actualUser.getSignUpDate());
+			else if(actualUser!=null) preparedStatement.setDate(4, actualUser.getSignUpDate());
+			else preparedStatement.setDate(4, null);
 			
-			if(user.getSignUpDate()!=null) preparedStatement.setTime(5, user.getSignUpTime());
-			else preparedStatement.setTime(5, actualUser.getSignUpTime());
+			if(user.getSignUpTime()!=null) preparedStatement.setTime(5, user.getSignUpTime());
+			else if(actualUser!=null) preparedStatement.setTime(5, actualUser.getSignUpTime());
+			else preparedStatement.setTime(5, null);
 			
-			if(user.getSignUpDate()!=null) preparedStatement.setDate(6, user.getLastLogoutDate());
-			else preparedStatement.setDate(6, actualUser.getLastLogoutDate());
+			if(user.getLastLogoutDate()!=null) preparedStatement.setDate(6, user.getLastLogoutDate());
+			else if(actualUser!=null) preparedStatement.setDate(6, actualUser.getLastLogoutDate());
+			else preparedStatement.setDate(6, null);
 			
-			if(user.getSignUpDate()!=null) preparedStatement.setTime(7, user.getLastLogoutTime());
-			else preparedStatement.setTime(7, actualUser.getLastLogoutTime());
+			if(user.getLastLogoutTime()!=null) preparedStatement.setTime(7, user.getLastLogoutTime());
+			else if(actualUser!=null) preparedStatement.setTime(7, actualUser.getLastLogoutTime());
+			else preparedStatement.setTime(7, null);
 			
 			preparedStatement.setBoolean(8, user.getDeleted());
 			
-			if(user.getSignUpDate()!=null) preparedStatement.setDate(9, user.getDeleteDate());
-			else preparedStatement.setDate(9, actualUser.getDeleteDate());
+			if(user.getDeleteDate()!=null) preparedStatement.setDate(9, user.getDeleteDate());
+			else if(actualUser!=null) preparedStatement.setDate(9, actualUser.getDeleteDate());
+			else preparedStatement.setDate(9, null);
 			
-			if(user.getSignUpDate()!=null) preparedStatement.setTime(10, user.getDeleteTime());
-			else preparedStatement.setTime(10, actualUser.getDeleteTime());
+			if(user.getDeleteTime()!=null) preparedStatement.setTime(10, user.getDeleteTime());
+			else if(actualUser!=null)preparedStatement.setTime(10, actualUser.getDeleteTime());
+			else preparedStatement.setTime(10, null);
 			
 			preparedStatement.setBoolean(11, user.isModerator());
 			preparedStatement.setBoolean(12, user.isAdmin());

@@ -1,4 +1,4 @@
-package com.fullvicie.actions.moderator;
+package com.fullvicie.actions.crud;
 
 import java.io.IOException;
 
@@ -7,33 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.ForumCategorySqlDao;
-import com.fullvicie.daos.sql.ForumMessageLikeSqlDao;
-import com.fullvicie.daos.sql.ForumMessageSqlDao;
-import com.fullvicie.daos.sql.ForumSqlDao;
-import com.fullvicie.daos.sql.PostCategorySqlDao;
-import com.fullvicie.daos.sql.PostCommentLikeSqlDao;
-import com.fullvicie.daos.sql.PostCommentSqlDao;
-import com.fullvicie.daos.sql.PostLikeSqlDao;
-import com.fullvicie.daos.sql.PostSqlDao;
-import com.fullvicie.daos.sql.ProfileSqlDao;
-import com.fullvicie.daos.sql.ReportSqlDao;
-import com.fullvicie.daos.sql.UserSqlDao;
+import com.fullvicie.pojos.*;
+import com.fullvicie.daos.sql.*;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
-import com.fullvicie.pojos.Forum;
-import com.fullvicie.pojos.ForumCategory;
-import com.fullvicie.pojos.ForumMessage;
-import com.fullvicie.pojos.ForumMessageLike;
-import com.fullvicie.pojos.Post;
-import com.fullvicie.pojos.PostCategory;
-import com.fullvicie.pojos.PostComment;
-import com.fullvicie.pojos.PostCommentLike;
-import com.fullvicie.pojos.PostLike;
-import com.fullvicie.pojos.Profile;
-import com.fullvicie.pojos.Report;
-import com.fullvicie.pojos.User;
+
 
 public class PseudoDelete implements IAction{
 		
@@ -109,11 +88,21 @@ public class PseudoDelete implements IAction{
 			url += "#reports-title";
 			break;
 		
+		case "com.fullvicie.pojos.Team":
+			et = (new TeamSqlDao()).pseudoDelete(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
+			url += "#teams-title";
+			break;	
+			
 		case "com.fullvicie.pojos.User":
 			et = (new UserSqlDao()).pseudoDelete(request.getParameter(User.PARAM_USER_ID), SearchBy.ID);
 			url += "#users-title";
 			break;
 			
+		case "com.fullvicie.pojos.VideoGame":
+			et = (new VideoGameSqlDao()).pseudoDelete(request.getParameter(VideoGame.PARAM_VIDEO_GAME_ID), SearchBy.ID);
+			url += "#users-title";
+			break;	
+		
 		default:
 			
 			break;

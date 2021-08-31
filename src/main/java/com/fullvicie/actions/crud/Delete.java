@@ -1,4 +1,4 @@
-package com.fullvicie.actions.admin;
+package com.fullvicie.actions.crud;
 
 import java.io.IOException;
 
@@ -90,11 +90,20 @@ public class Delete implements IAction{
 			url += "#reports-title";
 			break;
 		
+		case "com.fullvicie.pojos.Team":
+			et = (new TeamSqlDao()).delete(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
+			url += "#teams-title";
+			break;	
+			
 		case "com.fullvicie.pojos.User":
 			et = (new UserSqlDao()).delete(request.getParameter(User.PARAM_USER_ID), SearchBy.ID);
 			url += "#users-title";
 			break;
-			
+		
+		case "com.fullvicie.pojos.VideoGame":
+			et = (new VideoGameSqlDao()).delete(request.getParameter(VideoGame.PARAM_VIDEO_GAME_ID), SearchBy.ID);
+			url += "#video-games-title";
+			break;
 		default:
 			
 			break;

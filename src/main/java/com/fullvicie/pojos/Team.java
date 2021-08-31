@@ -20,15 +20,19 @@ public class Team implements IPojo{
 			PARAM_TEAM_LOGO = "PARAM_TEAM_LOGO", PARAM_TEAM_CREATION_DATE="PARAM_TEAM_CREATION_DATE", PARAM_TEAM_CREATION_TIME="PARAM_TEAM_CREATION_TIME",
 			PARAM_TEAM_DELETED="PARAM_TEAM_DELETED", PARAM_TEAM_DELETE_DATE="PARAM_TEAM_DELETE_DATE", PARAM_TEAM_DELETE_TIME="PARAM_TEAM_DELETE_TIME",
 			PARAM_TEAM_VIDEOGAME_ID="PARAM_TEAM_VIDEOGAME_ID", PARAM_TEAM_USER_OWNER_ID="PARAM_TEAM_USER_OWNER_ID", PARAM_TEAM_BASE64LOGO="PARAM_TEAM_BASE64LOGO",
-			PARAM_TEAM_USER_CREATOR_ID="PARAM_TEAM_USER_CREATOR_ID";
+			PARAM_TEAM_USER_CREATOR_ID="PARAM_TEAM_USER_CREATOR_ID", 
+			PARAM_TEAM_PLAYER_1_ID="PARAM_TEAM_PLAYER_1_ID", PARAM_TEAM_PLAYER_2_ID="PARAM_TEAM_PLAYER_2_ID", PARAM_TEAM_PLAYER_3_ID="PARAM_TEAM_PLAYER_3_ID",
+			PARAM_TEAM_PLAYER_4_ID="PARAM_TEAM_PLAYER_4_ID", PARAM_TEAM_PLAYER_5_ID="PARAM_TEAM_PLAYER_5_ID", PARAM_TEAM_PLAYER_6_ID="PARAM_TEAM_PLAYER_6_ID",
+			PARAM_TEAM_PLAYER_7_ID="PARAM_TEAM_PLAYER_7_ID", PARAM_TEAM_PLAYER_8_ID="PARAM_TEAM_PLAYER_8_ID", PARAM_TEAM_PLAYER_9_ID="PARAM_TEAM_PLAYER_9_ID";
 
-	public static final String ATTR_TEAM_OBJ = "ATTR_TEAM_OBJ";
+	public static final String ATTR_TEAM_OBJ = "ATTR_TEAM_OBJ", ATR_TEAMS_LIST = "ATR_TEAMS_LIST";
 	
 	
 	/*
 	 * Attributes
 	 */
 	private int id, videogameId, userOwnerId, userCreatorId;
+	private int players[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 	private String name, description, base64Logo;
 	private boolean deleted;
 	private Date creationDate, deleteDate;
@@ -43,12 +47,12 @@ public class Team implements IPojo{
 		
 	}
 	public Team(HttpServletRequest request) {
+				
 		try{this.id = Integer.parseInt(request.getParameter(PARAM_TEAM_ID));}
 		catch(Exception t) {this.id = -1;}
 		
 		this.name = request.getParameter(PARAM_TEAM_NAME);
 		this.description = request.getParameter(PARAM_TEAM_DESCRIPTION);
-		this.base64Logo = request.getParameter(PARAM_TEAM_BASE64LOGO);
 		
 		try{this.creationDate = Date.valueOf(request.getParameter(PARAM_TEAM_CREATION_DATE));}
 		catch(Exception t) {this.creationDate = Date.valueOf(LocalDate.now());}
@@ -64,14 +68,33 @@ public class Team implements IPojo{
 		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_TEAM_DELETE_TIME));}
 		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
 		
+		try{this.players[0] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_1_ID));}
+		catch(Exception t) {this.players[0] = -1;}
+		try{this.players[1] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_2_ID));}
+		catch(Exception t) {this.players[1] = -1;}
+		try{this.players[2] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_3_ID));}
+		catch(Exception t) {this.players[2] = -1;}
+		try{this.players[3] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_4_ID));}
+		catch(Exception t) {this.players[3] = -1;}
+		try{this.players[4] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_5_ID));}
+		catch(Exception t) {this.players[4] = -1;}
+		try{this.players[5] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_6_ID));}
+		catch(Exception t) {this.players[5] = -1;}
+		try{this.players[6] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_7_ID));}
+		catch(Exception t) {this.players[6] = -1;}
+		try{this.players[7] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_8_ID));}
+		catch(Exception t) {this.players[7] = -1;}
+		try{this.players[8] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_9_ID));}
+		catch(Exception t) {this.players[8] = -1;}
+		
 		try{this.videogameId = Integer.parseInt(request.getParameter(PARAM_TEAM_VIDEOGAME_ID));}
-		catch(Exception t) {this.id = -1;}
+		catch(Exception t) {this.videogameId = -1;}
 		
 		try{this.userOwnerId = Integer.parseInt(request.getParameter(PARAM_TEAM_USER_OWNER_ID));}
-		catch(Exception t) {this.id = -1;}
+		catch(Exception t) {this.userOwnerId = -1;}
 		
 		try{this.userCreatorId = Integer.parseInt(request.getParameter(PARAM_TEAM_CREATION_DATE));}
-		catch(Exception t) {this.id = -1;}
+		catch(Exception t) {this.userCreatorId = -1;}
 	}
 	
 	
@@ -205,6 +228,12 @@ public class Team implements IPojo{
 	}
 	public void setDeleteTime(Time deleteTime) {
 		this.deleteTime = deleteTime;
+	}
+	public int[] getPlayers() {
+		return players;
+	}
+	public void setPlayers(int players[]) {
+		this.players = players;
 	}
 	
 

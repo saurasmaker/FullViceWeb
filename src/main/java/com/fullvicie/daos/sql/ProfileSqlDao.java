@@ -174,20 +174,24 @@ public static int USER_COUNT = 0;
 			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(query);
 			
 			if(profile.getName() != null) preparedStatement.setString(1, profile.getName());
-			else preparedStatement.setString(1, actualProfile.getName());
-				
+			else if(actualProfile!=null) preparedStatement.setString(1, actualProfile.getName());
+			else preparedStatement.setString(1, null);
+			
 			if(profile.getSurnames() != null) preparedStatement.setString(2, profile.getSurnames());
-			else preparedStatement.setString(2, actualProfile.getSurnames());
+			else if(actualProfile!=null) preparedStatement.setString(2, actualProfile.getSurnames());
+			else preparedStatement.setString(2, null);
 			
 			if(profile.getBiography() != null) preparedStatement.setString(3, profile.getBiography());
-			else preparedStatement.setString(3, actualProfile.getBiography());
+			else if(actualProfile!=null) preparedStatement.setString(3, actualProfile.getBiography());
+			else preparedStatement.setString(3, null);
 			
 			if(profile.getBirthday() != null) preparedStatement.setDate(4, profile.getBirthday());
-			else preparedStatement.setDate(4, actualProfile.getBirthday());
+			else if(actualProfile!=null) preparedStatement.setDate(4, actualProfile.getBirthday());
+			else preparedStatement.setString(4, null);
 			
 			if(profile.getUserId() != -1) preparedStatement.setInt(5, profile.getUserId());
-			else preparedStatement.setInt(5, actualProfile.getUserId());
-
+			else if(actualProfile!=null) preparedStatement.setInt(5, actualProfile.getUserId());
+			else preparedStatement.setString(5, null);
 			
 			preparedStatement.execute();
 			preparedStatement.close();

@@ -20,7 +20,6 @@
 		<jsp:include page="mod/carousel.jsp"/>
 			
 		<div class="container text-white bg-dark">
-  			<p><a href="<%=request.getContextPath() %>/multimedia/img/a7fcaa43650adc892c401956a08dc32a.jpg">asdfsdfghsfgj</a></p>
 		</div>
 		
 		<jsp:include page="mod/footer.jsp"/>

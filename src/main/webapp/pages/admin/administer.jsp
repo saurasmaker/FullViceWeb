@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
-<%@ page import = "com.fullvicie.pojos.*" %>
-<%@ page import = "com.fullvicie.daos.*" %>
+<%@ page import="java.util.ArrayList" %>
     
     
 <!DOCTYPE html>
@@ -26,7 +25,7 @@
 
 	<body>
 		<div class = "general container">
-			<jsp:include page="admin-header.jsp" />		
+			<jsp:include page="administer-header.jsp" />		
 			<br/><br/><br/>
 			<div class = "content row">
 				<div class = "col-12">
@@ -35,13 +34,15 @@
 					<br/>
 				</div>
 				
-				<jsp:include page="users-admin.jsp"/>
+				<jsp:include page="admin-users.jsp"/>
+				<br/>
+				<jsp:include page="admin-video-games.jsp"/>
 			
 			</div>
 
 		</div>
 		<jsp:include page="../../mod/footer.jsp" />
 		
-		<script type="text/javascript" src="../../js/adminCRUD.js"></script>
+		<script type="text/javascript" src="../../js/admin-crud.js"></script>
 	</body>
 </html>

@@ -1,4 +1,4 @@
-package com.fullvicie.actions.admin;
+package com.fullvicie.actions.crud;
 
 import java.io.IOException;
 

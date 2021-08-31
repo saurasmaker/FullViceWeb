@@ -9,9 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fullvicie.actions.crud.*;
+// import com.fullvicie.actions.admin.*;
+// import com.fullvicie.actions.moderator.*;
 import com.fullvicie.actions.user.*;
-import com.fullvicie.actions.moderator.*;
-import com.fullvicie.actions.admin.*;
 
 
 /**
@@ -78,7 +79,7 @@ public class ActionsController extends HttpServlet {
 			break;
 			
 		case PseudoDelete.PARAM_PSEUDODELETE_ACTION:
-			url += (new PseudoDelete()).execute(request, response);
+			url = (new PseudoDelete()).execute(request, response);
 			break;
 				
 		}

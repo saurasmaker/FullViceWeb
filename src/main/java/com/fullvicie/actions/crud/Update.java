@@ -1,4 +1,4 @@
-package com.fullvicie.actions.admin;
+package com.fullvicie.actions.crud;
 
 import java.io.IOException;
 
@@ -232,6 +232,23 @@ public class Update implements IAction{
 			break;
 			
 			
+			/*
+			 * VIDEO GAME
+			 */
+			case "com.fullvicie.pojos.VideoGame":
+				VideoGame videoGame = new VideoGame(request);
+				
+				PermissionType ptVideoGame = checkPermissions(sessionUser, videoGame.getId(),
+						PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+				
+				if(ptVideoGame==PermissionType.NO_PERMISSION)
+						return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+				
+				et = (new VideoGameSqlDao()).update(request.getParameter(VideoGame.PARAM_VIDEO_GAME_ID), SearchBy.ID, videoGame);
+				url += "#video-games-title";
+				break;
+			
+			
 		//ERROR: NO EXISTS THAT UPDATE ACTION
 		default:
 			
@@ -270,7 +287,6 @@ public class Update implements IAction{
 			}
 		}
 		return PermissionType.NO_PERMISSION;
-		
-	
 	}
+	
 }

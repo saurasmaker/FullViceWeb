@@ -17,7 +17,6 @@ public interface IDao <Pojo> {
 	public ErrorType pseudoDelete(String search, SearchBy searchBy);
 	public ArrayList<Pojo> list();
 	
-	
 	/*
 	 * Static methods
 	 */

@@ -2,10 +2,38 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
-<%@ page import="com.fullvicie.controllers.ActionsController,com.fullvicie.actions.admin.Update" %>
+<%@ page import="com.fullvicie.controllers.ActionsController,com.fullvicie.actions.crud.Update" %>
 <%@ page import="com.fullvicie.pojos.User,com.fullvicie.pojos.Profile" %>
 <%@ page import="com.fullvicie.enums.*" %>
 <%@ page import="com.fullvicie.daos.sql.ProfileSqlDao,com.fullvicie.daos.sql.UserSqlDao" %>
+ 
+ 
+ <% // Profile JSP Logic.
+
+	Profile profile = null;
+	try {
+		User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+		user = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
+		profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
+		if(profile==null){
+			profile = new Profile();
+			profile.setUserId(user.getId());
+			(new ProfileSqlDao()).create(profile);
+			profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
+		}
+		
+		session.setAttribute(User.ATR_USER_LOGGED_OBJ, user);
+		session.setAttribute(Profile.ATTR_PROFILE_OBJ, profile);
+		
+	}
+	catch(Exception e){
+		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
+	}
+	
+	if(profile==null)
+		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
+%>
+ 
  
 <!DOCTYPE html>
 <html>
@@ -13,34 +41,6 @@
 		<title>FV - ${sessionScope.ATR_USER_LOGGED_OBJ.username}'s profile</title>
 		<jsp:include page="../../mod/head.jsp"/> 
 	</head>
-	
-	<%
-		Profile profile = null;
-		try {
-			User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-			user = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
-			profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-			if(profile==null){
-				profile = new Profile();
-				profile.setUserId(user.getId());
-				(new ProfileSqlDao()).create(profile);
-				profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-			}
-			
-			session.setAttribute(User.ATR_USER_LOGGED_OBJ, user);
-			session.setAttribute(Profile.ATTR_PROFILE_OBJ, profile);
-			
-		}
-		catch(Exception e){
-			((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
-		}
-		
-		if(profile==null)
-			((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
-	%>
-	
-	
-	
 	
 	<body class="dark-body">
 		

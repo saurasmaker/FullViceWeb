@@ -1,6 +1,10 @@
 package com.fullvicie.actions.user;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +29,10 @@ public class Signup implements IAction{
 		UserSqlDao udao = new UserSqlDao();
 		ProfileSqlDao pdao = new ProfileSqlDao(); 
 		User user = new User(request);
+		user.setSignUpDate(Date.valueOf(LocalDate.now()));
+		user.setSignUpTime(Time.valueOf(LocalTime.now()));
+		user.setLastLogoutDate(Date.valueOf(LocalDate.now()));
+		user.setLastLogoutTime(Time.valueOf(LocalTime.now()));
 		
 		ErrorType errorType = udao.create(user);
 		if(errorType != ErrorType.NO_ERROR) {		

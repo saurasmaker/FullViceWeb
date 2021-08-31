@@ -1,6 +1,11 @@
 
 document.getElementById("update-user-form").style.display = "none";
+document.getElementById("update-video-game-form").style.display = "none";
 
+var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})
 
 
 function updateAssessment(id, value, subject, comment, publicationDate, publicationTime, editDate, editTime, videogameId, userId){
@@ -66,9 +71,6 @@ function updateRental(id, startDate, startTime, endDate, endTime, returned, vide
 }
 
 function updateUser(id, nickname, email, isModerator, isAdmin){
-
-    alert(nickname);
-
 	document.getElementById("create-user-form").style.display = "none";
     document.getElementById("update-user-form").style.display = "block";
     
@@ -79,34 +81,20 @@ function updateUser(id, nickname, email, isModerator, isAdmin){
     document.getElementById("update-user-input-isadmin").checked = (isAdmin == "true");
 }
 
-function updateVideogame(id, name, description, releaseDate, stock, purchasePrice, rentalPrice){	
-	
-	displayAdminPage();
-	
-	document.getElementById("create-videogame-form").style.display = "none";
-    document.getElementById("update-videogame-form").style.display = "block";
+function updateVideoGame(id, name, description){
+	document.getElementById("create-video-game-form").style.display = "none";
+    document.getElementById("update-video-game-form").style.display = "block";
     
-    document.getElementById("add-videogameimage-form").style.display = "block";
-    document.getElementById("add-videogamecategory-form").style.display = "block";
-    
-    document.getElementById("videogameimage-title").style.display = "block";
-    document.getElementById("videogamecategory-title").style.display = "block";
-    document.getElementById("table-videogameimage").style.display = "block";
-    document.getElementById("table-videogamescategories").style.display = "block";
-    
-    document.getElementById("input-send-videogameimage").value = "Anadir imagen a '" + name + "'";
-    document.getElementById("input-send-videogamecategory").value = "Anadir categoria a '" + name + "'";
-    
-    document.getElementById("videogame-input-update-id").value = id;
-    document.getElementById("videogame-input-update-name").value = name;
-    document.getElementById("videogame-input-update-description").value = description;
-    document.getElementById("videogame-input-update-releasedate").value = releaseDate;
-    document.getElementById("videogame-input-update-stock").value = stock;    
-    document.getElementById("videogame-input-update-purchaseprice").value = purchasePrice;
-    document.getElementById("videogame-input-update-rentalprice").value = rentalPrice;  
-    
-    document.getElementById("videogameimage-input-idvideogame").value = id;
+    document.getElementById("update-video-game-input-id").value = id;
+    document.getElementById("update-video-game-input-name").value = name;
+    document.getElementById("update-video-game-input-description").value = description;
 }
+
+
+
+
+
+
 
 
 function cancelUpdateAssessment(){
@@ -140,15 +128,7 @@ function cancelUpdateUser(){
     document.getElementById("update-user-form").style.display = "none";
 }
 
-function cancelUpdateVideogame(){
+function cancelUpdateVideoGame(){
 	document.getElementById("create-videogame-form").style.display = "block";
     document.getElementById("update-videogame-form").style.display = "none";
-    
-    document.getElementById("videogameimage-title").style.display = "none";
-    document.getElementById("videogamecategory-title").style.display = "none";
-    document.getElementById("table-videogameimage").style.display = "none";
-    document.getElementById("table-videogamescategories").style.display = "none";
-    
-    document.getElementById("add-videogameimage-form").style.display = "none";
-    document.getElementById("add-videogamecategory-form").style.display = "none";
 }

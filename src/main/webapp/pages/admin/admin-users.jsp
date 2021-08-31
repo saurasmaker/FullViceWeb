@@ -1,4 +1,4 @@
-<%@page import="com.fullvicie.actions.moderator.PseudoDelete"%>
+<%@ page import="com.fullvicie.actions.crud.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
@@ -7,11 +7,10 @@
 <%@ page import = "com.fullvicie.pojos.User" %>
 <%@ page import = "com.fullvicie.daos.sql.UserSqlDao" %>
 <%@ page import = "com.fullvicie.controllers.ActionsController" %>
-<%@ page import = 'com.fullvicie.actions.admin.*' %>
 
 
 	<div id = "users-title" class = "col-12">
-        <h3 class = "display-3">Users</h3>
+        <h3 id="users-title" class = "display-3">Users</h3>
         <hr width = "25%" align = "left"/>
         <br/>
     </div>
@@ -97,7 +96,7 @@
                	</thead>
                	
 			   	<tbody>
-			   		<% session.setAttribute("usersList", new UserSqlDao().list()); %>
+			   		<% pageContext.setAttribute("usersList", new UserSqlDao().list()); %>
 				   	<c:forEach var='user' items='${usersList}'>
 				   		<c:if test="${not user.deleted}">
 				   		<% User u = (User) pageContext.getAttribute("user"); %>
@@ -131,14 +130,5 @@
             </table>
         </div>
     </div>
-	
-	<script>
-
-	var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-	var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-	  return new bootstrap.Popover(popoverTriggerEl)
-	})
-
-	</script>
 	
 	<br/>  

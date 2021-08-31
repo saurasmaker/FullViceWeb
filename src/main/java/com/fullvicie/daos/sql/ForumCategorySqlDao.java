@@ -1,8 +1,12 @@
 package com.fullvicie.daos.sql;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import com.fullvicie.controllers.DatabaseController;
@@ -13,7 +17,8 @@ import com.fullvicie.pojos.ForumCategory;
 public class ForumCategorySqlDao implements IDao<ForumCategory>{
 
 	
-	public static String TABLE_NAME = "forum_categories", ID_COLUMN="id", NAME_COLUMN="name", DESCRIPTION_COLUMN="description";
+	public static String TABLE_NAME = "forum_categories", ID_COLUMN="id", NAME_COLUMN="name", DESCRIPTION_COLUMN="description",
+			DELETED_COLUMN="deleted", DELETE_DATE_COLUMN="delete_date", DELETE_TIME_COLUMN="delete_time";;
 	
 	@Override
 	public ErrorType create(ForumCategory fc) {
@@ -81,8 +86,32 @@ public class ForumCategorySqlDao implements IDao<ForumCategory>{
 
 	@Override
 	public ErrorType pseudoDelete(String search, SearchBy searchBy) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			// Get user
+			ForumCategory fc = read(search, searchBy);
+			
+			// Define Query
+			String updateQuery = "UPDATE " + TABLE_NAME + " SET "
+					+ DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, " + DELETE_TIME_COLUMN + " = ? WHERE ";
+			
+			updateQuery = IDao.appendSqlSearchBy(updateQuery, SearchBy.ID, String.valueOf(fc.getId()));			
+			
+			// Prepare & Execute Statement
+			PreparedStatement preparedStatement = null;
+			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(updateQuery);
+			
+			preparedStatement.setBoolean(1, true);
+			preparedStatement.setDate(2, Date.valueOf(LocalDate.now()));
+			preparedStatement.setTime(3, Time.valueOf(LocalTime.now()));
+			
+			preparedStatement.execute();
+			preparedStatement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return ErrorType.UPDATE_FORUM_CATEGORY_ERROR;
+		}
+		
+		return ErrorType.NO_ERROR;
 	}
 	
 	@Override

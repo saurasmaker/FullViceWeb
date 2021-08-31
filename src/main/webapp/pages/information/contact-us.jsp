@@ -7,7 +7,7 @@
 		<jsp:include page="../../mod/head.jsp" /> 
 	</head>
 	
-	<body>
+	<body class="dark-body">
 		<jsp:include page="../../mod/header.jsp"/>
 		<br/><br/><br/>
 		
