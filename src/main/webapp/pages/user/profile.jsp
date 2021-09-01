@@ -48,7 +48,7 @@
 		<br/><br/><br/>
 		<div class="container text-white rounded bg-dark">
   			
-  			<h2>Profile</h2>
+  			<h2>${sessionScope.ATR_USER_LOGGED_OBJ.username}'s Profile</h2>
   			<div class="row">
 	  			<div id="profile-forms" class="col-8">
 		  			

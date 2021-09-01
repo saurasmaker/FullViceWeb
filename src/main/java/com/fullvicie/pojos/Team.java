@@ -19,7 +19,7 @@ public class Team implements IPojo{
 	public static final String PARAM_TEAM_ID = "PARAM_TEAM_ID", PARAM_TEAM_NAME = "PARAM_TEAM_NAME", PARAM_TEAM_DESCRIPTION = "PARAM_TEAM_DESCRIPTION",
 			PARAM_TEAM_LOGO = "PARAM_TEAM_LOGO", PARAM_TEAM_CREATION_DATE="PARAM_TEAM_CREATION_DATE", PARAM_TEAM_CREATION_TIME="PARAM_TEAM_CREATION_TIME",
 			PARAM_TEAM_DELETED="PARAM_TEAM_DELETED", PARAM_TEAM_DELETE_DATE="PARAM_TEAM_DELETE_DATE", PARAM_TEAM_DELETE_TIME="PARAM_TEAM_DELETE_TIME",
-			PARAM_TEAM_VIDEOGAME_ID="PARAM_TEAM_VIDEOGAME_ID", PARAM_TEAM_USER_OWNER_ID="PARAM_TEAM_USER_OWNER_ID", PARAM_TEAM_BASE64LOGO="PARAM_TEAM_BASE64LOGO",
+			PARAM_TEAM_VIDEO_GAME_ID="PARAM_TEAM_VIDEO_GAME_ID", PARAM_TEAM_USER_OWNER_ID="PARAM_TEAM_USER_OWNER_ID", PARAM_TEAM_BASE64LOGO="PARAM_TEAM_BASE64LOGO",
 			PARAM_TEAM_USER_CREATOR_ID="PARAM_TEAM_USER_CREATOR_ID", 
 			PARAM_TEAM_PLAYER_1_ID="PARAM_TEAM_PLAYER_1_ID", PARAM_TEAM_PLAYER_2_ID="PARAM_TEAM_PLAYER_2_ID", PARAM_TEAM_PLAYER_3_ID="PARAM_TEAM_PLAYER_3_ID",
 			PARAM_TEAM_PLAYER_4_ID="PARAM_TEAM_PLAYER_4_ID", PARAM_TEAM_PLAYER_5_ID="PARAM_TEAM_PLAYER_5_ID", PARAM_TEAM_PLAYER_6_ID="PARAM_TEAM_PLAYER_6_ID",
@@ -31,7 +31,7 @@ public class Team implements IPojo{
 	/*
 	 * Attributes
 	 */
-	private int id, videogameId, userOwnerId, userCreatorId;
+	private int id, videoGameId, userOwnerId, userCreatorId;
 	private int players[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 	private String name, description, base64Logo;
 	private boolean deleted;
@@ -87,8 +87,8 @@ public class Team implements IPojo{
 		try{this.players[8] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_9_ID));}
 		catch(Exception t) {this.players[8] = -1;}
 		
-		try{this.videogameId = Integer.parseInt(request.getParameter(PARAM_TEAM_VIDEOGAME_ID));}
-		catch(Exception t) {this.videogameId = -1;}
+		try{this.videoGameId = Integer.parseInt(request.getParameter(PARAM_TEAM_VIDEO_GAME_ID));}
+		catch(Exception t) {this.videoGameId = -1;}
 		
 		try{this.userOwnerId = Integer.parseInt(request.getParameter(PARAM_TEAM_USER_OWNER_ID));}
 		catch(Exception t) {this.userOwnerId = -1;}
@@ -105,7 +105,7 @@ public class Team implements IPojo{
 	public String toJavaScriptFunction() {
 		return "'" + this.id + "', '" + this.name + "', '" + this.description + "', '" + this.base64Logo + "', '"  + 
 				this.creationDate + "', '" + this.creationTime + "', '" + this.deleted + "', '" + 
-				this.deleteDate + "', '" + this.deleteTime + "', '" + this.videogameId  + "', '" + 
+				this.deleteDate + "', '" + this.deleteTime + "', '" + this.videoGameId  + "', '" + 
 				this.userOwnerId + "', '" + this.userCreatorId + "'";
 	}
 
@@ -123,7 +123,7 @@ public class Team implements IPojo{
 		jObject.put("deleted", this.deleted);
 		jObject.put("deleteDate", this.deleteDate);
 		jObject.put("deleteTime", this.deleteTime);
-		jObject.put("videogameId", this.videogameId);
+		jObject.put("videogameId", this.videoGameId);
 		jObject.put("userOwnerId", this.userOwnerId);
 		jObject.put("userCreatorId", this.userCreatorId);
 		
@@ -143,11 +143,11 @@ public class Team implements IPojo{
 	}
 
 
-	public int getVideogameId() {
-		return videogameId;
+	public int getVideoGameId() {
+		return videoGameId;
 	}
-	public void setVideogameId(int videogameId) {
-		this.videogameId = videogameId;
+	public void setVideoGameId(int videogameId) {
+		this.videoGameId = videogameId;
 	}
 
 

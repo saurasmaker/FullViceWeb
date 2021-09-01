@@ -41,7 +41,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptForum == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ForumSqlDao()).create(new Forum(request));
 			url += "#forums-title";
@@ -58,7 +58,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptForumCategory == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ForumCategorySqlDao()).create(new ForumCategory(request));
 			url += "#forum-categories-title";
@@ -75,7 +75,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptForumMessage == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ForumMessageSqlDao()).create(new ForumMessage(request));
 			url += "#forum-messages-title";
@@ -92,7 +92,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION);
 			
 			if(ptForumMessageLike == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ForumMessageLikeSqlDao()).create(new ForumMessageLike(request));
 			url += "#forum-message-likes-title";
@@ -109,7 +109,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptPost == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new PostSqlDao()).create(new Post(request));
 			url += "#posts-title";
@@ -126,7 +126,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptPostCategory == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new PostCategorySqlDao()).create(new PostCategory(request));
 			url += "#post-categories-title";
@@ -143,7 +143,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptPostComment == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new PostCommentSqlDao()).create(new PostComment(request));
 			url += "#post-comments-title";
@@ -159,7 +159,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION);
 			
 			if(ptPostCommentLike == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new PostCommentLikeSqlDao()).create(new PostCommentLike(request));
 			url += "#post-comment-likes-title";
@@ -175,7 +175,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptPostLike == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new PostLikeSqlDao()).create(new PostLike(request));
 			url += "#post-likes-title";
@@ -192,7 +192,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptProfile == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ProfileSqlDao()).create(new Profile(request));
 			url += "#profiles-title";
@@ -209,7 +209,7 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptReport == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new ReportSqlDao()).create(new Report(request));
 			url += "#reports-title";
@@ -220,12 +220,12 @@ public class Create implements IAction{
 		 * TEAM
 		 */
 		case "com.fullvicie.pojos.Team":
-			
+						
 			PermissionType ptTeam = checkPermissions(sessionUser,
 					PermissionType.USER_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptTeam == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new TeamSqlDao()).create(new Team(request));
 			url += "#teams-title";
@@ -243,7 +243,7 @@ public class Create implements IAction{
 					PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptUser == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new UserSqlDao()).create(new User(request));
 			url += "#users-title";
@@ -261,7 +261,7 @@ public class Create implements IAction{
 					 PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptVideogame == PermissionType.NO_PERMISSION)
-					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			et = (new VideoGameSqlDao()).create(new VideoGame(request));
 			url += "#videogames-title";
@@ -294,7 +294,7 @@ public class Create implements IAction{
 			case MODERATOR_PERMISSION:
 				if(sessionUser.getModerator()) return PermissionType.MODERATOR_PERMISSION;
 				break;
-			case OWNER_PERMISSION:
+			case USER_PERMISSION:
 				if(sessionUser != null) return PermissionType.USER_PERMISSION;
 				break;
 			case WHOEVER_PERMISSION:

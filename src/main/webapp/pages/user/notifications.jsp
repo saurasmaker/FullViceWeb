@@ -17,7 +17,7 @@
 		<br/><br/><br/>
 		
 		<div class="container text-white rounded bg-dark">
-			<h2>Notifications</h2>
+			<h2>${sessionScope.ATR_USER_LOGGED_OBJ.username}'s Notifications</h2>
  			<div class="row">
  			
  			

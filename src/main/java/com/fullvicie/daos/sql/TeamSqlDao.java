@@ -22,7 +22,7 @@ public class TeamSqlDao implements IDao<Team>{
 
 	public static String TABLE_NAME = "teams", ID_COLUMN="id", NAME_COLUMN="name", DESCRIPTION_COLUMN="description", LOGO_COLUMN="logo",
 			CREATION_DATE_COLUMN="creation_date", CREATION_TIME_COLUMN="creation_time",
-			DELETED_COLUMN="delete", DELETED_DATE_COLUMN="deleted_date", DELETED_TIME_COLUMN="deleted_time",
+			DELETED_COLUMN="deleted", DELETE_DATE_COLUMN="delete_date", DELETE_TIME_COLUMN="delete_time",
 			PLAYER_1_ID_COLUMN="player_1_id", PLAYER_2_ID_COLUMN="player_2_id", PLAYER_3_ID_COLUMN="player_3_id",
 			PLAYER_4_ID_COLUMN="player_4_id", PLAYER_5_ID_COLUMN="player_5_id", PLAYER_6_ID_COLUMN="player_6_id",
 			PLAYER_7_ID_COLUMN="player_7_id", PLAYER_8_ID_COLUMN="player_8_id", PLAYER_9_ID_COLUMN="player_9_id",
@@ -38,8 +38,8 @@ public class TeamSqlDao implements IDao<Team>{
 						+ CREATION_DATE_COLUMN + ", " 
 						+ CREATION_TIME_COLUMN + ", "  
 						+ DELETED_COLUMN + ", " 
-						+ DELETED_DATE_COLUMN + ", " 
-						+ DELETED_TIME_COLUMN + ", " 
+						+ DELETE_DATE_COLUMN + ", " 
+						+ DELETE_TIME_COLUMN + ", " 
 						+ PLAYER_1_ID_COLUMN + ", "
 						+ PLAYER_2_ID_COLUMN + ", " 
 						+ PLAYER_3_ID_COLUMN + ", " 
@@ -55,10 +55,10 @@ public class TeamSqlDao implements IDao<Team>{
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", team);	
 			} catch(Exception e) {
 				e.printStackTrace();
-				return ErrorType.CREATE_USER_ERROR;
+				return ErrorType.CREATE_TEAM_ERROR;
 			}
 			else
-				return ErrorType.USER_NULL_ERROR;
+				return ErrorType.TEAM_NULL_ERROR;
 	}
 
 	@Override
@@ -93,8 +93,8 @@ public class TeamSqlDao implements IDao<Team>{
 						+ CREATION_DATE_COLUMN + " = ?, "
 						+ CREATION_TIME_COLUMN + " = ?, "
 						+ DELETED_COLUMN + " = ?, "
-						+ DELETED_DATE_COLUMN + " = ?, "
-						+ DELETED_TIME_COLUMN + " = ?, "
+						+ DELETE_DATE_COLUMN + " = ?, "
+						+ DELETE_TIME_COLUMN + " = ?, "
 						+ PLAYER_1_ID_COLUMN + " = ?, "
 						+ PLAYER_2_ID_COLUMN + " = ?, "
 						+ PLAYER_3_ID_COLUMN + " = ?, "
@@ -164,7 +164,7 @@ public class TeamSqlDao implements IDao<Team>{
 			
 			// Define Query
 			String updateQuery = "UPDATE " + TABLE_NAME + " SET "
-					+ DELETED_COLUMN + " = ?, " + DELETED_DATE_COLUMN + " = ?, " + DELETED_TIME_COLUMN + " = ? WHERE ";
+					+ DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, " + DELETE_TIME_COLUMN + " = ? WHERE ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, SearchBy.ID, String.valueOf(team.getId()));			
 			
@@ -208,11 +208,11 @@ public class TeamSqlDao implements IDao<Team>{
 	
 	
 	public ArrayList<Team> listByPlayerId(int playerId) {
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + "WHERE " + PLAYER_1_ID_COLUMN + "=" + playerId;
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + PLAYER_1_ID_COLUMN + "='" + playerId + "'";
 		
 		for(int i = 2; i < 10; ++i)
-			selectQuery = " OR player_" + i + "_id = " + playerId;
-		
+			selectQuery += " OR player_" + i + "_id='" + playerId + "'";
+				
 		ResultSet rs = null;
 		ArrayList<Team> teamsList = new ArrayList<Team>();
 		
@@ -245,24 +245,30 @@ public class TeamSqlDao implements IDao<Team>{
 			preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(query);
 			
 			if(team.getName()!=null) preparedStatement.setString(pos++, team.getName());
-			else preparedStatement.setString(pos++, actualTeam.getName());
+			else if(actualTeam!=null) preparedStatement.setString(pos++, actualTeam.getName());
+			else preparedStatement.setString(pos++, null);
 			
 			if(team.getDescription()!=null) preparedStatement.setString(pos++, team.getDescription());
-			else preparedStatement.setString(pos++, actualTeam.getDescription());
-			
+			else if(actualTeam!=null) preparedStatement.setString(pos++, actualTeam.getDescription());
+			else preparedStatement.setString(pos++, null);
+				
 			if(team.getCreationDate()!=null) preparedStatement.setDate(pos++, team.getCreationDate());
-			else preparedStatement.setDate(pos++, actualTeam.getCreationDate());
+			else if(actualTeam!=null) preparedStatement.setDate(pos++, actualTeam.getCreationDate());
+			else preparedStatement.setDate(pos++, null);
 			
 			if(team.getCreationTime()!=null) preparedStatement.setTime(pos++, team.getCreationTime());
-			else preparedStatement.setTime(pos++, actualTeam.getCreationTime());
-
+			else if(actualTeam!=null) preparedStatement.setTime(pos++, actualTeam.getCreationTime());
+			else preparedStatement.setTime(pos++, null);
+			
 			preparedStatement.setBoolean(pos++, team.isDeleted());
 			
 			if(team.getDeleteDate()!=null) preparedStatement.setDate(pos++, team.getDeleteDate());
-			else preparedStatement.setDate(pos++, actualTeam.getDeleteDate());
+			else if(actualTeam!=null) preparedStatement.setDate(pos++, actualTeam.getDeleteDate());
+			else preparedStatement.setDate(pos++, null);
 			
 			if(team.getDeleteTime()!=null) preparedStatement.setTime(pos++, team.getDeleteTime());
-			else preparedStatement.setTime(pos++, actualTeam.getDeleteTime());
+			else if(actualTeam!=null) preparedStatement.setTime(pos++, actualTeam.getDeleteTime());
+			else preparedStatement.setTime(pos++, null);
 			
 			int i = 0;
 			for(int player: team.getPlayers()) {
@@ -270,15 +276,18 @@ public class TeamSqlDao implements IDao<Team>{
 			}
 			pos+=i;
 			
-			if(team.getVideogameId()!=-1) preparedStatement.setInt(pos++, team.getVideogameId());
-			else preparedStatement.setInt(pos++, actualTeam.getVideogameId());
+			if(team.getVideoGameId()!=-1) preparedStatement.setInt(pos++, team.getVideoGameId());
+			else if(actualTeam!=null) preparedStatement.setInt(pos++, actualTeam.getVideoGameId());
+			else preparedStatement.setInt(pos++, -1);
 			
 			if(team.getUserOwnerId()!=-1) preparedStatement.setInt(pos++, team.getUserOwnerId());
-			else preparedStatement.setInt(pos++, actualTeam.getUserOwnerId());
+			else if(actualTeam!=null) preparedStatement.setInt(pos++, actualTeam.getUserOwnerId());
+			else preparedStatement.setInt(pos++, -1);
 			
 			if(team.getUserCreatorId()!=-1) preparedStatement.setInt(pos++, team.getUserCreatorId());
-			else preparedStatement.setInt(pos++, actualTeam.getUserCreatorId());
-			
+			else if(actualTeam!=null) preparedStatement.setInt(pos++, actualTeam.getUserCreatorId());
+			else preparedStatement.setInt(pos++, -1);
+						
 			preparedStatement.execute();
 			preparedStatement.close();
 		} catch (SQLException e) {
@@ -300,16 +309,16 @@ public class TeamSqlDao implements IDao<Team>{
 			team.setCreationDate(rs.getDate(CREATION_DATE_COLUMN));
 			team.setCreationTime(rs.getTime(CREATION_TIME_COLUMN));
 			team.setDeleted(rs.getBoolean(DELETED_COLUMN));
-			team.setDeleteDate(rs.getDate(DELETED_DATE_COLUMN));
-			team.setDeleteTime(rs.getTime(DELETED_TIME_COLUMN));
+			team.setDeleteDate(rs.getDate(DELETE_DATE_COLUMN));
+			team.setDeleteTime(rs.getTime(DELETE_TIME_COLUMN));
 
 			int players[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
 			for(int i = 0; i < players.length; ++i)
 				players[i] = rs.getInt("player_" + (i+1) + "_id");
 			
-			team.setVideogameId(rs.getInt(VIDEO_GAME_ID_COLUMN));
+			team.setVideoGameId(rs.getInt(VIDEO_GAME_ID_COLUMN));
 			team.setUserOwnerId(rs.getInt(USER_OWNER_ID_COLUMN));
-			team.setUserCreatorId(rs.getInt(CREATION_DATE_COLUMN));
+			team.setUserCreatorId(rs.getInt(USER_CREATOR_ID_COLUMN));
 
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -208,6 +208,25 @@ public class Update implements IAction{
 			break;
 		
 			
+			
+		/*
+		 * TEAM
+		 */
+		case "com.fullvicie.pojos.Team":
+			Team team = new Team(request);
+			
+			PermissionType ptTeam = checkPermissions(sessionUser, team.getUserOwnerId(),
+					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptTeam==PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			
+			et = (new TeamSqlDao()).update(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID, team);
+			url += "#teams-title";
+			break;
+				
+				
+				
 		/*
 		 * USER
 		 */
