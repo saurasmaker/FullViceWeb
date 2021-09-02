@@ -54,7 +54,7 @@ public class Login implements IAction{
 		if(userFinded != null && !userFinded.getDeleted()) {
 			if(userToCheck.getPassword().equals(userFinded.getPassword())) {
 				request.getSession().setAttribute(User.ATR_USER_LOGGED_OBJ, userFinded);
-				return request.getContextPath() + ActionsController.INDEX_PAGE;
+				return request.getHeader("referer");
 			}
 			else
 				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;

@@ -62,6 +62,10 @@ public class ActionsController extends HttpServlet {
 			url = (new ChangeUserPicture()).execute(request, response);
 			break;
 			
+		case ChangeTeamLogo.PARAM_CHANGE_TEAM_LOGO_ACTION:
+			url = (new ChangeTeamLogo()).execute(request, response);
+			break;
+			
 		case Create.PARAM_CREATE_ACTION:
 			url = (new Create()).execute(request, response);
 			break;

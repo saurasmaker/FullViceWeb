@@ -66,7 +66,7 @@ public class TeamSqlDao implements IDao<Team>{
 		Team team = null;
 		ResultSet rs = null;
 		
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE "; 
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		try {
 			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
@@ -106,16 +106,16 @@ public class TeamSqlDao implements IDao<Team>{
 						+ PLAYER_9_ID_COLUMN + " = ?, "
 						+ VIDEO_GAME_ID_COLUMN + " = ?, "
 						+ USER_OWNER_ID_COLUMN + " = ?, "
-						+ USER_CREATOR_ID_COLUMN + " = ? WHERE ";
+						+ USER_CREATOR_ID_COLUMN + " = ? ";
 				
 				updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 				executeQueryWithParameters(updateQuery, team);
 			} catch(Exception e) {
 				e.printStackTrace();
-				return ErrorType.UPDATE_USER_ERROR;
+				return ErrorType.UPDATE_TEAM_ERROR;
 			}
 			else
-				return ErrorType.USER_NULL_ERROR;
+				return ErrorType.TEAM_NULL_ERROR;
 			
 			return ErrorType.NO_ERROR;
 	}
@@ -125,18 +125,20 @@ public class TeamSqlDao implements IDao<Team>{
 			try {
 				// Define Query
 				String updateQuery = "UPDATE " + TABLE_NAME + " SET "
-						+ LOGO_COLUMN + " = ? WHERE ";
+						+ LOGO_COLUMN + " = ? ";
 				updateQuery = IDao.appendSqlSearchBy(updateQuery, SearchBy.ID, search);			
 				
 				// Prepare & Execute Statement
 				PreparedStatement preparedStatement = null;
+				
 				preparedStatement = DatabaseController.DATABASE_CONNECTION.prepareStatement(updateQuery);
 				preparedStatement.setBlob(1, picture);
+				
 				preparedStatement.execute();
 				preparedStatement.close();
 			} catch(Exception e) {
 				e.printStackTrace();
-				return ErrorType.UPDATE_USER_ERROR;
+				return ErrorType.UPDATE_TEAM_ERROR;
 			}
 			
 			return ErrorType.NO_ERROR;
@@ -144,13 +146,13 @@ public class TeamSqlDao implements IDao<Team>{
 	
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
-		String deleteQuery = "DELETE FROM " + TABLE_NAME + " WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
 		} catch (SQLException e)  {
 			e.printStackTrace();
-			return ErrorType.DELETE_USER_ERROR;
+			return ErrorType.DELETE_TEAM_ERROR;
 		}	
 		
 		return ErrorType.NO_ERROR;
@@ -164,7 +166,7 @@ public class TeamSqlDao implements IDao<Team>{
 			
 			// Define Query
 			String updateQuery = "UPDATE " + TABLE_NAME + " SET "
-					+ DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, " + DELETE_TIME_COLUMN + " = ? WHERE ";
+					+ DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, " + DELETE_TIME_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, SearchBy.ID, String.valueOf(team.getId()));			
 			
@@ -179,17 +181,20 @@ public class TeamSqlDao implements IDao<Team>{
 			preparedStatement.close();
 		} catch(Exception e) {
 			e.printStackTrace();
-			return ErrorType.UPDATE_USER_ERROR;
+			return ErrorType.UPDATE_TEAM_ERROR;
 		}
 		
 		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public ArrayList<Team> list() {
+	public ArrayList<Team> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;
 		ArrayList<Team> teamsList = new ArrayList<Team>();
+		
+		if(searchBy != SearchBy.NONE)
+			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					

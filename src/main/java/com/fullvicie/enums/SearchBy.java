@@ -5,5 +5,6 @@ public enum SearchBy{
 	NAME,
 	USERNAME,
 	EMAIL,
-	USER_ID;
+	USER_ID,
+	NONE;
 }

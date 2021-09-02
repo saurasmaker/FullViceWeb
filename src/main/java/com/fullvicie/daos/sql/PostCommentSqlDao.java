@@ -40,7 +40,7 @@ public class PostCommentSqlDao implements IDao<PostComment>{
 		PostComment pc = null;
 		ResultSet rs = null;
 		
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + "WHERE "; 
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		try {
 			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
@@ -64,7 +64,7 @@ public class PostCommentSqlDao implements IDao<PostComment>{
 				+ MADE_DATE_COLUMN + " = ?, " + MADE_TIME_COLUMN + " = ?, " + LAST_EDIT_DATE_COLUMN + " = ?, "
 				+ LAST_EDIT_TIME_COLUMN + " = ?, " + DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, "
 				+ DELETE_TIME_COLUMN + " = ?, " + LIKES_COLUMN + " = ?, " + DISLIKES_COLUMN + " = ?, "
-				+ POST_ID_COLUMN + " = ?, " + USER_ID_COLUMN + " = ? WHERE ";
+				+ POST_ID_COLUMN + " = ?, " + USER_ID_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 			executeQueryWithParameters(updateQuery, pc);
@@ -78,7 +78,7 @@ public class PostCommentSqlDao implements IDao<PostComment>{
 
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
-		String deleteQuery = "DELETE FROM " + TABLE_NAME + "WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
@@ -97,10 +97,13 @@ public class PostCommentSqlDao implements IDao<PostComment>{
 	}
 	
 	@Override
-	public ArrayList<PostComment> list() {
+	public ArrayList<PostComment> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;
 		ArrayList<PostComment> postCommentList = new ArrayList<PostComment>();
+		
+		if(searchBy != SearchBy.NONE)
+			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					

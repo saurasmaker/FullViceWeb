@@ -30,7 +30,7 @@ public class PostCommentLikeSqlDao implements IDao<PostCommentLike>{
 		PostCommentLike pc = null;
 		ResultSet rs = null;
 		
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + "WHERE "; 
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		try {
 			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
@@ -51,7 +51,7 @@ public class PostCommentLikeSqlDao implements IDao<PostCommentLike>{
 	public ErrorType update(String search, SearchBy searchBy, PostCommentLike pcl) {
 		try {
 			String updateQuery = "UPDATE " + TABLE_NAME + " SET " + DISLIKE_COLUMN + " = ?, "  + POST_COMMENT_ID_COLUMN + " = ?, "
-				+ USER_ID_COLUMN + " = ?  WHERE ";
+				+ USER_ID_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 			executeQueryWithParameters(updateQuery, pcl);
@@ -65,7 +65,7 @@ public class PostCommentLikeSqlDao implements IDao<PostCommentLike>{
 
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
-		String deleteQuery = "DELETE FROM " + TABLE_NAME + "WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
@@ -84,10 +84,13 @@ public class PostCommentLikeSqlDao implements IDao<PostCommentLike>{
 	}
 	
 	@Override
-	public ArrayList<PostCommentLike> list() {
+	public ArrayList<PostCommentLike> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;
 		ArrayList<PostCommentLike> postCommentLikesList = new ArrayList<PostCommentLike>();
+		
+		if(searchBy != SearchBy.NONE)
+			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					

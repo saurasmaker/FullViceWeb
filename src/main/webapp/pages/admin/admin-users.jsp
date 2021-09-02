@@ -7,7 +7,7 @@
 <%@ page import = "com.fullvicie.pojos.User" %>
 <%@ page import = "com.fullvicie.daos.sql.UserSqlDao" %>
 <%@ page import = "com.fullvicie.controllers.ActionsController" %>
-
+<%@ page import = "com.fullvicie.enums.SearchBy" %>
 
 	<div id = "users-title" class = "col-12">
         <h3 id="users-title" class = "display-3">Users</h3>
@@ -17,7 +17,6 @@
 	  
 	<div class = "col-lg-4 col-md-6 col-sm-12">
       	<form id = "create-user-form" class = "form-group" action = "<%= request.getContextPath() %>/ActionsController" method = "POST">
-			
 			<input id="create-user-input-action" type='hidden' name='<%= ActionsController.PARAM_SELECT_ACTION %>' value='<%= Create.PARAM_CREATE_ACTION %>'/>
 			<input id="create-user-input-object-class" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS %>" value="<%=User.class.getName() %>" />
 			
@@ -96,7 +95,7 @@
                	</thead>
                	
 			   	<tbody>
-			   		<% pageContext.setAttribute("usersList", new UserSqlDao().list()); %>
+			   		<% pageContext.setAttribute("usersList", new UserSqlDao().listBy(SearchBy.NONE, null)); %>
 				   	<c:forEach var='user' items='${usersList}'>
 				   		<c:if test="${not user.deleted}">
 				   		<% User u = (User) pageContext.getAttribute("user"); %>

@@ -40,7 +40,7 @@ public class ReportSqlDao implements IDao<Report>{
 	}
 	
 	@Override
-	public ArrayList<Report> list() {
+	public ArrayList<Report> listBy(SearchBy searchBy, String search) {
 		// TODO Auto-generated method stub
 		return null;
 	}

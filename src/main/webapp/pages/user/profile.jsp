@@ -80,7 +80,7 @@
 			        	</form>
 		  			</div>
 		  			
-		  			<div id="update-user-div" class="row">
+		  			<div id="update-personal-information-div" class="row">
 		  			
 		  				<h3>Personal Information</h3>
 			        	<form id="update-user-form" class="form-group" action="<%= request.getContextPath() %>/ActionsController" method="POST" >

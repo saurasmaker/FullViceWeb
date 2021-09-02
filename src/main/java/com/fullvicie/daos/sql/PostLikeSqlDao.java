@@ -40,7 +40,7 @@ public class PostLikeSqlDao implements IDao<PostLike>{
 	}
 	
 	@Override
-	public ArrayList<PostLike> list() {
+	public ArrayList<PostLike> listBy(SearchBy searchBy, String search) {
 		// TODO Auto-generated method stub
 		return null;
 	}

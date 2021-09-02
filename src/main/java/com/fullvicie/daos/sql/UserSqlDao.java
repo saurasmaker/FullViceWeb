@@ -19,7 +19,6 @@ import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.User;
 
 
-
 public class UserSqlDao implements IDao<User>{
 	
 	/*
@@ -32,6 +31,7 @@ public class UserSqlDao implements IDao<User>{
 			LAST_LOGOUT_DATE_COLUMN="last_logout_date", LAST_LOGOUT_TIME_COLUMN="last_logout_time",
 			DELETED_COLUMN = "deleted", DELETE_DATE_COLUMN="delete_date", DELETE_TIME_COLUMN="delete_time",
 			IS_MODERATOR_COLUMN="moderator", IS_ADMIN_COLUMN="admin", PICTURE_COLUMN="picture";
+	
 	
 	/*
 	 * CRUD Methods
@@ -68,7 +68,7 @@ public class UserSqlDao implements IDao<User>{
 		User user = null;
 		ResultSet rs = null;
 		
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE "; 
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		try {
 			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
@@ -103,7 +103,7 @@ public class UserSqlDao implements IDao<User>{
 					+ DELETE_DATE_COLUMN + " = ?, "
 					+ DELETE_TIME_COLUMN + " = ?, "
 					+ IS_MODERATOR_COLUMN + " = ?, "
-					+ IS_ADMIN_COLUMN + " = ? WHERE ";
+					+ IS_ADMIN_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 			executeQueryWithParameters(updateQuery, user);
@@ -121,7 +121,7 @@ public class UserSqlDao implements IDao<User>{
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
 		
-		String deleteQuery = "DELETE FROM " + TABLE_NAME + " WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
@@ -142,7 +142,7 @@ public class UserSqlDao implements IDao<User>{
 			
 			// Define Query
 			String updateQuery = "UPDATE " + TABLE_NAME + " SET "
-					+ DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, " + DELETE_TIME_COLUMN + " = ? WHERE ";
+					+ DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, " + DELETE_TIME_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, SearchBy.ID, String.valueOf(user.getId()));			
 			
@@ -164,10 +164,13 @@ public class UserSqlDao implements IDao<User>{
 	
 	
 	@Override
-	public ArrayList<User> list() {
+	public ArrayList<User> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;
 		ArrayList<User> usersList = new ArrayList<User>();
+		
+		if(searchBy != SearchBy.NONE)
+			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					
@@ -195,7 +198,7 @@ public class UserSqlDao implements IDao<User>{
 			// Define Query
 			String updateQuery = "UPDATE " + TABLE_NAME + " SET "
 					+ LAST_LOGOUT_DATE_COLUMN + " = ?, "
-					+ LAST_LOGOUT_TIME_COLUMN + " = ? WHERE ";
+					+ LAST_LOGOUT_TIME_COLUMN + " = ? ";
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, SearchBy.ID, search);			
 			
 			// Prepare & Execute Statement
@@ -220,7 +223,7 @@ public class UserSqlDao implements IDao<User>{
 			try {
 				// Define Query
 				String updateQuery = "UPDATE " + TABLE_NAME + " SET "
-						+ PICTURE_COLUMN + " = ? WHERE ";
+						+ PICTURE_COLUMN + " = ? ";
 				updateQuery = IDao.appendSqlSearchBy(updateQuery, SearchBy.ID, search);			
 				
 				// Prepare & Execute Statement

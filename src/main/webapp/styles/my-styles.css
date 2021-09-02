@@ -6,9 +6,7 @@
 	background: #161616;
 }
 
-/*
- * Responsive text
- */
-.dark-body{
-	background: #000000;
+.img-fit{
+	width:100%;
+	object-fit: cover;
 }

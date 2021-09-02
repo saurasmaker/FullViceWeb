@@ -42,7 +42,7 @@ public class PostSqlDao implements IDao<Post>{
 		Post post = null;
 		ResultSet rs = null;
 		
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + "WHERE "; 
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		try {
 			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
@@ -65,7 +65,7 @@ public class PostSqlDao implements IDao<Post>{
 			String updateQuery = "UPDATE " + TABLE_NAME + " SET " + NAME_COLUMN + " = ?, "
 				+ DESCRIPTION_COLUMN + " = ?, " + TAGS_COLUMN + " = ?, " + CREATION_DATE_COLUMN + " = ?, "
 				+ CREATION_TIME_COLUMN + " = ?, " + DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, "
-				+ DELETE_TIME_COLUMN + " = ?, "+ POST_CATEGORY_ID_COLUMN + " = ?, " + USER_ID_COLUMN + " = ? WHERE ";
+				+ DELETE_TIME_COLUMN + " = ?, "+ POST_CATEGORY_ID_COLUMN + " = ?, " + USER_ID_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 			executeQueryWithParameters(updateQuery, post);
@@ -79,7 +79,7 @@ public class PostSqlDao implements IDao<Post>{
 
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
-		String deleteQuery = "DELETE FROM " + TABLE_NAME + "WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
@@ -98,10 +98,13 @@ public class PostSqlDao implements IDao<Post>{
 	}
 	
 	@Override
-	public ArrayList<Post> list() {
+	public ArrayList<Post> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;
 		ArrayList<Post> postsList = new ArrayList<Post>();
+		
+		if(searchBy != SearchBy.NONE)
+			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					

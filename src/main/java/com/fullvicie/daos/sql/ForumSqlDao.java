@@ -39,7 +39,7 @@ public class ForumSqlDao implements IDao<Forum>{
 		Forum forum = null;
 		ResultSet rs = null;
 		
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + "WHERE "; 
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		try {
 			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
@@ -63,7 +63,7 @@ public class ForumSqlDao implements IDao<Forum>{
 				+ DESCRIPTION_COLUMN + " = ?, " + TAGS_COLUMN + " = ?, " + CREATION_DATE_COLUMN + " = ?, "
 				+ CREATION_TIME_COLUMN + " = ?, " + LATEST_ANSWER_DATE_COLUMN + " = ?, " + LATEST_ANSWER_TIME_COLUMN + " = ?, "
 				+ DELETED_COLUMN + " = ?, " + DELETE_DATE_COLUMN + " = ?, " + DELETE_TIME_COLUMN + " = ?, "
-				+ FORUM_CATEGORY_ID_COLUMN + " = ?, " + USER_ID_COLUMN + " = ? WHERE ";
+				+ FORUM_CATEGORY_ID_COLUMN + " = ?, " + USER_ID_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 			executeQueryWithParameters(updateQuery, forum);
@@ -77,7 +77,7 @@ public class ForumSqlDao implements IDao<Forum>{
 
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
-		String deleteQuery = "DELETE FROM " + TABLE_NAME + "WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
@@ -96,10 +96,13 @@ public class ForumSqlDao implements IDao<Forum>{
 	}
 	
 	@Override
-	public ArrayList<Forum> list() {
+	public ArrayList<Forum> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;
 		ArrayList<Forum> forumsList = new ArrayList<Forum>();
+		
+		if(searchBy != SearchBy.NONE)
+			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					

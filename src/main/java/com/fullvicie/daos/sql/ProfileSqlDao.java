@@ -49,7 +49,7 @@ public static int USER_COUNT = 0;
 		Profile profile = null;
 		ResultSet rs = null;
 		
-		String selectQuery = "SELECT * FROM profiles WHERE "; 
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		try {
 			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
@@ -77,7 +77,7 @@ public static int USER_COUNT = 0;
 					+ SURNAMES_COLUMN + " = ?, "
 					+ BIOGRAPHY_COLUMN + " = ?, "
 					+ BIRTHDAY_COLUMN + " = ?, "
-					+ USER_ID_COLUMN + " = ? WHERE ";
+					+ USER_ID_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 			executeQueryWithParameters(updateQuery, profile);
@@ -95,7 +95,7 @@ public static int USER_COUNT = 0;
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
 		
-		String deleteQuery = "DELETE FROM " + TABLE_NAME + " WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
@@ -115,13 +115,12 @@ public static int USER_COUNT = 0;
 			Profile profile = read(search, searchBy);
 			
 			// Define Query
-			String updateQuery = "UPDATE users SET "
+			String updateQuery = "UPDATE " + TABLE_NAME + " SET "
 					+ NAME_COLUMN + " = ?, "
 					+ SURNAMES_COLUMN + " = ?, " 
 					+ BIOGRAPHY_COLUMN + " = ? "
 					+ BIRTHDAY_COLUMN + " = ? "
-					+ USER_ID_COLUMN + " = ? "
-					+ "WHERE ";
+					+ USER_ID_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, SearchBy.ID, String.valueOf(profile.getId()));			
 			
@@ -143,10 +142,13 @@ public static int USER_COUNT = 0;
 	
 	
 	@Override
-	public ArrayList<Profile> list() {
+	public ArrayList<Profile> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;
 		ArrayList<Profile> profilesList = new ArrayList<Profile>();
+		
+		if(searchBy != SearchBy.NONE)
+			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					

@@ -30,7 +30,7 @@ public class ForumMessageLikeSqlDao implements IDao<ForumMessageLike>{
 		ForumMessageLike fc = null;
 		ResultSet rs = null;
 		
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + "WHERE "; 
+		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		try {
 			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);	
@@ -52,7 +52,7 @@ public class ForumMessageLikeSqlDao implements IDao<ForumMessageLike>{
 	public ErrorType update(String search, SearchBy searchBy, ForumMessageLike fc) {
 		try {
 			String updateQuery = "UPDATE " + TABLE_NAME + " SET " + DISLIKE_COLUMN + " = ?, "
-					+ USER_ID_COLUMN + " = ?, " + FORUM_MESSAGE_ID_COLUMN + " = ? WHERE ";
+					+ USER_ID_COLUMN + " = ?, " + FORUM_MESSAGE_ID_COLUMN + " = ? ";
 			
 			updateQuery = IDao.appendSqlSearchBy(updateQuery, searchBy, search);			
 			executeQueryWithParameters(updateQuery, fc);
@@ -66,7 +66,7 @@ public class ForumMessageLikeSqlDao implements IDao<ForumMessageLike>{
 
 	@Override
 	public ErrorType delete(String search, SearchBy searchBy) {
-		String deleteQuery = "DELETE FROM " + TABLE_NAME + "WHERE ";
+		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		try {
 			deleteQuery = IDao.appendSqlSearchBy(deleteQuery, searchBy, search);
 			DatabaseController.DATABASE_STATEMENT.executeUpdate(deleteQuery);	
@@ -85,10 +85,13 @@ public class ForumMessageLikeSqlDao implements IDao<ForumMessageLike>{
 	}
 	
 	@Override
-	public ArrayList<ForumMessageLike> list() {
+	public ArrayList<ForumMessageLike> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 		
 		ResultSet rs = null;
 		ArrayList<ForumMessageLike> forumMessageLikesList = new ArrayList<ForumMessageLike>();
+		
+		if(searchBy != SearchBy.NONE)
+			selectQuery = IDao.appendSqlSearchBy(selectQuery, searchBy, search);
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					

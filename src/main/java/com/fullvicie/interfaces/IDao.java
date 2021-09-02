@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.fullvicie.enums.*;
 
-
 public interface IDao <Pojo> {
 	
 	/*
@@ -15,12 +14,14 @@ public interface IDao <Pojo> {
 	public ErrorType update(String search, SearchBy searchBy, Pojo pojo);
 	public ErrorType delete(String search, SearchBy searchBy);
 	public ErrorType pseudoDelete(String search, SearchBy searchBy);
-	public ArrayList<Pojo> list();
+	public ArrayList<Pojo> listBy(SearchBy searchBy, String search);
 	
 	/*
 	 * Static methods
 	 */
 	public static String appendSqlSearchBy(String s, SearchBy searchBy, String search) {
+		
+		s += " WHERE ";
 		
 		switch(searchBy) {
 		

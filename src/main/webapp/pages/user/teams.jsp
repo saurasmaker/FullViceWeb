@@ -11,7 +11,7 @@
 <%
 	User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
 	pageContext.setAttribute(Team.ATR_TEAMS_LIST, new TeamSqlDao().listByPlayerId(sessionUser.getId()));	
-	pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new VideoGameSqlDao().list());
+	pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new VideoGameSqlDao().listBy(SearchBy.NONE, null));
 %>
     
 <!DOCTYPE html>
@@ -95,13 +95,12 @@
 
 								<label for="team-input-video-game"><i class="fas fa-gamepad"></i> Video game: </label>
 								<select class="form-control" id="team-input-video-game" name="<%=Team.PARAM_TEAM_VIDEO_GAME_ID %>">
-								    <option value="-1">Select a video game</option>
 								    <c:forEach var="videoGame" items="${ATTR_VIDEO_GAMES_LIST}">
 									    <c:if test="${not videoGame.deleted}">
 									    	<option value="${videoGame.id}">${videoGame.name}</option>
 									    </c:if>
 								    </c:forEach>
-								  </select>
+								</select>
 							
 								<br/>
 								
@@ -112,20 +111,6 @@
 		  			
 		  			<br/>
 		        
-		        	<!--  
-			        <div id="change-user-picture-div" class="col-4">
-			        	<label for="user-input-picture"><i class="fas fa-image"></i> Picture: </label>
-							
-			        	<img  class="img-fluid rounded" src="data:image/png;base64, ${ATR_USER_LOGGED_OBJ.base64Picture}" alt="${ATTR_TEAM_OBJ.username}'s picture."/>
-			        	<br/>
-			        	<form id = "change-user-picture-form" class = "form-group" enctype="multipart/form-data" action="< %=//request.getContextPath()%>/ActionsController" method="POST">
-							<input id="user-input-action" type='hidden' name='< %=//ActionsController.PARAM_SELECT_ACTION%>' value='< %=//ChangeTeamLogo.PARAM_CHANGE_TEAM_LOGO_ACTION %>'/>
-					        <p><input id = "user-input-picture" type = "file" accept="image/*" class="form-control" name="< %=//User.PART_USER_PICTURE %>"></p>
-					        <input id="user-input-change-picture" type="submit" class="btn btn-primary" value="Change"/>
-						</form>
-			        
-			        </div>
-			        -->
 				</div>
 			
 			</div>
