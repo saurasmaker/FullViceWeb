@@ -85,7 +85,7 @@
 								
 								<input id="team-input-owner-id" type="hidden" name="<%=Team.PARAM_TEAM_USER_OWNER_ID %>" value="${ATR_USER_LOGGED_OBJ.id}" />
 								<input id="team-input-creator-id" type="hidden" name="<%=Team.PARAM_TEAM_USER_CREATOR_ID %>" value="${ATR_USER_LOGGED_OBJ.id}" />
-								<input id="team-input-creator-id" type="hidden" name="<%=Team.PARAM_TEAM_PLAYER_1_ID %>" value="${ATR_USER_LOGGED_OBJ.id}" />
+								<input id="team-input-gamer-profile-0-id" type="hidden" name="<%=Team.PARAM_TEAM_GAMER_PROFILE_ID_ %>0" value="${ATR_USER_LOGGED_OBJ.id}" />
 								
 								<label for="team-input-name"><i class="fas fa-tag"></i> Name: </label>
 								<p><input id = "team-input-name" type="text" class="form-control" placeholder="Name of the team" name="<%=Team.PARAM_TEAM_NAME %>" required></p> 

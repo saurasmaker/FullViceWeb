@@ -99,6 +99,25 @@ public class Update implements IAction{
 			
 			
 		/*
+		 * GAMER PROFILE
+		 */
+		case "com.fullvicie.pojos.GamerProfile":
+						
+			GamerProfile gamerProfile =  new GamerProfile(request);
+			
+			PermissionType ptGamerProfile = checkPermissions(sessionUser, gamerProfile.getUserId(),
+					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptGamerProfile == PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			
+			et = (new GamerProfileSqlDao()).update(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID, gamerProfile);
+			url += "#gamer-profiles-title";
+			break;	
+			
+			
+			
+		/*
 		 * POST
 		 */
 		case "com.fullvicie.pojos.Post":

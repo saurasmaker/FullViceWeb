@@ -9,19 +9,19 @@ import org.json.JSONObject;
 
 import com.fullvicie.interfaces.IPojo;
 
-public class Player implements IPojo{
+public class GamerProfile implements IPojo{
 
 	
 	/*
 	 * Static Attributes
 	 */
-	public static String PARAM_PLAYER_ID="PARAM_PLAYER_ID", PARAM_PLAYER_NAME_IN_GAME="PARAM_PLAYER_NAME_IN_GAME", 
-			PARAM_PLAYER_ANALYSIS_PAGE="PARAM_PLAYER_ANALYSIS_PAGE",
-			PARAM_PLAYER_POINTS="PARAM_PLAYER_POINTS", PARAM_PLAYER_DELETED="PARAM_PLAYER_DELETED",
-			PARAM_PLAYER_DELETE_DATE="PARAM_PLAYER_DELETE_DATE", PARAM_PLAYER_DELETE_TIME="PARAM_PLAYER_DELETE_TIME",
-			PARAM_PLAYER_VIDEO_GAME_ID="PARAM_PLAYER_GAME_ID", PARAM_PLAYER_USER_ID="PARAM_PLAYER_USER_ID";
+	public static String PARAM_GAMER_PROFILE_ID="PARAM_GAMER_PROFILE_ID", PARAM_GAMER_PROFILE_NAME_IN_GAME="PARAM_GAMER_PROFILE_NAME_IN_GAME", 
+			PARAM_GAMER_PROFILE_ANALYSIS_PAGE="PARAM_GAMER_PROFILE_ANALYSIS_PAGE",
+			PARAM_GAMER_PROFILE_POINTS="PARAM_GAMER_PROFILE_POINTS", PARAM_GAMER_PROFILE_DELETED="PARAM_GAMER_PROFILE_DELETED",
+			PARAM_GAMER_PROFILE_DELETE_DATE="PARAM_GAMER_PROFILE_DELETE_DATE", PARAM_GAMER_PROFILE_DELETE_TIME="PARAM_GAMER_PROFILE_DELETE_TIME",
+			PARAM_GAMER_PROFILE_VIDEO_GAME_ID="PARAM_GAMER_PROFILE_VIDEO_GAME_ID", PARAM_GAMER_PROFILE_USER_ID="PARAM_GAMER_PROFILE_USER_ID";
 	
-	public static String ATTR_PLAYER_OBJ="ATTR_PLAYER_OBJ", ATTR_PLAYERS_LIST="ATTR_PLAYERS_LIST";
+	public static String ATTR_GAMER_PROFILE_OBJ="ATTR_GAMER_PROFILE_OBJ", ATTR_GAMER_PROFILES_LIST="ATTR_GAMER_PROFILES_LIST";
 	
 	
 	/*
@@ -38,30 +38,32 @@ public class Player implements IPojo{
 	/*
 	 * Constructors
 	 */
-	public Player() {
+	public GamerProfile() {
 		
 	}
-	public Player(HttpServletRequest request) {
-		try{this.id = Integer.parseInt(request.getParameter(PARAM_PLAYER_ID));}
+	public GamerProfile(HttpServletRequest request) {
+		try{this.id = Integer.parseInt(request.getParameter(PARAM_GAMER_PROFILE_ID));}
 		catch(Exception t) {this.id = -1;}
 		
-		this.nameInGame = request.getParameter(PARAM_PLAYER_NAME_IN_GAME);
+		this.nameInGame = request.getParameter(PARAM_GAMER_PROFILE_NAME_IN_GAME);
 		
-		try{this.points = Integer.parseInt(request.getParameter(PARAM_PLAYER_POINTS));}
+		this.analysisPage = request.getParameter(PARAM_GAMER_PROFILE_ANALYSIS_PAGE);
+		
+		try{this.points = Integer.parseInt(request.getParameter(PARAM_GAMER_PROFILE_POINTS));}
 		catch(Exception t) {this.points = 0;}
 		
-		this.deleted = request.getParameter(PARAM_PLAYER_DELETED) != null ? true : false;
+		this.deleted = request.getParameter(PARAM_GAMER_PROFILE_DELETED) != null ? true : false;
 		
-		try{ this.setDeleteDate(Date.valueOf(request.getParameter(PARAM_PLAYER_DELETE_DATE))); }
+		try{ this.setDeleteDate(Date.valueOf(request.getParameter(PARAM_GAMER_PROFILE_DELETE_DATE))); }
 		catch(Exception t) { this.setDeleteDate(null); }
 		
-		try{ this.deleteTime = Time.valueOf(request.getParameter(PARAM_PLAYER_DELETE_TIME)); }
+		try{ this.deleteTime = Time.valueOf(request.getParameter(PARAM_GAMER_PROFILE_DELETE_TIME)); }
 		catch(Exception t) { this.deleteTime = null; }
 		
-		try{this.videoGameId = Integer.parseInt(request.getParameter(PARAM_PLAYER_VIDEO_GAME_ID));}
+		try{this.videoGameId = Integer.parseInt(request.getParameter(PARAM_GAMER_PROFILE_VIDEO_GAME_ID));}
 		catch(Exception t) {this.videoGameId = -1;}
 		
-		try{this.userId = Integer.parseInt(request.getParameter(PARAM_PLAYER_USER_ID));}
+		try{this.userId = Integer.parseInt(request.getParameter(PARAM_GAMER_PROFILE_USER_ID));}
 		catch(Exception t) {this.userId = -1;}
 	}
 	

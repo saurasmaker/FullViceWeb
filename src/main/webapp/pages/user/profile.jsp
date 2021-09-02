@@ -1,38 +1,45 @@
-<%@page import="com.fullvicie.actions.user.ChangeUserPicture"%>
+
+<%@page import="com.fullvicie.daos.sql.VideoGameSqlDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
-<%@ page import="com.fullvicie.controllers.ActionsController,com.fullvicie.actions.crud.Update" %>
-<%@ page import="com.fullvicie.pojos.User,com.fullvicie.pojos.Profile" %>
-<%@ page import="com.fullvicie.enums.*" %>
-<%@ page import="com.fullvicie.daos.sql.ProfileSqlDao,com.fullvicie.daos.sql.UserSqlDao" %>
- 
- 
- <% // Profile JSP Logic.
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 
-	Profile profile = null;
-	try {
-		User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-		user = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
-		profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-		if(profile==null){
-			profile = new Profile();
-			profile.setUserId(user.getId());
-			(new ProfileSqlDao()).create(profile);
-			profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-		}
-		
-		session.setAttribute(User.ATR_USER_LOGGED_OBJ, user);
-		session.setAttribute(Profile.ATTR_PROFILE_OBJ, profile);
-		
-	}
-	catch(Exception e){
-		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
-	}
-	
-	if(profile==null)
-		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
-%>
+<%@ page import="java.util.ArrayList" %>
+
+<%@ page import="com.fullvicie.controllers.ActionsController,com.fullvicie.actions.crud.Update, com.fullvicie.actions.crud.Create, com.fullvicie.actions.crud.PseudoDelete, com.fullvicie.actions.user.ChangeUserPicture" %>
+<%@ page import="com.fullvicie.pojos.User, com.fullvicie.pojos.Profile, com.fullvicie.pojos.GamerProfile, com.fullvicie.pojos.VideoGame" %>
+<%@ page import="com.fullvicie.daos.sql.UserSqlDao, com.fullvicie.daos.sql.ProfileSqlDao, com.fullvicie.daos.sql.GamerProfileSqlDao, com.fullvicie.daos.sql.VideoGameSqlDao" %>
+<%@ page import="com.fullvicie.enums.*" %>
+ 
+ <%
+   // Profile JSP Logic.
+
+   	Profile profile = null;
+   	try {
+   		User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+   		user = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
+   		profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
+   		if(profile==null){
+		   	profile = new Profile();
+		   	profile.setUserId(user.getId());
+		   	(new ProfileSqlDao()).create(profile);
+		   	profile = new ProfileSqlDao().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
+   		}
+   		
+   		session.setAttribute(User.ATR_USER_LOGGED_OBJ, user);
+   		session.setAttribute(Profile.ATTR_PROFILE_OBJ, profile);
+   		pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new VideoGameSqlDao().listBy(SearchBy.NONE, null));
+   		session.setAttribute(GamerProfile.ATTR_GAMER_PROFILES_LIST, new GamerProfileSqlDao().listBy(SearchBy.USER_ID,String.valueOf(user.getId())));
+   		
+   	}
+   	catch(Exception e){
+   		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
+   	}
+   	
+   	if(profile==null)
+   		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
+   %>
  
  
 <!DOCTYPE html>
@@ -48,7 +55,7 @@
 		<br/><br/><br/>
 		<div class="container text-white rounded bg-dark">
   			
-  			<h2>${sessionScope.ATR_USER_LOGGED_OBJ.username}'s Profile</h2>
+  			<h2 id="users-title">${sessionScope.ATR_USER_LOGGED_OBJ.username}'s Profile</h2>
   			<div class="row">
 	  			<div id="profile-forms" class="col-8">
 		  			
@@ -80,9 +87,10 @@
 			        	</form>
 		  			</div>
 		  			
-		  			<div id="update-personal-information-div" class="row">
+		  			<br/>
 		  			
-		  				<h3>Personal Information</h3>
+		  			<div id="update-personal-information-div" class="row">
+		  				<h3 id="profiles-title">Personal Information</h3>
 			        	<form id="update-user-form" class="form-group" action="<%= request.getContextPath() %>/ActionsController" method="POST" >
 				            <input id="update-profile-input-action" type='hidden' name='<%= ActionsController.PARAM_SELECT_ACTION %>' value='<%= Update.PARAM_UPDATE_ACTION %>'/>
 							<input id="update-profile-input-object-class" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS %>" value="<%=Profile.class.getName() %>" />
@@ -139,17 +147,131 @@
 		        </div>
 			</div>
 			
+			<br/>
 			
-			<div>
-		        <br/><br/>
-		        
-		        <div>
-			        
-		        </div>
-  			
+			<div id="" class="row">
+				<h3 id="gamer-profiles-title">Gamer profiles</h3>
+		        <div class="col-12">			
+					<table class="table table-dark table-striped">
+					  	<thead>
+					    	<tr>
+					      		<th scope="col">Name</th>
+					      		<th scope="col">Analysis page</th>
+					      		<th scope="col">Video game</th>
+					      		<th scope="col">Create / Edit</th>
+								<th scope="col">Remove</th>
+					    	</tr>
+					  	</thead>
+					  	
+					  	<c:forEach var="videoGame" items="${ATTR_VIDEO_GAMES_LIST}">
+							<c:if test="${not videoGame.deleted}">
+								
+								<% // Logic to check if user has the Gamer Profile of this Video Game
+								ArrayList<GamerProfile> userGamerProfiles = (ArrayList<GamerProfile>) session.getAttribute(GamerProfile.ATTR_GAMER_PROFILES_LIST);
+								VideoGame vg = (VideoGame) pageContext.getAttribute("videoGame");
+								pageContext.setAttribute("userHasGamerProfile", false);
+								for(GamerProfile gp: userGamerProfiles)
+									if(gp.getVideoGameId()==vg.getId()){
+										pageContext.setAttribute("userHasGamerProfile", true);
+										pageContext.setAttribute("gamerProfile", gp);
+										break;
+									}	
+								%>
+					
+								<tbody id="div-video-game-${videoGame.id}">
+						    		<c:choose>
+						    		
+						    			<c:when test="${userHasGamerProfile}">
+						    				<tr>
+							    				<th scope="row" >${gamerProfile.nameInGame}</th>
+									      		<td><a class="a-dark-mode" href="${gamerProfile.analysisPage}" target="_blank">${gamerProfile.analysisPage}</a></td>
+									      		<td>${videoGame.name}</td>
+									      		<td><a class="btn btn-primary" data-bs-toggle="collapse" href="#update-gamer-profile-collapse-${videoGame.id}" role="button" aria-expanded="false" aria-controls="update-gamer-profile-collapse-${videoGame.id}">Edit</a></td>
+									      		<td>
+									      			<form id = "remove-create-gamer-profile-form-${videoGame.id}" class = "form-group" action="<%=request.getContextPath()%>/ActionsController" method = "POST" onsubmit="return removeGamerProfile()" >
+											            <input id="remove-gamer-profile-input-action-${videoGame.id}" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=PseudoDelete.PARAM_PSEUDODELETE_ACTION%>'/>
+														<input id="remove-gamer-profile-input-object-class-${videoGame.id}" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS%>" value="<%=GamerProfile.class.getName()%>" />
+							      						<input id="remove-gamer-profile-input-id-${videoGame.id}" type="hidden" name="<%=GamerProfile.PARAM_GAMER_PROFILE_ID%>" value="${gamerProfile.id}" />
+							      						<input id="remove-gamer-profile-input-confirm-${videoGame.id}" type="submit" class="btn btn-danger" value="Remove"/>
+							      					</form>
+									      		</td>
+									      	</tr>
+									      	
+									      	<tr>
+								      			<td colspan="5">
+										      		<div id="update-gamer-profile-collapse-${videoGame.id}" class="collapse">
+														<div id="update-gamer-profile-div-${videoGame.id}" class="card card-body bg-dark">
+											  				<form id = "update-gamer-profile-form-${videoGame.id}" class = "form-group" action="<%=request.getContextPath()%>/ActionsController" method = "POST" >
+													            <input id="update-gamer-profile-input-action-${videoGame.id}" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=Update.PARAM_UPDATE_ACTION%>'/>
+																<input id="update-gamer-profile-input-object-class-${videoGame.id}" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS%>" value="<%=GamerProfile.class.getName()%>" />
+																<input id="update-gamer-profile-input-user-id-${videoGame.id}" type="hidden" name="<%=GamerProfile.PARAM_GAMER_PROFILE_ID %>" value="${gamerProfile.id}" />
+																<input id="update-gamer-profile-input-user-id-${videoGame.id}" type="hidden" name="<%=GamerProfile.PARAM_GAMER_PROFILE_USER_ID %>" value="${ATR_USER_LOGGED_OBJ.id}" />
+																<input id="update-gamer-profile-input-video-game-id-${videoGame.id}" type="hidden" name="<%=GamerProfile.PARAM_GAMER_PROFILE_VIDEO_GAME_ID%>" value="${videoGame.id}" />
+																
+																<label for="update-gamer-profile-input-name-${videoGame.id}"><i class="fas fa-tag"></i> Name in video game: </label>
+																<p><input id = "update-gamer-profile-input-name-${videoGame.id}" type="text" class="form-control" value="${gamerProfile.nameInGame}" name="<%=GamerProfile.PARAM_GAMER_PROFILE_NAME_IN_GAME %>" required></p> 
+													
+															    <label for="update-gamer-profile-input-description-${videoGame.id}"><i class="fas fa-book"></i> Analysis page: </label>
+																<p><input id="update-gamer-profile-input-description-${videoGame.id}" type="text" class="form-control" value="${gamerProfile.analysisPage}" name="<%=GamerProfile.PARAM_GAMER_PROFILE_ANALYSIS_PAGE %>" required/></p>							
+																
+																<input id="update-gamer-profile-input-confirm-${videoGame.id}" type="submit" class="btn btn-primary" value="Confirm"/>
+												        		<a id="a-cancel-gamer-profile-update-${videoGame.id}" class="btn btn-secondary" data-bs-toggle="collapse" href="#update-gamer-profile-collapse-${videoGame.id}" role="button" aria-expanded="false" aria-controls="update-gamer-profile-collapse-${videoGame.id}" onclick="cancelEditGamerProfile('${videoGame.id}', '${gamerProfile.nameInGame}', '${gamerProfile.analysisPage}')">Cancel</a>
+												        	</form>
+										  				</div>
+													</div>
+												</td>
+						    				</tr>
+						    			</c:when>
+						    			
+						    			<c:otherwise>
+						    				<tr>
+							    				<th scope="row">-</th>
+							    				<td>-</td>
+							    				<td>${videoGame.name}</td>
+									      		<td><a class="btn btn-primary" data-bs-toggle="collapse" href="#create-gamer-profile-collapse-${videoGame.id}" role="button" aria-expanded="false" aria-controls="create-gamer-profile-collapse-${videoGame.id}">Create</a></td>
+									      		<td>-</td>
+								      		</tr>
+								      		
+								      		<tr>
+								      			<td colspan="5">
+										      		<div id="create-gamer-profile-collapse-${videoGame.id}" class="collapse">
+														<div id="create-gamer-profile-div-${videoGame.id}" class="card card-body bg-dark">
+											  				<form id = "create-gamer-profile-form-${videoGame.id}" class = "form-group" action="<%=request.getContextPath()%>/ActionsController" method = "POST" >
+													            <input id="create-gamer-profile-input-action-${videoGame.id}" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=Create.PARAM_CREATE_ACTION%>'/>
+																<input id="create-gamer-profile-input-object-class-${videoGame.id}" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS%>" value="<%=GamerProfile.class.getName()%>" />
+																<input id="create-gamer-profile-input-user-id-${videoGame.id}" type="hidden" name="<%=GamerProfile.PARAM_GAMER_PROFILE_USER_ID %>" value="${ATR_USER_LOGGED_OBJ.id}" />
+																<input id="create-gamer-profile-input-video-game-id-${videoGame.id}" type="hidden" name="<%=GamerProfile.PARAM_GAMER_PROFILE_VIDEO_GAME_ID%>" value="${videoGame.id}" />
+																
+																<label for="create-gamer-profile-input-name-${videoGame.id}"><i class="fas fa-tag"></i> Name in video game: </label>
+																<p><input id = "create-gamer-profile-input-name-${videoGame.id}" type="text" class="form-control" placeholder="Name of the team" name="<%=GamerProfile.PARAM_GAMER_PROFILE_NAME_IN_GAME %>" required></p> 
+													
+															    <label for="create-gamer-profile-input-description-${videoGame.id}"><i class="fas fa-book"></i> Analysis page: </label>
+																<p><input id="create-gamer-profile-input-description-${videoGame.id}" type="text" class="form-control" placeholder="Set a description of the team..." name="<%=GamerProfile.PARAM_GAMER_PROFILE_ANALYSIS_PAGE %>" required/></p>							
+															
+																<br/>
+																
+																<input id="create-gamer-profile-input-confirm-${videoGame.id}" type="submit" class="btn btn-primary" value="Confirm"/>
+												        	</form>
+										  				</div>
+													</div>
+												</td>
+						    				</tr>
+						    			</c:otherwise>
+						    			
+						    		</c:choose>
+							    	
+							  	</tbody>
+			
+							</c:if>
+							
+						</c:forEach>
+						
+					</table>
+					
+				</div>
+				
   			</div>
-  			
-	        
+
 	        <br/>
 	        
 		</div>

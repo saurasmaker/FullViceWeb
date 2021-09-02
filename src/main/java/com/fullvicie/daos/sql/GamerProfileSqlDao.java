@@ -13,17 +13,17 @@ import com.fullvicie.controllers.DatabaseController;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IDao;
-import com.fullvicie.pojos.Player;
+import com.fullvicie.pojos.GamerProfile;
 
-public class PlayerSqlDao implements IDao<Player>{
+public class GamerProfileSqlDao implements IDao<GamerProfile>{
 
-	public static String TABLE_NAME = "players", ID_COLUMN="id", NAME_IN_GAME_COLUMN="name_in_game",
+	public static String TABLE_NAME = "gamer_profile", ID_COLUMN="id", NAME_IN_GAME_COLUMN="name_in_game",
 			ANALYSIS_PAGE_COLUMN="analysis_page", POINTS_COLUMN="points",
 			DELETED_COLUMN="deleted", DELETE_DATE_COLUMN="delete_date", DELETE_TIME_COLUMN="delete_time",
 			VIDEO_GAME_ID_COLUMN="video_game_id", USER_ID_COLUMN="user_id";
 	
 	@Override
-	public ErrorType create(Player player) {
+	public ErrorType create(GamerProfile player) {
 		if(player!=null)
 			try {
 				return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + " (" 
@@ -45,8 +45,8 @@ public class PlayerSqlDao implements IDao<Player>{
 	}
 
 	@Override
-	public Player read(String search, SearchBy searchBy) {
-		Player player = null;
+	public GamerProfile read(String search, SearchBy searchBy) {
+		GamerProfile player = null;
 		ResultSet rs = null;
 		
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
@@ -67,7 +67,7 @@ public class PlayerSqlDao implements IDao<Player>{
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, Player player) {
+	public ErrorType update(String search, SearchBy searchBy, GamerProfile player) {
 		if(player!=null)
 			try {
 				String updateQuery = "UPDATE " + TABLE_NAME + " SET " 
@@ -112,7 +112,7 @@ public class PlayerSqlDao implements IDao<Player>{
 	public ErrorType pseudoDelete(String search, SearchBy searchBy) {
 		try {
 			// Get user
-			Player player = read(search, searchBy);
+			GamerProfile player = read(search, searchBy);
 			
 			// Define Query
 			String updateQuery = "UPDATE " + TABLE_NAME + " SET "
@@ -131,14 +131,14 @@ public class PlayerSqlDao implements IDao<Player>{
 			preparedStatement.close();
 		} catch(Exception e) {
 			e.printStackTrace();
-			return ErrorType.UPDATE_USER_ERROR;
+			return ErrorType.UPDATE_GAMER_PROFILE_ERROR;
 		}
 		
 		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public ArrayList<Player> listBy(SearchBy searchBy, String search) {
+	public ArrayList<GamerProfile> listBy(SearchBy searchBy, String search) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME; 
 		
 		if(searchBy != SearchBy.NONE)
@@ -146,12 +146,12 @@ public class PlayerSqlDao implements IDao<Player>{
 			
 		
 		ResultSet rs = null;
-		ArrayList<Player> playersList = new ArrayList<Player>();
+		ArrayList<GamerProfile> playersList = new ArrayList<GamerProfile>();
 		
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					
 			while(rs.next()) {
-				Player player = setPlayerAttributes(rs);
+				GamerProfile player = setPlayerAttributes(rs);
 				playersList.add(player);
 			}	
 			rs.close();
@@ -166,10 +166,10 @@ public class PlayerSqlDao implements IDao<Player>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, Player player) {
+	private ErrorType executeQueryWithParameters(String query, GamerProfile player) {
 		PreparedStatement preparedStatement = null;
 		
-		Player actualPlayer = read(String.valueOf(player.getId()), SearchBy.ID);
+		GamerProfile actualPlayer = read(String.valueOf(player.getId()), SearchBy.ID);
 		int pos = 1;
 		
 		try {
@@ -215,10 +215,10 @@ public class PlayerSqlDao implements IDao<Player>{
 		return ErrorType.NO_ERROR;
 	}
 	
-	private Player setPlayerAttributes(ResultSet rs) {
-		Player player = null;
+	private GamerProfile setPlayerAttributes(ResultSet rs) {
+		GamerProfile player = null;
 		try {
-			player = new Player();
+			player = new GamerProfile();
 			player.setId(rs.getInt(ID_COLUMN));
 			player.setNameInGame(rs.getString(NAME_IN_GAME_COLUMN));
 			player.setAnalysisPage(rs.getString(ANALYSIS_PAGE_COLUMN));

@@ -23,36 +23,39 @@ public class TeamSqlDao implements IDao<Team>{
 	public static String TABLE_NAME = "teams", ID_COLUMN="id", NAME_COLUMN="name", DESCRIPTION_COLUMN="description", LOGO_COLUMN="logo",
 			CREATION_DATE_COLUMN="creation_date", CREATION_TIME_COLUMN="creation_time",
 			DELETED_COLUMN="deleted", DELETE_DATE_COLUMN="delete_date", DELETE_TIME_COLUMN="delete_time",
-			PLAYER_1_ID_COLUMN="player_1_id", PLAYER_2_ID_COLUMN="player_2_id", PLAYER_3_ID_COLUMN="player_3_id",
-			PLAYER_4_ID_COLUMN="player_4_id", PLAYER_5_ID_COLUMN="player_5_id", PLAYER_6_ID_COLUMN="player_6_id",
-			PLAYER_7_ID_COLUMN="player_7_id", PLAYER_8_ID_COLUMN="player_8_id", PLAYER_9_ID_COLUMN="player_9_id",
+			GAMER_PROFILE_ID_COLUMN = "gamer_profile_id_",
 			VIDEO_GAME_ID_COLUMN="video_game_id", USER_OWNER_ID_COLUMN="user_owner_id", USER_CREATOR_ID_COLUMN="user_creator_id";
 	
 	@Override
 	public ErrorType create(Team team) {
 		if(team!=null)
 			try {
-				return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + " (" 
+				String selectQuery = "INSERT INTO " + TABLE_NAME + " (" 
 						+ NAME_COLUMN + ", " 
 						+ DESCRIPTION_COLUMN + ", "
 						+ CREATION_DATE_COLUMN + ", " 
 						+ CREATION_TIME_COLUMN + ", "  
 						+ DELETED_COLUMN + ", " 
 						+ DELETE_DATE_COLUMN + ", " 
-						+ DELETE_TIME_COLUMN + ", " 
-						+ PLAYER_1_ID_COLUMN + ", "
-						+ PLAYER_2_ID_COLUMN + ", " 
-						+ PLAYER_3_ID_COLUMN + ", " 
-						+ PLAYER_4_ID_COLUMN + ", " 
-						+ PLAYER_5_ID_COLUMN + ", " 
-						+ PLAYER_6_ID_COLUMN + ", " 
-						+ PLAYER_7_ID_COLUMN + ", " 
-						+ PLAYER_8_ID_COLUMN + ", " 
-						+ PLAYER_9_ID_COLUMN + ", " 
+						+ DELETE_TIME_COLUMN + ", ";
+				
+				for	(int i = 0; i < new Team().getGamerProfiles().length; ++i)
+					selectQuery += ""
+						+ GAMER_PROFILE_ID_COLUMN + i + ", ";
+				
+				selectQuery += ""
 						+ VIDEO_GAME_ID_COLUMN + ", " 
 						+ USER_OWNER_ID_COLUMN + ", " 
 						+ USER_CREATOR_ID_COLUMN + ") "
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", team);	
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?,";
+				
+				for	(int i = 0; i < new Team().getGamerProfiles().length; ++i)
+					selectQuery += ""
+						+ "?, ";
+				
+				selectQuery += "?, ?, ?)";
+				
+				return executeQueryWithParameters(selectQuery, team);	
 			} catch(Exception e) {
 				e.printStackTrace();
 				return ErrorType.CREATE_TEAM_ERROR;
@@ -94,16 +97,13 @@ public class TeamSqlDao implements IDao<Team>{
 						+ CREATION_TIME_COLUMN + " = ?, "
 						+ DELETED_COLUMN + " = ?, "
 						+ DELETE_DATE_COLUMN + " = ?, "
-						+ DELETE_TIME_COLUMN + " = ?, "
-						+ PLAYER_1_ID_COLUMN + " = ?, "
-						+ PLAYER_2_ID_COLUMN + " = ?, "
-						+ PLAYER_3_ID_COLUMN + " = ?, "
-						+ PLAYER_4_ID_COLUMN + " = ?, "
-						+ PLAYER_5_ID_COLUMN + " = ?, "
-						+ PLAYER_6_ID_COLUMN + " = ?, "
-						+ PLAYER_7_ID_COLUMN + " = ?, "
-						+ PLAYER_8_ID_COLUMN + " = ?, "
-						+ PLAYER_9_ID_COLUMN + " = ?, "
+						+ DELETE_TIME_COLUMN + " = ?, ";
+				
+				for	(int i = 0; i < new Team().getGamerProfiles().length; ++i)
+					updateQuery += ""
+						+ GAMER_PROFILE_ID_COLUMN + i + " = ?, ";
+				
+				updateQuery += ""
 						+ VIDEO_GAME_ID_COLUMN + " = ?, "
 						+ USER_OWNER_ID_COLUMN + " = ?, "
 						+ USER_CREATOR_ID_COLUMN + " = ? ";
@@ -213,10 +213,10 @@ public class TeamSqlDao implements IDao<Team>{
 	
 	
 	public ArrayList<Team> listByPlayerId(int playerId) {
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + PLAYER_1_ID_COLUMN + "='" + playerId + "'";
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + GAMER_PROFILE_ID_COLUMN + 0 + "='" + playerId + "'";
 		
-		for(int i = 2; i < 10; ++i)
-			selectQuery += " OR player_" + i + "_id='" + playerId + "'";
+		for(int i = 1; i < new Team().getGamerProfiles().length; ++i)
+			selectQuery += " OR " + GAMER_PROFILE_ID_COLUMN + i + "='" + playerId + "'";
 				
 		ResultSet rs = null;
 		ArrayList<Team> teamsList = new ArrayList<Team>();
@@ -276,7 +276,7 @@ public class TeamSqlDao implements IDao<Team>{
 			else preparedStatement.setTime(pos++, null);
 			
 			int i = 0;
-			for(int player: team.getPlayers()) {
+			for(int player: team.getGamerProfiles()) {
 				preparedStatement.setInt(pos + i++, player);
 			}
 			pos+=i;
@@ -316,10 +316,9 @@ public class TeamSqlDao implements IDao<Team>{
 			team.setDeleted(rs.getBoolean(DELETED_COLUMN));
 			team.setDeleteDate(rs.getDate(DELETE_DATE_COLUMN));
 			team.setDeleteTime(rs.getTime(DELETE_TIME_COLUMN));
-
-			int players[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
-			for(int i = 0; i < players.length; ++i)
-				players[i] = rs.getInt("player_" + (i+1) + "_id");
+			
+			for(int i = 0; i < team.getGamerProfiles().length; ++i)
+				team.getGamerProfiles()[i] = rs.getInt(GAMER_PROFILE_ID_COLUMN + i);
 			
 			team.setVideoGameId(rs.getInt(VIDEO_GAME_ID_COLUMN));
 			team.setUserOwnerId(rs.getInt(USER_OWNER_ID_COLUMN));

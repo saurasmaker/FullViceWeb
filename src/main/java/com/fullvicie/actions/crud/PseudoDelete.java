@@ -53,6 +53,11 @@ public class PseudoDelete implements IAction{
 			url += "#forum-message-likes-title";
 			break;
 			
+		case "com.fullvicie.pojos.GamerProfile":
+			et = (new GamerProfileSqlDao()).pseudoDelete(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID);
+			url += "#gamer-profiles-likes-title";
+			break;
+			
 		case "com.fullvicie.pojos.Post":
 			et = (new PostSqlDao()).pseudoDelete(request.getParameter(Post.PARAM_POST_ID), SearchBy.ID);
 			url += "#posts-title";

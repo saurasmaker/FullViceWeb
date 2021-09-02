@@ -84,3 +84,17 @@ function resetProfileData(name, surnames, biography, birthday) {
 
     profileInputConfirm.disabled = profileBtnCancel.disabled = true;
 }
+
+
+function cancelEditGamerProfile(id, nameInGame, analysisPage){
+	var inputNameInGame = document.getElementById("update-gamer-profile-input-name-" + id);
+	var inputAnalysisPage = document.getElementById("update-gamer-profile-input-description-" + id);
+	
+	inputNameInGame.value = nameInGame;
+	inputAnalysisPage.value = analysisPage;
+}
+
+function removeGamerProfile(){
+	return confirm('Are you sure you want to remove this "Gamer Profile"? Click OK to proceed otherwise click Cancel.');
+}
+

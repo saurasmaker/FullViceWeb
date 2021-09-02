@@ -101,6 +101,23 @@ public class Create implements IAction{
 			
 			
 		/*
+		 * FORUM CATEGORY
+		 */
+		case "com.fullvicie.pojos.GamerProfile":
+			
+			PermissionType ptGamerProfile = checkPermissions(sessionUser,
+					PermissionType.USER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+			
+			if(ptGamerProfile == PermissionType.NO_PERMISSION)
+					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			
+			et = (new GamerProfileSqlDao()).create(new GamerProfile(request));
+			url += "#gamer-profile-title";
+			
+			break;	
+			
+		
+		/*
 		 * POST
 		 */
 		case "com.fullvicie.pojos.Post":

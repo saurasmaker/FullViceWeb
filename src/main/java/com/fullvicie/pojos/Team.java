@@ -20,11 +20,8 @@ public class Team implements IPojo{
 			PARAM_TEAM_LOGO = "PARAM_TEAM_LOGO", PARAM_TEAM_CREATION_DATE="PARAM_TEAM_CREATION_DATE", PARAM_TEAM_CREATION_TIME="PARAM_TEAM_CREATION_TIME",
 			PARAM_TEAM_DELETED="PARAM_TEAM_DELETED", PARAM_TEAM_DELETE_DATE="PARAM_TEAM_DELETE_DATE", PARAM_TEAM_DELETE_TIME="PARAM_TEAM_DELETE_TIME",
 			PARAM_TEAM_VIDEO_GAME_ID="PARAM_TEAM_VIDEO_GAME_ID", PARAM_TEAM_USER_OWNER_ID="PARAM_TEAM_USER_OWNER_ID", PARAM_TEAM_BASE64LOGO="PARAM_TEAM_BASE64LOGO",
-			PARAM_TEAM_USER_CREATOR_ID="PARAM_TEAM_USER_CREATOR_ID", 
-			PARAM_TEAM_PLAYER_1_ID="PARAM_TEAM_PLAYER_1_ID", PARAM_TEAM_PLAYER_2_ID="PARAM_TEAM_PLAYER_2_ID", PARAM_TEAM_PLAYER_3_ID="PARAM_TEAM_PLAYER_3_ID",
-			PARAM_TEAM_PLAYER_4_ID="PARAM_TEAM_PLAYER_4_ID", PARAM_TEAM_PLAYER_5_ID="PARAM_TEAM_PLAYER_5_ID", PARAM_TEAM_PLAYER_6_ID="PARAM_TEAM_PLAYER_6_ID",
-			PARAM_TEAM_PLAYER_7_ID="PARAM_TEAM_PLAYER_7_ID", PARAM_TEAM_PLAYER_8_ID="PARAM_TEAM_PLAYER_8_ID", PARAM_TEAM_PLAYER_9_ID="PARAM_TEAM_PLAYER_9_ID";
-
+			PARAM_TEAM_USER_CREATOR_ID="PARAM_TEAM_USER_CREATOR_ID", PARAM_TEAM_GAMER_PROFILE_ID_="PARAM_TEAM_GAMER_PROFILE_ID_";
+			
 	public static final String ATTR_TEAM_OBJ = "ATTR_TEAM_OBJ", ATR_TEAMS_LIST = "ATR_TEAMS_LIST";
 	
 	
@@ -32,7 +29,7 @@ public class Team implements IPojo{
 	 * Attributes
 	 */
 	private int id, videoGameId, userOwnerId, userCreatorId;
-	private int players[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
+	private int gamerProfiles[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 	private String name, description, base64Logo;
 	private boolean deleted;
 	private Date creationDate, deleteDate;
@@ -68,24 +65,9 @@ public class Team implements IPojo{
 		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_TEAM_DELETE_TIME));}
 		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
 		
-		try{this.players[0] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_1_ID));}
-		catch(Exception t) {this.players[0] = -1;}
-		try{this.players[1] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_2_ID));}
-		catch(Exception t) {this.players[1] = -1;}
-		try{this.players[2] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_3_ID));}
-		catch(Exception t) {this.players[2] = -1;}
-		try{this.players[3] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_4_ID));}
-		catch(Exception t) {this.players[3] = -1;}
-		try{this.players[4] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_5_ID));}
-		catch(Exception t) {this.players[4] = -1;}
-		try{this.players[5] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_6_ID));}
-		catch(Exception t) {this.players[5] = -1;}
-		try{this.players[6] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_7_ID));}
-		catch(Exception t) {this.players[6] = -1;}
-		try{this.players[7] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_8_ID));}
-		catch(Exception t) {this.players[7] = -1;}
-		try{this.players[8] = Integer.parseInt(request.getParameter(PARAM_TEAM_PLAYER_9_ID));}
-		catch(Exception t) {this.players[8] = -1;}
+		for(int i = 0; i < gamerProfiles.length; ++i)
+			try{this.gamerProfiles[i] = Integer.parseInt(request.getParameter(PARAM_TEAM_GAMER_PROFILE_ID_ + i));}
+			catch(Exception t) {this.gamerProfiles[i] = -1;}
 		
 		try{this.videoGameId = Integer.parseInt(request.getParameter(PARAM_TEAM_VIDEO_GAME_ID));}
 		catch(Exception t) {this.videoGameId = -1;}
@@ -93,7 +75,7 @@ public class Team implements IPojo{
 		try{this.userOwnerId = Integer.parseInt(request.getParameter(PARAM_TEAM_USER_OWNER_ID));}
 		catch(Exception t) {this.userOwnerId = -1;}
 		
-		try{this.userCreatorId = Integer.parseInt(request.getParameter(PARAM_TEAM_CREATION_DATE));}
+		try{this.userCreatorId = Integer.parseInt(request.getParameter(PARAM_TEAM_USER_CREATOR_ID));}
 		catch(Exception t) {this.userCreatorId = -1;}
 	}
 	
@@ -229,11 +211,11 @@ public class Team implements IPojo{
 	public void setDeleteTime(Time deleteTime) {
 		this.deleteTime = deleteTime;
 	}
-	public int[] getPlayers() {
-		return players;
+	public int[] getGamerProfiles() {
+		return gamerProfiles;
 	}
-	public void setPlayers(int players[]) {
-		this.players = players;
+	public void setGamerProfiles(int players[]) {
+		this.gamerProfiles = players;
 	}
 	
 

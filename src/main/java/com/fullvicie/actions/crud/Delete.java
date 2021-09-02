@@ -55,6 +55,11 @@ public class Delete implements IAction{
 			url += "#forum-message-likes-title";
 			break;
 			
+		case "com.fullvicie.pojos.GamerProfile":
+			et = (new GamerProfileSqlDao()).delete(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID);
+			url += "#gamer-profiles-title";
+			break;
+			
 		case "com.fullvicie.pojos.Post":
 			et = (new PostSqlDao()).delete(request.getParameter(Post.PARAM_POST_ID), SearchBy.ID);
 			url += "#posts-title";

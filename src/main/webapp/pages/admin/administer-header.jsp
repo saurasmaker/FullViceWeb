@@ -9,7 +9,7 @@
 <header>
   	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
     	<div class="container-xl">
-	    	<a class="navbar-brand" href="../../index.jsp">Full Vicie</a>
+	    	<a class="navbar-brand" href="<%=request.getContextPath() %>/index.jsp">Full Vicie</a>
 	    	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
@@ -74,9 +74,9 @@
 									${sessionScope.ATR_USER_LOGGED_OBJ.username}
 								</a>
 			             		<ul class="dropdown-menu" aria-labelledby="dropdown07XL">
-			             			<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user_notifications.jsp">Notifications</a></li>
-			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user_profile.jsp">Profile</a></li>
-			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/user_teams.jsp">Teams</a></li>
+			             			<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/notifications.jsp">Notifications</a></li>
+			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/profile.jsp">Profile</a></li>
+			                		<li><a class="dropdown-item" href="<%=request.getContextPath() %>/pages/user/teams.jsp">Teams</a></li>
 			                		<li class="dropdown-divider"></li>
 			                		<li>
 										<form action= "<%= request.getContextPath() %>/ActionsController" method="post">
