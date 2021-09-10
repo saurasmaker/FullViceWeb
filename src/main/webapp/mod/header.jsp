@@ -20,13 +20,13 @@
         		<!-- Navbar MENU section -->
         		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
           			<li class="nav-item">
-            			<a class="nav-link disabled" aria-current="page" href="pages/communities.jsp">Communities</a>
+            			<a class="nav-link a-dark-mode disabled" aria-current="page" href="pages/communities.jsp">Communities</a>
           			</li>
           			<li class="nav-item">
-            			<a class="nav-link disabled" href="pages/projects.jsp">Projects</a>
+            			<a class="nav-link a-dark-mode disabled" href="pages/projects.jsp">Projects</a>
           			</li>
           			<li class="nav-item dropdown">
-            			<a class="nav-link dropdown-toggle" href="pages/forums.jsp" id="dropdown07XL" data-bs-toggle="dropdown" data-hover="dropdown" aria-expanded="false">Forums</a>
+            			<a class="nav-link dropdown-toggle a-dark-mode" href="pages/forums.jsp" id="dropdown07XL" data-bs-toggle="dropdown" data-hover="dropdown" aria-expanded="false">Forums</a>
              			<ul class="dropdown-menu" aria-labelledby="dropdown07XL">
 			                <li><a class="dropdown-item" href="#">Video Games</a></li>
 			                <li><a class="dropdown-item" href="#">Series</a></li>
@@ -35,7 +35,7 @@
 			                <li><a class="dropdown-item" href="#">Table games</a></li>
 			                <li><a class="dropdown-item" href="#">E-SPORTS</a></li>
 			                <li class="dropdown-divider"/>
-			                <li><a class="dropdown-item" href="#">Forums</a></li>
+			                <li><a class="dropdown-item a-dark-mode" href="#">Forums</a></li>
             			</ul>
           			</li>
         		</ul>
@@ -71,7 +71,7 @@
 	        	
 	        			<c:otherwise>  
 			        		<li class="nav-item dropdown">
-			            		<a class="nav-link dropdown-toggle" href="pages/forums.jsp" id="dropdown07XL" data-bs-toggle="dropdown" data-hover="dropdown" aria-expanded="false">
+			            		<a class="nav-link dropdown-toggle a-dark-mode" href="pages/forums.jsp" id="dropdown07XL" data-bs-toggle="dropdown" data-hover="dropdown" aria-expanded="false">
 									${sessionScope.ATR_USER_LOGGED_OBJ.username}
 								</a>
 			             		<ul class="dropdown-menu" aria-labelledby="dropdown07XL">
@@ -91,7 +91,7 @@
 
 			            	<c:if test='${sessionScope.ATR_USER_LOGGED_OBJ.admin == true}'>
 			            		<li class="nav-item">
-		                			<a class="nav-link" href = "<%=request.getContextPath() %>/pages/admin/administer.jsp">Administer<span class="sr-only">(current)</span></a>
+		                			<a class="nav-link a-dark-mode" href = "<%=request.getContextPath() %>/pages/admin/administer.jsp">Administer<span class="sr-only">(current)</span></a>
 		            			</li>
 			            	</c:if>
 	        			</c:otherwise>

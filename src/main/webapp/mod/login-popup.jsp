@@ -80,8 +80,8 @@
 			<div class="modal-footer">
 				<input id="checkbox-showpassword" type = "checkbox" onclick="showPassIn('exampleModal')"/>
 				<label for="checkbox-showpassword">Show password</label>
-				<a href="#">Forgot Password?</a>
-        		<a id="signup-login-label" href="#" value="false" onclick="showSignUpForm()">Sign Up</a>
+				<a class="" href="#">Forgot Password?</a>
+        		<a class="" id="signup-login-label" href="#" value="false" onclick="showSignUpForm()">Sign Up</a>
 			</div>
 		</div>
 	</div>

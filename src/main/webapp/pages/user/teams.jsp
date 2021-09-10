@@ -10,7 +10,8 @@
 
 <%
 	User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-	pageContext.setAttribute(Team.ATR_TEAMS_LIST, new TeamSqlDao().listByPlayerId(sessionUser.getId()));	
+System.out.println(String.valueOf(sessionUser.getId()));
+	pageContext.setAttribute(Team.ATR_TEAMS_LIST, new TeamSqlDao().listByMemberId(String.valueOf(sessionUser.getId())));	
 	pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new VideoGameSqlDao().listBy(SearchBy.NONE, null));
 %>
     
@@ -51,7 +52,7 @@
 							<% request.setAttribute(VideoGame.ATTR_VIDEO_GAME_OBJ, new VideoGameSqlDao().read(String.valueOf(request.getAttribute("teamVideoGameId")), SearchBy.ID)); %>
 							<tbody id="div-team-${team.id}">
 						    	<tr>
-						      		<th scope="row"><img class="img-fluid rounded" src="data:image/png;base64, ${team.base64Logo}" alt="${team.name}'s logo"/></th>
+						      		<th scope="row"><img class="img-fluid rounded img-fit" src="data:image/png;base64, ${team.base64Logo}" alt="${team.name}'s logo"/></th>
 						      		<td>${team.name}</td>
 						      		<td>${ATTR_VIDEO_GAME_OBJ.name}</td>
 						      		<td><a class="btn btn-primary" href="<%= request.getContextPath() %>/pages/team.jsp?<%= Team.PARAM_TEAM_ID %>=${team.id}">See</a></td>

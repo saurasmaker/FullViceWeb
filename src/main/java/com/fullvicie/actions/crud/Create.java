@@ -1,6 +1,7 @@
 package com.fullvicie.actions.crud;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.PermissionType;
+import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
 
 import com.fullvicie.daos.sql.*;
@@ -242,9 +244,22 @@ public class Create implements IAction{
 					PermissionType.USER_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
 			
 			if(ptTeam == PermissionType.NO_PERMISSION)
-					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new TeamSqlDao()).create(new Team(request));
+			boolean canCreateTeam = false;
+			Team newTeam = new Team(request);
+			ArrayList<GamerProfile> gamerProfilesUser = new GamerProfileSqlDao().listBy(SearchBy.USER_ID, String.valueOf(newTeam.getUserCreatorId()));
+			for(GamerProfile gp: gamerProfilesUser)
+				if(gp.getVideoGameId()==newTeam.getVideoGameId()) {
+					canCreateTeam = true;
+					newTeam.getGamerProfiles()[0] = gp.getId();
+					break;
+				}
+			
+			if(!canCreateTeam)
+				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.MUST_HAVE_CORRESPONDING_GAMER_PROFILE;
+			
+			et = (new TeamSqlDao()).create(newTeam);
 			url += "#teams-title";
 			
 			break;	

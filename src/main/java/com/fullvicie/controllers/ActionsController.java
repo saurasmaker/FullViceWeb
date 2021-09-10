@@ -65,6 +65,26 @@ public class ActionsController extends HttpServlet {
 		case ChangeTeamLogo.PARAM_CHANGE_TEAM_LOGO_ACTION:
 			url = (new ChangeTeamLogo()).execute(request, response);
 			break;
+		
+		case InvitePlayerToTeam.PARAM_INVITE_PLAYER_TO_TEAM_ACTION:
+			url = (new InvitePlayerToTeam()).execute(request, response);
+			break;
+			
+		case AcceptTeamInvitation.PARAM_ACCEPT_TEAM_INVITATION_ACTION:
+			url = new AcceptTeamInvitation().execute(request, response);
+			break;
+			
+		case RejectTeamInvitation.PARAM_REJECT_TEAM_INVITATION_ACTION:
+			url = new RejectTeamInvitation().execute(request, response);
+			break;
+			
+		case LeaveTeam.PARAM_LEAVE_TEAM_ACTION:
+			url = new LeaveTeam().execute(request, response);
+			break;	
+		
+		case KickPlayerFromTeam.PARAM_KICK_PLAYER_FROM_TEAM_ACTION:
+			url = new KickPlayerFromTeam().execute(request, response);
+			break;
 			
 		case Create.PARAM_CREATE_ACTION:
 			url = (new Create()).execute(request, response);

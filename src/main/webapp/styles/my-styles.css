@@ -11,10 +11,16 @@
 	object-fit: cover;
 }
 
+.img-in-table{
+	width: 100px;
+}
+
 .a-dark-mode{
 	color: white;
+	transition: opacity .55s ease-in-out;
 }
 
 .a-dark-mode:hover{
-	color: rgb(240, 248, 255);
+	color: red;
+	transition: opacity 1s ease-in-out;
 }

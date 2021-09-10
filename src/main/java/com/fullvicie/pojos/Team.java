@@ -113,6 +113,17 @@ public class Team implements IPojo{
 	}
 
 	
+	public int getNumberOfPlayers() {
+		
+		int cont = 0;
+		
+		for(int gp: this.gamerProfiles)
+			if(gp > 0)
+				++cont;
+		
+		return cont;
+	}
+	
 
 	/*
 	 * Getters & Setters

@@ -16,7 +16,9 @@ import com.fullvicie.controllers.DatabaseController;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IDao;
+import com.fullvicie.pojos.GamerProfile;
 import com.fullvicie.pojos.Team;
+import com.fullvicie.pojos.User;
 
 public class TeamSqlDao implements IDao<Team>{
 
@@ -212,11 +214,19 @@ public class TeamSqlDao implements IDao<Team>{
 
 	
 	
-	public ArrayList<Team> listByPlayerId(int playerId) {
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + GAMER_PROFILE_ID_COLUMN + 0 + "='" + playerId + "'";
+	public ArrayList<Team> listByMemberId(String memberId) {
 		
-		for(int i = 1; i < new Team().getGamerProfiles().length; ++i)
-			selectQuery += " OR " + GAMER_PROFILE_ID_COLUMN + i + "='" + playerId + "'";
+		User user = new UserSqlDao().read(memberId, SearchBy.ID);
+		ArrayList<GamerProfile> gpList = new GamerProfileSqlDao().listBy(SearchBy.USER_ID, String.valueOf(user.getId()));
+		
+		String OR = " OR ";
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE ";
+		
+		for(int i = 0; i < new Team().getGamerProfiles().length; ++i) 
+			for(GamerProfile gp: gpList) 
+				selectQuery += GAMER_PROFILE_ID_COLUMN + i + "='" + gp.getId() + "'" + OR;
+
+		selectQuery = selectQuery.substring(0, selectQuery.length()-OR.length());
 				
 		ResultSet rs = null;
 		ArrayList<Team> teamsList = new ArrayList<Team>();
