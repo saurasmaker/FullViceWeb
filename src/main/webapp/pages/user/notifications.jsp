@@ -1,3 +1,4 @@
+<%@page import="com.fullvicie.actions.user.RejectTeamInvitation"%>
 <%@page import="com.fullvicie.actions.user.AcceptTeamInvitation"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -48,7 +49,6 @@
 					  			<% //Setting necesary variables
 					  			TeamInvitation teamInvitation = (TeamInvitation)pageContext.getAttribute("teamInvitation");
 					  			User transmitter = new UserSqlDao().read(String.valueOf(teamInvitation.getTransmitterUserId()), SearchBy.ID);
-					  			System.out.println(transmitter.getUsername());
 					  			Team team = new TeamSqlDao().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
 					  			VideoGame videoGame = new VideoGameSqlDao().read(String.valueOf(team.getVideoGameId()), SearchBy.ID);
 					  			pageContext.setAttribute("transmitter", transmitter);
@@ -70,7 +70,7 @@
 									
 									<th scope="col">
 										<form  action="<%=request.getContextPath()%>/ActionsController" method="POST">
-						      				<input type="hidden" name="<%= ActionsController.PARAM_SELECT_ACTION %>" value="<%= AcceptTeamInvitation.PARAM_ACCEPT_TEAM_INVITATION_ACTION %>"/>	
+						      				<input type="hidden" name="<%= ActionsController.PARAM_SELECT_ACTION %>" value="<%= RejectTeamInvitation.PARAM_REJECT_TEAM_INVITATION_ACTION %>"/>	
 											<input type="hidden" name="<%= TeamInvitation.PARAM_TEAM_INVITATION_ID %>" value="${teamInvitation.id}" />
 											<input class="btn btn-danger" type="submit" value="Reject">
 										</form>

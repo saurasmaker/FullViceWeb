@@ -1,3 +1,6 @@
+<%@page import="com.fullvicie.actions.user.ChangeTeamOwner"%>
+<%@page import="com.fullvicie.actions.crud.Delete"%>
+<%@page import="com.fullvicie.daos.sql.TeamInvitationSqlDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
@@ -17,9 +20,11 @@
 		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_TEAM_ERROR);
 	
 	User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+	ArrayList<TeamInvitation> teamInvitations = new TeamInvitationSqlDao().listBy(SearchBy.TEAM_ID, String.valueOf(team.getId()));
 	
 	session.setAttribute(Team.ATTR_TEAM_OBJ, team);
 	pageContext.setAttribute("videogamesList", new VideoGameSqlDao().listBy(SearchBy.NONE, null));
+	pageContext.setAttribute("teamInvitations", teamInvitations);
 %>
     
     
@@ -154,6 +159,7 @@
 					      		<th scope="col">Picture</th>
 					      		<th scope="col">Name</th>
 					      		<th scope="col">Analysis Page</th>
+					      		<% try { if (team.getUserOwnerId() == sessionUser.getId()){ %><th scope="col">Set as Owner </th><% }  } catch(Exception e){ } %>
 								<% try { if (team.getUserOwnerId() == sessionUser.getId()){ %><th scope="col">Kick</th><% }  } catch(Exception e){ } %>
 					    	</tr>
 					  	</thead>	
@@ -173,30 +179,92 @@
 						  			<tbody id="tbody-gamer-profile-${loop.index}">
 								    	<tr>
 								    		<th scope="row">${loop.index+1}</th>
-								      		<td><img class="img-fluid rounded img-in-table" src="data:image/png;base64, ${user.base64Picture}" alt="${gamerProfile.nameInGame}'s logo" /></th>
-								      		<td><a class="a-dark-mode" target="_blank" href="<%= request.getContextPath() %>/pages/user-profile.jsp?<%= User.PARAM_USER_ID %>=${user.id}">${gamerProfile.nameInGame}</a></td>
+								      		<td><img class="img-fluid rounded img-in-table" src="data:image/png;base64, ${user.base64Picture}" alt="${gamerProfile.nameInGame}'s logo" /></td>
+								      		<td><a class="a-dark-mode" target="_blank" href="<%= request.getContextPath() %>/pages/user-profile.jsp?<%= User.PARAM_USER_ID %>=${user.id}"><% if(team.getUserOwnerId() == gamerP.getUserId()) { %> <i class="fas fa-crown"></i> <% } %> ${gamerProfile.nameInGame}</a></td>
 								      		<td><a class="a-dark-mode" target="_blank" href="${gamerProfile.analysisPage}">${gamerProfile.analysisPage}</a></td>
 		
 								    		<% if (team!=null && user!=null && sessionUser!=null){ %>
+								    		
+								    			<th scope="col">
+								    			<% if (team.getUserOwnerId() == sessionUser.getId() && sessionUser.getId() != user.getId()){ %>
+								    				<form  action="<%=request.getContextPath()%>/ActionsController" method="POST" onsubmit="return changeOwner('<%= team.getName() %>', '<%= gamerP.getNameInGame() %>')">
+														<input type="hidden" name="<%= ActionsController.PARAM_SELECT_ACTION %>" value="<%= ChangeTeamOwner.PARAM_CHANGE_TEAM_OWNER_ACTION %>"/>
+														<input type="hidden" name="<%= Team.PARAM_TEAM_ID %>" value="<%= team.getId() %>"/>
+														<input type="hidden" name="<%= GamerProfile.PARAM_GAMER_PROFILE_ID %>" value="<%= gamerP.getId() %>"/>
+														<input class="btn btn-danger" type="submit" value="Set as Owner">
+													</form>
+								    			<% } %>
+								    			</th>
+								    		
 								    			<th scope="col">
 								    			<% if(sessionUser.getId() == gamerP.getUserId()) { %>
-													<form  action="<%=request.getContextPath()%>/ActionsController" method="POST">
+													<form  action="<%=request.getContextPath()%>/ActionsController" method="POST" onsubmit="return leaveTeam('<%= team.getName() %>')">
+														<input type="hidden" name="<%= ActionsController.PARAM_SELECT_ACTION %>" value="<%= LeaveTeam.PARAM_LEAVE_TEAM_ACTION %>"/>
+														<input type="hidden" name="<%= Team.PARAM_TEAM_ID %>" value="<%= team.getId() %>"/>
 														<input class="btn btn-danger" type="submit" value="Leave">
 													</form>
 												<% } else if (team.getUserOwnerId() == sessionUser.getId()) { %>
-													<form  action="<%=request.getContextPath()%>/ActionsController" method="POST">
+													<form  action="<%=request.getContextPath()%>/ActionsController" method="POST" onsubmit="return kickPlayerFromTeam('<%= team.getName() %>', '<%= user.getUsername() %>')">
+														<input type="hidden" name="<%= ActionsController.PARAM_SELECT_ACTION %>" value="<%= KickPlayerFromTeam.PARAM_KICK_PLAYER_FROM_TEAM_ACTION %>"/>
+														<input type="hidden" name="<%= GamerProfile.PARAM_GAMER_PROFILE_ID %>" value="<%= gamerP.getId() %>"/>
+														<input type="hidden" name="<%= Team.PARAM_TEAM_ID %>" value="<%= team.getId() %>"/>
 														<input class="btn btn-danger" type="submit" value="Kick">
 													</form>
 												<% } %>
+												</th>
+												
+								    		<% } %>
+								    	</tr>			
+								  	</tbody>
+							<% } catch(Exception e){ } %>	
+						</c:forEach>
+						
+						<% if(sessionUser!=null) if (team.getUserOwnerId() == sessionUser.getId()) { %>
+						<c:forEach var="teamInvitation" items="${teamInvitations}" varStatus="loop">
+					  		<% //Logic show Kick or Leave from Team	
+					  		TeamInvitation teamInvitation = (TeamInvitation) pageContext.getAttribute("teamInvitation");
+					  		User user = new UserSqlDao().read(String.valueOf(teamInvitation.getReceiverUserId()), SearchBy.ID);
+					  		try{
+						  		pageContext.setAttribute("user", user);
+					  		%>
+					  		
+						  			<tbody id="tbody-gamer-profile-${loop.index}">
+								    	<tr>
+								    		<th scope="row">-</th>
+								      		<td><img class="img-fluid rounded img-in-table" src="data:image/png;base64, ${user.base64Picture}" alt="${user.username}'s logo" /></td>
+								      		<td><a class="a-dark-mode" target="_blank" href="<%= request.getContextPath() %>/pages/user-profile.jsp?<%= User.PARAM_USER_ID %>=${user.id}">${user.username}</a></td>
+								      		<td>Waiting invitation response...</td>
+		
+								    		<% if (team!=null && user!=null && sessionUser!=null){ %>
+								    			<th scope="col">
+													<form  action="<%=request.getContextPath()%>/ActionsController" method="POST" onsubmit="return cancelInvitation('<%= team.getName() %>', '<%= user.getUsername() %>')">
+														<input type="hidden" name="<%= ActionsController.PARAM_SELECT_ACTION %>" value="<%= Delete.PARAM_DELETE_ACTION %>"/>
+														<input type="hidden" name="<%= ActionsController.PARAM_OBJECT_CLASS %>" value="<%= TeamInvitation.class.getName() %>"/>
+														<input type="hidden" name="<%= TeamInvitation.PARAM_TEAM_INVITATION_ID %>" value="<%= teamInvitation.getId() %>"/>
+														<input class="btn btn-danger" type="submit" value="Cancel">
+													</form>
 												</th>
 								    		<% } %>
 								    	</tr>			
 								  	</tbody>
 							<% } catch(Exception e){ } %>	
 						</c:forEach>
+						<% } %>
+						
 					</table>
 				</div>
 			</div>
+			
+			<% if(sessionUser!=null) if (team.getUserOwnerId() == sessionUser.getId()) { %>
+			<div>
+				<form  action="<%=request.getContextPath()%>/ActionsController" method="POST" onsubmit="return deleteTeam('<%= team.getName() %>')">
+					<input type="hidden" name="<%= ActionsController.PARAM_SELECT_ACTION %>" value="<%= Delete.PARAM_DELETE_ACTION %>"/>
+					<input type="hidden" name="<%= ActionsController.PARAM_OBJECT_CLASS %>" value="<%= Team.class.getName() %>"/>
+					<input type="hidden" name="<%= Team.PARAM_TEAM_ID %>" value="<%= team.getId() %>"/>
+					<input class="btn btn-danger" type="submit" value="Delete Team">
+				</form>
+			</div>
+			<% } %>
 			
 		</div>		
 				

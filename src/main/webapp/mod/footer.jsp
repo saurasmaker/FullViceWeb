@@ -6,22 +6,22 @@
       <!-- Section: Social media -->
       <section class="mb-4">
         <!-- Facebook -->
-        <a target="_blank" class="btn btn-outline-light btn-floating m-1" href="https://www.youtube.com/channel/UCaVbYAud6rzDBrrfVhAhFjQ" role="button">
+        <a target="_blank" class="btn btn-outline-light btn-floating m-1 "  href="https://www.youtube.com/channel/UCaVbYAud6rzDBrrfVhAhFjQ" role="button" >
             <i class="fab fa-youtube"></i>
         </a>
   
         <!-- Twitter -->
-        <a target="_blank" class="btn btn-outline-light btn-floating m-1" href="https://twitter.com/MisterRed_YT" role="button"
+        <a target="_blank" class="btn btn-outline-light btn-floating m-1 " href="https://twitter.com/MisterRed_YT" role="button"
           ><i class="fab fa-twitter"></i>
         </a>
   
         <!-- Google -->
-        <a target="_blank" class="btn btn-outline-light btn-floating m-1" href="https://discord.gg/GN6beJvEYZ" role="button">
+        <a target="_blank" class="btn btn-outline-light btn-floating m-1 " href="https://discord.gg/GN6beJvEYZ" role="button">
           <i class="fab fa-discord"></i>
         </a>
   
         <!-- Instagram -->
-        <a target="_blank" class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/misterred_official/" role="button">
+        <a target="_blank" class="btn btn-outline-light btn-floating m-1  " href="https://www.instagram.com/misterred_official/" role="button">
             <i class="fab fa-instagram"></i>
         </a>
   
@@ -55,16 +55,16 @@
   
             <ul class="list-unstyled mb-0">
               <li>
-                <a href="#!" class="text-white">Link 1</a>
+                <a href="#!" class="a-dark-mode">Link 1</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Link 2</a>
+                <a href="#!" class="a-dark-mode">Link 2</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Link 3</a>
+                <a href="#!" class="a-dark-mode">Link 3</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Link 4</a>
+                <a href="#!" class="a-dark-mode">Link 4</a>
               </li>
             </ul>
           </div>
@@ -76,19 +76,19 @@
   
             <ul class="list-unstyled mb-0">
               <li>
-                <a href="<%=request.getContextPath() %>/pages/information/about-us.jsp" class="text-white">About Us</a>
+                <a href="<%=request.getContextPath() %>/pages/information/about-us.jsp" class="a-dark-mode">About Us</a>
               </li>
               <li>
-                <a href="<%=request.getContextPath() %>/pages/information/delivery-information.jsp" class="text-white">Delivery Information</a>
+                <a href="<%=request.getContextPath() %>/pages/information/delivery-information.jsp" class="a-dark-mode">Delivery Information</a>
               </li>
               <li>
-                <a href="<%=request.getContextPath() %>/pages/information/privacy-policy.jsp" class="text-white">Privacy Policy</a>
+                <a href="<%=request.getContextPath() %>/pages/information/privacy-policy.jsp" class="a-dark-mode">Privacy Policy</a>
               </li>
               <li>
-                <a href="<%=request.getContextPath() %>/pages/information/terms-and-conditions.jsp" class="text-white">Terms & Conditions</a>
+                <a href="<%=request.getContextPath() %>/pages/information/terms-and-conditions.jsp" class="a-dark-mode">Terms & Conditions</a>
               </li>
               <li>
-                <a href="<%=request.getContextPath() %>/pages/information/contact-us.jsp" class="text-white">Contact Us</a>
+                <a href="<%=request.getContextPath() %>/pages/information/contact-us.jsp" class="a-dark-mode">Contact Us</a>
               </li>
             </ul>
           </div>
@@ -100,16 +100,16 @@
   
             <ul class="list-unstyled mb-0">
               <li>
-                <a href="#!" class="text-white">Videogames</a>
+                <a href="#!" class="a-dark-mode">Videogames</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Role Games</a>
+                <a href="#!" class="a-dark-mode">Role Games</a>
               </li>
               <li>
-                <a href="#!" class="text-white">My Profile</a>
+                <a href="#!" class="a-dark-mode">My Profile</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Community</a>
+                <a href="#!" class="a-dark-mode">Community</a>
               </li>
             </ul>
           </div>
@@ -121,16 +121,16 @@
   
             <ul class="list-unstyled mb-0">
               <li>
-                <a href="#!" class="text-white">Link 1</a>
+                <a href="#!" class="a-dark-mode">Link 1</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Link 2</a>
+                <a href="#!" class="a-dark-mode">Link 2</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Link 3</a>
+                <a href="#!" class="a-dark-mode">Link 3</a>
               </li>
               <li>
-                <a href="#!" class="text-white">Link 4</a>
+                <a href="#!" class="a-dark-mode">Link 4</a>
               </li>
             </ul>
           </div>
@@ -146,7 +146,7 @@
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
       © 2021 Copyright:
-      <a class="text-white" href="http://fullvicie.sytes.net/FullVicie_Web/">Full Vicie</a>
+      <a class="a-dark-mode" href="http://fullvicie.sytes.net/FullVicie_Web/">Full Vicie</a>
     </div>
     <!-- Copyright -->
   </footer>

@@ -244,7 +244,23 @@ public class Update implements IAction{
 			url += "#teams-title";
 			break;
 				
+			
+			/*
+			 * TEAM INVITATION
+			 */
+			case "com.fullvicie.pojos.TeamInvitation":
+				TeamInvitation teamInvitation = new TeamInvitation(request);
+							
+				PermissionType ptTeamInvitation = checkPermissions(sessionUser, NO_OWNER,
+						PermissionType.ADMINISTRATOR_PERMISSION);
 				
+				if(ptTeamInvitation==PermissionType.NO_PERMISSION)
+						return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+				
+				et = (new TeamInvitationSqlDao()).update(String.valueOf(teamInvitation.getId()), SearchBy.ID, teamInvitation);
+				url += "#team-invitations-title";
+				break;
+			
 				
 		/*
 		 * USER

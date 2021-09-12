@@ -10,7 +10,6 @@
 
 <%
 	User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-System.out.println(String.valueOf(sessionUser.getId()));
 	pageContext.setAttribute(Team.ATR_TEAMS_LIST, new TeamSqlDao().listByMemberId(String.valueOf(sessionUser.getId())));	
 	pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new VideoGameSqlDao().listBy(SearchBy.NONE, null));
 %>

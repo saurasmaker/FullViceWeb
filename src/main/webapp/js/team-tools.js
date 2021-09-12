@@ -53,3 +53,24 @@ function resetTeamData(name, description, videoGameId) {
 
     teamInputConfirm.disabled = teamBtnCancel.disabled = true;
 }
+
+
+function cancelInvitation(teamName, userName){
+	return confirm('Are you sure you want to cancel the invitation you sent ' + userName + ' to join your ' + teamName + ' team?');
+}
+
+function kickPlayerFromTeam(teamName, userName){
+	return confirm('Are you sure you want to kick ' + userName + ' out of the ' + teamName + ' team?');
+}
+
+function leaveTeam(teamName){
+	return confirm('Are you sure you want to leave the ' + teamName + ' team?');
+}
+
+function changeOwner(teamName, userName){
+	return confirm('Are you sure you want to establish ' + userName + ' as the new owner of the ' + teamName + ' team?');
+}
+
+function deleteTeam(teamName){
+	return confirm('Are you sure you want to delete the ' + teamName + ' team?');
+}

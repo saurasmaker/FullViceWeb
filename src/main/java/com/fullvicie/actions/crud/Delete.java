@@ -100,6 +100,11 @@ public class Delete implements IAction{
 			url += "#teams-title";
 			break;	
 			
+		case "com.fullvicie.pojos.TeamInvitation":
+			et = (new TeamInvitationSqlDao()).delete(request.getParameter(TeamInvitation.PARAM_TEAM_INVITATION_ID), SearchBy.ID);
+			url += "#team-invitations-title";
+			break;		
+		
 		case "com.fullvicie.pojos.User":
 			et = (new UserSqlDao()).delete(request.getParameter(User.PARAM_USER_ID), SearchBy.ID);
 			url += "#users-title";

@@ -86,6 +86,10 @@ public class ActionsController extends HttpServlet {
 			url = new KickPlayerFromTeam().execute(request, response);
 			break;
 			
+		case ChangeTeamOwner.PARAM_CHANGE_TEAM_OWNER_ACTION:
+			url = new ChangeTeamOwner().execute(request, response);
+			break;
+			
 		case Create.PARAM_CREATE_ACTION:
 			url = (new Create()).execute(request, response);
 			break;

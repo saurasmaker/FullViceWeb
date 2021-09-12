@@ -218,6 +218,10 @@ public class TeamSqlDao implements IDao<Team>{
 		
 		User user = new UserSqlDao().read(memberId, SearchBy.ID);
 		ArrayList<GamerProfile> gpList = new GamerProfileSqlDao().listBy(SearchBy.USER_ID, String.valueOf(user.getId()));
+		ArrayList<Team> teamsList = new ArrayList<Team>();
+		
+		if(gpList.size() <= 0)
+			return teamsList;
 		
 		String OR = " OR ";
 		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE ";
@@ -229,8 +233,7 @@ public class TeamSqlDao implements IDao<Team>{
 		selectQuery = selectQuery.substring(0, selectQuery.length()-OR.length());
 				
 		ResultSet rs = null;
-		ArrayList<Team> teamsList = new ArrayList<Team>();
-		
+
 		try {
 			rs = DatabaseController.DATABASE_STATEMENT.executeQuery(selectQuery);					
 			while(rs.next()) {
@@ -241,6 +244,9 @@ public class TeamSqlDao implements IDao<Team>{
 		} catch (SQLException e)  {
 			e.printStackTrace();
 		}	
+		
+		
+		System.out.println(teamsList);
 		
 		return teamsList;
 	}

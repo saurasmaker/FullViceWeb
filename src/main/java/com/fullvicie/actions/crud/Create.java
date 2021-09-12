@@ -265,6 +265,22 @@ public class Create implements IAction{
 			break;	
 			
 			
+			/*
+			 * TEAM
+			 */
+			case "com.fullvicie.pojos.TeamInvitation":
+				
+				PermissionType ptTeamInvitation = checkPermissions(sessionUser,
+						PermissionType.USER_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
+				
+				if(ptTeamInvitation == PermissionType.NO_PERMISSION)
+						return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+				
+				et = (new TeamInvitationSqlDao()).create(new TeamInvitation(request));
+				url += "#team-invitations-title";
+				
+				break;
+			
 			
 		/*
 		 * USER
