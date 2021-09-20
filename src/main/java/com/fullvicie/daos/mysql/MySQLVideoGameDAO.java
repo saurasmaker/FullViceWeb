@@ -145,7 +145,7 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 	 * Tool Methods
 	 */
 	private ErrorType executeQueryWithParameters(String query, VideoGame vg) throws DaoException {
-		VideoGame actualFc = read(String.valueOf(vg.getId()), SearchBy.ID);
+		VideoGame actualVg = read(String.valueOf(vg.getId()), SearchBy.ID);
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -153,11 +153,11 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 			stat = connection.prepareStatement(query);
 			if(vg != null) {
 				if(vg.getName() != null) stat.setString(pos++, vg.getName());
-				else if(actualFc != null) stat.setString(pos++, actualFc.getName());
+				else if(actualVg != null) stat.setString(pos++, actualVg.getName());
 				else stat.setString(pos++, null);
 				
 				if(vg.getDescription() != null) stat.setString(pos++, vg.getDescription());
-				else if(actualFc != null) stat.setString(pos++, actualFc.getDescription());
+				else if(actualVg != null) stat.setString(pos++, actualVg.getDescription());
 				else stat.setString(pos++, null);
 			}
 			stat.execute();
