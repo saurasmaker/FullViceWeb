@@ -1,8 +1,5 @@
 package com.fullvicie.pojos;
 
-import java.sql.Date;
-import java.sql.Time;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONObject;
@@ -29,9 +26,6 @@ public class GamerProfile implements IPojo{
 	 */
 	private int id, points, videoGameId, userId;
 	private String nameInGame, analysisPage; 
-	private boolean deleted;
-	private Date deleteDate;
-	private Time deleteTime;
 
 
 	
@@ -52,14 +46,6 @@ public class GamerProfile implements IPojo{
 		try{this.points = Integer.parseInt(request.getParameter(PARAM_GAMER_PROFILE_POINTS));}
 		catch(Exception t) {this.points = 0;}
 		
-		this.deleted = request.getParameter(PARAM_GAMER_PROFILE_DELETED) != null ? true : false;
-		
-		try{ this.setDeleteDate(Date.valueOf(request.getParameter(PARAM_GAMER_PROFILE_DELETE_DATE))); }
-		catch(Exception t) { this.setDeleteDate(null); }
-		
-		try{ this.deleteTime = Time.valueOf(request.getParameter(PARAM_GAMER_PROFILE_DELETE_TIME)); }
-		catch(Exception t) { this.deleteTime = null; }
-		
 		try{this.videoGameId = Integer.parseInt(request.getParameter(PARAM_GAMER_PROFILE_VIDEO_GAME_ID));}
 		catch(Exception t) {this.videoGameId = -1;}
 		
@@ -71,12 +57,6 @@ public class GamerProfile implements IPojo{
 	/*
 	 * Methods
 	 */
-	@Override
-	public String toJavaScriptFunction() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public JSONObject toJSONObject() {
 		// TODO Auto-generated method stub
@@ -90,60 +70,43 @@ public class GamerProfile implements IPojo{
 	public int getPoints() {
 		return points;
 	}
-
 	public void setPoints(int points) {
 		this.points = points;
 	}
 
+	
 	public String getNameInGame() {
 		return nameInGame;
 	}
-
 	public void setNameInGame(String nameInGame) {
 		this.nameInGame = nameInGame;
 	}
 
+	
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	
 	public int getUserId() {
 		return userId;
 	}
-
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
+	
 	public int getVideoGameId() {
 		return videoGameId;
 	}
-
 	public void setVideoGameId(int gameId) {
 		this.videoGameId = gameId;
 	}
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-	public Date getDeleteDate() {
-		return deleteDate;
-	}
-	public void setDeleteDate(Date deleteDate) {
-		this.deleteDate = deleteDate;
-	}
-	public Time getDeleteTime() {
-		return deleteTime;
-	}
-	public void setDeleteTime(Time deleteTime) {
-		this.deleteTime = deleteTime;
-	}
+
+	
 	public String getAnalysisPage() {
 		return analysisPage;
 	}

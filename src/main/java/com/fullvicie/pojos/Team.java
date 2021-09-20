@@ -31,9 +31,8 @@ public class Team implements IPojo{
 	private int id, videoGameId, userOwnerId, userCreatorId;
 	private int gamerProfiles[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 	private String name, description, base64Logo;
-	private boolean deleted;
-	private Date creationDate, deleteDate;
-	private Time creationTime, deleteTime;
+	private Date creationDate;
+	private Time creationTime;
 	
 	
 	
@@ -57,14 +56,6 @@ public class Team implements IPojo{
 		try{this.creationTime = Time.valueOf(request.getParameter(PARAM_TEAM_CREATION_TIME));}
 		catch(Exception t) {this.creationTime = Time.valueOf(LocalTime.now());}
 		
-		this.deleted = request.getParameter(PARAM_TEAM_DELETED) != null ? true : false;
-		
-		try{this.deleteDate = Date.valueOf(request.getParameter(PARAM_TEAM_DELETE_DATE));}
-		catch(Exception t) {this.deleteDate = Date.valueOf(LocalDate.now());}
-		
-		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_TEAM_DELETE_TIME));}
-		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
-		
 		for(int i = 0; i < gamerProfiles.length; ++i)
 			try{this.gamerProfiles[i] = Integer.parseInt(request.getParameter(PARAM_TEAM_GAMER_PROFILE_ID_ + i));}
 			catch(Exception t) {this.gamerProfiles[i] = -1;}
@@ -84,14 +75,6 @@ public class Team implements IPojo{
 	 * Methods
 	 */
 	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.name + "', '" + this.description + "', '" + this.base64Logo + "', '"  + 
-				this.creationDate + "', '" + this.creationTime + "', '" + this.deleted + "', '" + 
-				this.deleteDate + "', '" + this.deleteTime + "', '" + this.videoGameId  + "', '" + 
-				this.userOwnerId + "', '" + this.userCreatorId + "'";
-	}
-
-	@Override
 	public JSONObject toJSONObject() {
 		
 		JSONObject jObject = new JSONObject();
@@ -102,9 +85,6 @@ public class Team implements IPojo{
 		jObject.put("base64Logo", this.base64Logo);
 		jObject.put("creationDate", this.creationDate);
 		jObject.put("creationDate", this.creationTime);
-		jObject.put("deleted", this.deleted);
-		jObject.put("deleteDate", this.deleteDate);
-		jObject.put("deleteTime", this.deleteTime);
 		jObject.put("videogameId", this.videoGameId);
 		jObject.put("userOwnerId", this.userOwnerId);
 		jObject.put("userCreatorId", this.userCreatorId);
@@ -175,28 +155,11 @@ public class Team implements IPojo{
 		this.base64Logo = base64Logo;
 	}
 
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-
 	public Date getCreationDate() {
 		return creationDate;
 	}
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
-	}
-
-
-	public Date getDeleteDate() {
-		return deleteDate;
-	}
-	public void setDeleteDate(Date deleteDate) {
-		this.deleteDate = deleteDate;
 	}
 
 
@@ -216,12 +179,6 @@ public class Team implements IPojo{
 	}
 	
 
-	public Time getDeleteTime() {
-		return deleteTime;
-	}
-	public void setDeleteTime(Time deleteTime) {
-		this.deleteTime = deleteTime;
-	}
 	public int[] getGamerProfiles() {
 		return gamerProfiles;
 	}

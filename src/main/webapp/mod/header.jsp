@@ -20,10 +20,10 @@
         		<!-- Navbar MENU section -->
         		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
           			<li class="nav-item">
-            			<a class="nav-link a-dark-mode disabled" aria-current="page" href="pages/communities.jsp">Communities</a>
+            			<a class="nav-link a-dark-mode" aria-current="page" href="<%=request.getContextPath() %>/pages/teams.jsp">Teams</a>
           			</li>
           			<li class="nav-item">
-            			<a class="nav-link a-dark-mode disabled" href="pages/projects.jsp">Projects</a>
+            			<a class="nav-link a-dark-mode disabled" href="<%=request.getContextPath() %>/pages/leagues-and-tournaments.jsp">Leagues and Tournaments</a>
           			</li>
           			<li class="nav-item dropdown">
             			<a class="nav-link dropdown-toggle a-dark-mode" href="pages/forums.jsp" id="dropdown07XL" data-bs-toggle="dropdown" data-hover="dropdown" aria-expanded="false">Forums</a>

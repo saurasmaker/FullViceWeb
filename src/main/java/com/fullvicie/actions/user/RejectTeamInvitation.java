@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.TeamInvitationSqlDao;
+import com.fullvicie.daos.mysql.MySQLTeamInvitationDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -27,9 +27,9 @@ public class RejectTeamInvitation implements IAction{
 			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
 		String url = request.getHeader("referer");
-		TeamInvitation teamInvitation = new TeamInvitationSqlDao().read(request.getParameter(TeamInvitation.PARAM_TEAM_INVITATION_ID), SearchBy.ID);
+		TeamInvitation teamInvitation = new MySQLTeamInvitationDAO().read(request.getParameter(TeamInvitation.PARAM_TEAM_INVITATION_ID), SearchBy.ID);
 		
-		if(new TeamInvitationSqlDao().delete(String.valueOf(teamInvitation.getId()), SearchBy.ID) == ErrorType.NO_ERROR) 
+		if(new MySQLTeamInvitationDAO().delete(String.valueOf(teamInvitation.getId()), SearchBy.ID) == ErrorType.NO_ERROR) 
 			return url;
 
 		return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.DELETE_TEAM_INVITATION_ERROR;

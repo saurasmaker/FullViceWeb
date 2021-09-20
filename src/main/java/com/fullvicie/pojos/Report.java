@@ -16,7 +16,7 @@ public class Report implements IPojo{
 	/*
 	 * Static Attributes
 	 */
-	public static final String PARAM_REPORT_ID = "PARAM_REPORT_ID", PARAM_REPORT_KIND = "PARAM_REPORT_KIND", PARAM_REPORT_DESCRIPTION = "PARAM_REPORT_DESCRIPTION",
+	public static final String PARAM_REPORT_ID = "PARAM_REPORT_ID", PARAM_REPORT_REPORT_TYPE_ID = "PARAM_REPORT_REPORT_TYPE_ID", PARAM_REPORT_DESCRIPTION = "PARAM_REPORT_DESCRIPTION",
 		PARAM_REPORT_REPORT_DATE = "PARAM_REPORT_REPORT_DATE", PARAM_REPORT_REPORT_TIME = "PARAM_REPORT_REPORT_TIME", PARAM_REPORT_SOLUTION_DATE = "PARAM_REPORT_SOLUTION_DATE",
 		PARAM_REPORT_SOLUTION_TIME = "PARAM_REPORT_SOLUTION_TIME", PARAM_REPORT_MODERATOR_ID = "PARAM_REPORT_MODERATOR_ID", PARAM_REPORT_ACCUSED_ID = "PARAM_REPORT_ACCUSED_ID",
 		PARAM_REPORT_WHISTLEBLOWER_ID = "PARAM_REPORT_WHISTLEBOWER_ID";
@@ -27,8 +27,8 @@ public class Report implements IPojo{
 	/*
 	 * Attributes
 	 */
-	private int id, moderatorId, accusedId, whistleblowerId;
-	private String kind, description;
+	private int id, reportTypeId, moderatorId, accusedId, whistleblowerId;
+	private String description;
 	private Date reportDate, solutionDate;
 	private Time reportTime, solutionTime;
 	
@@ -44,7 +44,6 @@ public class Report implements IPojo{
 		try{this.id = Integer.parseInt(request.getParameter(PARAM_REPORT_ID));}
 		catch(Exception t) {this.id = -1;}
 		
-		this.kind = request.getParameter(PARAM_REPORT_KIND);
 		this.description = request.getParameter(PARAM_REPORT_DESCRIPTION);
 
 		try{this.reportDate = Date.valueOf(request.getParameter(PARAM_REPORT_REPORT_DATE));}
@@ -59,8 +58,11 @@ public class Report implements IPojo{
 		try{this.solutionTime = Time.valueOf(request.getParameter(PARAM_REPORT_SOLUTION_TIME));}
 		catch(Exception t) {this.reportTime = Time.valueOf(LocalTime.now());}
 		
-		try{this.moderatorId = Integer.parseInt(request.getParameter(PARAM_REPORT_MODERATOR_ID));}
+		try{this.reportTypeId = Integer.parseInt(request.getParameter(PARAM_REPORT_MODERATOR_ID));}
 		catch(Exception t) {this.moderatorId = -1;}
+		
+		try{this.moderatorId = Integer.parseInt(request.getParameter(PARAM_REPORT_REPORT_TYPE_ID));}
+		catch(Exception t) {this.reportTypeId = -1;}
 		
 		try{this.accusedId = Integer.parseInt(request.getParameter(PARAM_REPORT_ACCUSED_ID));}
 		catch(Exception t) {this.accusedId = -1;}
@@ -74,24 +76,17 @@ public class Report implements IPojo{
 	 * Methods
 	 */
 	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.kind  + "', '" + this.description  + "', '" + this.reportDate  + "', '" + this.reportTime
-				 + "', '" + this.solutionDate  + "', '" + this.solutionTime  + "', '" + this.moderatorId  + "', '" + this.accusedId
-				 + "', '" + this.whistleblowerId + "'";
-	}
-
-	@Override
 	public JSONObject toJSONObject() {
 		
 		JSONObject jObject = new JSONObject();
 		
 		jObject.put("id", id);
-		jObject.put("name", this.kind);
 		jObject.put("description", this.description);
 		jObject.put("reportDate", this.reportDate);
 		jObject.put("reportTime", this.reportTime);
 		jObject.put("solutionDate", this.solutionDate);
 		jObject.put("solutionTime", this.solutionTime);
+		jObject.put("reportTypeId", this.reportTypeId);
 		jObject.put("moderatorId", this.moderatorId);
 		jObject.put("accusedId", this.accusedId);
 		jObject.put("whistleblowerId", this.whistleblowerId);
@@ -135,14 +130,6 @@ public class Report implements IPojo{
 	}
 
 	
-	public String getKind() {
-		return kind;
-	}
-	public void setKind(String kind) {
-		this.kind = kind;
-	}
-
-	
 	public String getDescription() {
 		return description;
 	}
@@ -180,6 +167,14 @@ public class Report implements IPojo{
 	}
 	public void setSolutionTime(Time solutionTime) {
 		this.solutionTime = solutionTime;
+	}
+
+	public int getReportTypeId() {
+		return reportTypeId;
+	}
+
+	public void setReportTypeId(int reportTypeId) {
+		this.reportTypeId = reportTypeId;
 	}
 	
 }

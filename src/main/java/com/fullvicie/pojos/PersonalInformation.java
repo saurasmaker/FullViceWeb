@@ -8,45 +8,46 @@ import org.json.JSONObject;
 
 import com.fullvicie.interfaces.IPojo;
 
-public class Profile implements IPojo{
+public class PersonalInformation implements IPojo{
 
 	/*
 	 * Static Attributes
 	 */
-	public static final String PARAM_PROFILE_ID = "PARAM_PROFILE_ID", PARAM_PROFILE_NAME = "PARAM_PROFILE_NAME", PARAM_PROFILE_SURNAMES = "PARAM_PROFILE_SURNAMES",
-			PARAM_PROFILE_BIOGRAPHY = "PARAM_PROFILE_BIOGRAPHY", PARAM_PROFILE_BIRTHDAY = "PARAM_PROFILE_BIRTHDAY", PARAM_PROFILE_BASE64_PICTURE = "PARAM_PROFILE_BASE64_PICTURE",
-			PARAM_PROFILE_USER_ID = "PARAM_PROFILE_USER_ID";
+	public static final String PARAM_PERSONAL_INFORMATION_ID = "PARAM_PERSONAL_INFORMATION_ID", PARAM_PERSONAL_INFORMATION_NAME = "PARAM_PERSONAL_INFORMATION_NAME", PARAM_PERSONAL_INFORMATION_SURNAMES = "PARAM_PERSONAL_INFORMATION_SURNAMES",
+			PARAM_PERSONAL_INFORMATION_BIOGRAPHY = "PARAM_PERSONAL_INFORMATION_BIOGRAPHY", PARAM_PERSONAL_INFORMATION_BIRTHDAY = "PARAM_PERSONAL_INFORMATION_BIRTHDAY",
+			PARAM_PERSONAL_INFORMATION_ADDRESS = "PARAM_PERSONAL_INFORMATION_ADDRESS", PARAM_PERSONAL_INFORMATION_USER_ID = "PARAM_PERSONAL_INFORMATION_USER_ID";
 	
-	public static final String ATTR_PROFILE_OBJ = "ATTR_PROFILE_OBJ";
+	public static final String ATTR_PERSONAL_INFORMATION_OBJ = "ATTR_PERSONAL_INFORMATION_OBJ";
 
 	
 	/*
 	 * Attributes
 	 */
 	private int id, userId;
-	private String name, surnames, biography, base64Picture;
+	private String name, surnames, biography, address;
 	private Date birthday;
 	
 	
 	/*
 	 * Constructors
 	 */
-	public Profile() {
+	public PersonalInformation() {
 		
 	}
 	
-	public Profile(HttpServletRequest request) {
-		try{this.id = Integer.parseInt(request.getParameter(PARAM_PROFILE_ID));}
+	public PersonalInformation(HttpServletRequest request) {
+		try{this.id = Integer.parseInt(request.getParameter(PARAM_PERSONAL_INFORMATION_ID));}
 		catch(Exception t) {this.id = -1;}
 		
-		this.name = request.getParameter(PARAM_PROFILE_NAME);
-		this.surnames = request.getParameter(PARAM_PROFILE_SURNAMES);
-		this.biography = request.getParameter(PARAM_PROFILE_BIOGRAPHY);
+		this.name = request.getParameter(PARAM_PERSONAL_INFORMATION_NAME);
+		this.surnames = request.getParameter(PARAM_PERSONAL_INFORMATION_SURNAMES);
+		this.biography = request.getParameter(PARAM_PERSONAL_INFORMATION_BIOGRAPHY);
+		this.address = request.getParameter(PARAM_PERSONAL_INFORMATION_ADDRESS);
 		
-		try{ this.birthday = Date.valueOf(request.getParameter(PARAM_PROFILE_BIRTHDAY)); }
+		try{ this.birthday = Date.valueOf(request.getParameter(PARAM_PERSONAL_INFORMATION_BIRTHDAY)); }
 		catch(Exception t) { this.birthday = null; }
 		
-		try{this.userId = Integer.parseInt(request.getParameter(PARAM_PROFILE_USER_ID));}
+		try{this.userId = Integer.parseInt(request.getParameter(PARAM_PERSONAL_INFORMATION_USER_ID));}
 		catch(Exception t) {this.userId = -1;}
 		
 	}
@@ -55,12 +56,6 @@ public class Profile implements IPojo{
 	/*
 	 * Methods
 	 */
-	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.name + "', '" + this.surnames + "', '" + this.biography
-			+ "', '" + this.birthday  + "', '" + this.base64Picture  + "', '" + this.userId + "'";
-	}
-
 	@Override
 	public JSONObject toJSONObject() {
 		
@@ -71,7 +66,6 @@ public class Profile implements IPojo{
 		jObject.put("surnames", this.surnames);
 		jObject.put("biography", this.biography);
 		jObject.put("birthday", this.birthday);
-		jObject.put("base64Picture", this.base64Picture);
 		jObject.put("userId", this.userId);
 		
 		return jObject;
@@ -129,14 +123,11 @@ public class Profile implements IPojo{
 	}
 
 	
-	public String getPicture() {
-		return base64Picture;
+	public String getAddress() {
+		return address;
 	}
-	public void setPicture(String base64Picture) {
-		this.base64Picture = base64Picture;
+	public void setAddress(String address) {
+		this.address = address;
 	}
-	
-	
-	
 
 }

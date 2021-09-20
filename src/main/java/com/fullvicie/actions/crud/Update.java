@@ -7,8 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-
-import com.fullvicie.daos.sql.*;
+import com.fullvicie.daos.mysql.*;
 import com.fullvicie.enums.*;
 import com.fullvicie.interfaces.IAction;
 import com.fullvicie.pojos.*;
@@ -46,7 +45,7 @@ public class Update implements IAction{
 			if(ptForum == PermissionType.NO_PERMISSION)
 					return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ForumSqlDao()).update(request.getParameter(Forum.PARAM_FORUM_ID), SearchBy.ID, forum);
+			et = (new MySQLForumDAO()).update(request.getParameter(Forum.PARAM_FORUM_ID), SearchBy.ID, forum);
 			url += "#forums-title";
 			break;
 			
@@ -63,7 +62,7 @@ public class Update implements IAction{
 			if(ptForumCategory == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ForumCategorySqlDao()).update(request.getParameter(ForumCategory.PARAM_FORUM_CATEGORY_ID), SearchBy.ID, new ForumCategory(request));
+			et = (new MySQLForumCategoryDAO()).update(request.getParameter(ForumCategory.PARAM_FORUM_CATEGORY_ID), SearchBy.ID, new ForumCategory(request));
 			url += "#forum-categories-title";
 			break;
 			
@@ -82,7 +81,7 @@ public class Update implements IAction{
 			if(ptForumMessage == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ForumMessageSqlDao()).update(request.getParameter(ForumMessage.PARAM_FORUM_MESSGAE_ID), SearchBy.ID, forumMessage);
+			et = (new MySQLForumMessageDAO()).update(request.getParameter(ForumMessage.PARAM_FORUM_MESSGAE_ID), SearchBy.ID, forumMessage);
 			url += "#forum-messages-title";
 			break;
 			
@@ -92,7 +91,7 @@ public class Update implements IAction{
 		 * FORUM MESSAGE LIKE
 		 */
 		case "com.fullvicie.pojos.ForumMessageLike":
-			et = (new ForumMessageLikeSqlDao()).update(request.getParameter(ForumMessageLike.PARAM_FORUM_MESSAGE_LIKE_ID), SearchBy.ID, new ForumMessageLike(request));
+			et = (new MySQLForumMessageLikeDAO()).update(request.getParameter(ForumMessageLike.PARAM_FORUM_MESSAGE_LIKE_ID), SearchBy.ID, new ForumMessageLike(request));
 			url += "#forum-message-likes-title";
 			break;
 		
@@ -111,7 +110,7 @@ public class Update implements IAction{
 			if(ptGamerProfile == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new GamerProfileSqlDao()).update(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID, gamerProfile);
+			et = (new MySQLGamerProfileDAO()).update(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID, gamerProfile);
 			url += "#gamer-profiles-title";
 			break;	
 			
@@ -130,7 +129,7 @@ public class Update implements IAction{
 			if(ptPost == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new PostSqlDao()).update(request.getParameter(Post.PARAM_POST_ID), SearchBy.ID, post);
+			et = (new MySQLPostDAO()).update(request.getParameter(Post.PARAM_POST_ID), SearchBy.ID, post);
 			url += "#posts-title";
 			break;
 			
@@ -147,7 +146,7 @@ public class Update implements IAction{
 			if(ptPostCategory == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new PostCategorySqlDao()).update(request.getParameter(PostCategory.PARAM_POST_CATEGORY_ID), SearchBy.ID, new PostCategory(request));
+			et = (new MySQLPostCategoryDAO()).update(request.getParameter(PostCategory.PARAM_POST_CATEGORY_ID), SearchBy.ID, new PostCategory(request));
 			url += "#post-categories-title";
 			break;
 			
@@ -166,7 +165,7 @@ public class Update implements IAction{
 			if(ptComment == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new PostCommentSqlDao()).update(request.getParameter(PostComment.PARAM_POST_COMMENT_ID), SearchBy.ID, postComment);
+			et = (new MySQLPostCommentDAO()).update(request.getParameter(PostComment.PARAM_POST_COMMENT_ID), SearchBy.ID, postComment);
 			url += "#post-comments-title";
 			break;
 			
@@ -176,7 +175,7 @@ public class Update implements IAction{
 		 * POST COMMENT LIKE
 		 */
 		case "com.fullvicie.pojos.PostCommentLike":
-			et = (new PostCommentLikeSqlDao()).update(request.getParameter(PostCommentLike.PARAM_POST_COMMENT_LIKE_ID), SearchBy.ID, new PostCommentLike(request));
+			et = (new MySQLPostCommentLikeDAO()).update(request.getParameter(PostCommentLike.PARAM_POST_COMMENT_LIKE_ID), SearchBy.ID, new PostCommentLike(request));
 			url += "#post-comment-likes-title";
 			break;
 			
@@ -186,7 +185,7 @@ public class Update implements IAction{
 		 * POST LIKE
 		 */
 		case "com.fullvicie.pojos.PostLike":
-			et = (new PostLikeSqlDao()).update(request.getParameter(PostLike.PARAM_POST_LIKE_ID), SearchBy.ID, new PostLike(request));
+			et = (new MySQLPostLikeDAO()).update(request.getParameter(PostLike.PARAM_POST_LIKE_ID), SearchBy.ID, new PostLike(request));
 			url += "#post-likes-title";
 			break;
 		
@@ -196,7 +195,7 @@ public class Update implements IAction{
 		 * PROFILE
 		 */
 		case "com.fullvicie.pojos.Profile":
-			Profile profile = new Profile(request);
+			PersonalInformation profile = new PersonalInformation(request);
 			
 			PermissionType ptProfile = checkPermissions(sessionUser, profile.getUserId(),
 					PermissionType.OWNER_PERMISSION, PermissionType.MODERATOR_PERMISSION, PermissionType.ADMINISTRATOR_PERMISSION);
@@ -205,7 +204,7 @@ public class Update implements IAction{
 				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			}
 			
-			et = (new ProfileSqlDao()).update(request.getParameter(Profile.PARAM_PROFILE_ID), SearchBy.ID, profile) ;
+			et = (new MySQLProfileDAO()).update(request.getParameter(PersonalInformation.PARAM_PROFILE_ID), SearchBy.ID, profile) ;
 			url += "#profiles-title";
 			break;
 		
@@ -222,7 +221,7 @@ public class Update implements IAction{
 			if(ptReport==PermissionType.NO_PERMISSION)
 				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ReportSqlDao()).update(request.getParameter(Report.PARAM_REPORT_ID), SearchBy.ID, new Report(request));
+			et = (new MySQLReportDAO()).update(request.getParameter(Report.PARAM_REPORT_ID), SearchBy.ID, new Report(request));
 			url += "#reports-title";
 			break;
 		
@@ -240,7 +239,7 @@ public class Update implements IAction{
 			if(ptTeam==PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new TeamSqlDao()).update(String.valueOf(team.getId()), SearchBy.ID, team);
+			et = (new MySQLTeamDAO()).update(String.valueOf(team.getId()), SearchBy.ID, team);
 			url += "#teams-title";
 			break;
 				
@@ -257,7 +256,7 @@ public class Update implements IAction{
 				if(ptTeamInvitation==PermissionType.NO_PERMISSION)
 						return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 				
-				et = (new TeamInvitationSqlDao()).update(String.valueOf(teamInvitation.getId()), SearchBy.ID, teamInvitation);
+				et = (new MySQLTeamInvitationDAO()).update(String.valueOf(teamInvitation.getId()), SearchBy.ID, teamInvitation);
 				url += "#team-invitations-title";
 				break;
 			
@@ -275,13 +274,13 @@ public class Update implements IAction{
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
 			else if(ptUser==PermissionType.OWNER_PERMISSION) {
-				User actualUser = new UserSqlDao().read(String.valueOf(user.getId()), SearchBy.ID);
+				User actualUser = new MySQLUserDAO().read(String.valueOf(user.getId()), SearchBy.ID);
 				user.setAdmin(actualUser.getAdmin());
 				user.setModerator(actualUser.getModerator());
 				user.setDeleted(actualUser.getDeleted());
 			}
 			
-			et = (new UserSqlDao()).update(request.getParameter(User.PARAM_USER_ID), SearchBy.ID, user);
+			et = (new MySQLUserDAO()).update(request.getParameter(User.PARAM_USER_ID), SearchBy.ID, user);
 			url += "#users-title";
 			break;
 			
@@ -298,7 +297,7 @@ public class Update implements IAction{
 				if(ptVideoGame==PermissionType.NO_PERMISSION)
 						return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 				
-				et = (new VideoGameSqlDao()).update(request.getParameter(VideoGame.PARAM_VIDEO_GAME_ID), SearchBy.ID, videoGame);
+				et = (new MySQLVideoGameDAO()).update(request.getParameter(VideoGame.PARAM_VIDEO_GAME_ID), SearchBy.ID, videoGame);
 				url += "#video-games-title";
 				break;
 			

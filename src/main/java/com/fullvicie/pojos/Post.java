@@ -30,9 +30,8 @@ public class Post implements IPojo{
 	 */
 	private int id, likes, dislikes, userId, postCategoryId;
 	private String name, description, tags;
-	private boolean deleted;
-	private Date creationDate, deleteDate;
-	private Time creationTime, deleteTime;
+	private Date creationDate;
+	private Time creationTime;
 	
 	
 	
@@ -56,15 +55,7 @@ public class Post implements IPojo{
 		
 		try{this.creationTime = Time.valueOf(request.getParameter(PARAM_POST_CREATION_TIME));}
 		catch(Exception t) {this.creationTime = Time.valueOf(LocalTime.now());}
-		
-		this.deleted = request.getParameter(PARAM_POST_DELETED) != null ? true : false;
-		
-		try{this.deleteDate = Date.valueOf(request.getParameter(PARAM_POST_DELETE_DATE));}
-		catch(Exception t) {this.deleteDate = Date.valueOf(LocalDate.now());}
-		
-		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_POST_DELETE_TIME));}
-		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
-		
+
 		try{this.likes = Integer.parseInt(request.getParameter(PARAM_POST_LIKES));}
 		catch(Exception t) {this.id = 0;}
 		
@@ -84,13 +75,6 @@ public class Post implements IPojo{
 	 * Methods
 	 */
 	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.name + "', '" + this.description + "', '" + this.tags + "', '" + this.creationDate
-			+ "', '" + this.creationTime + "', '" + this.deleted  + "', '" + this.deleteDate  + "', '" + this.deleteTime
-			+ "', '" + this.likes + "', '" + this.dislikes  + "', '" + this.userId  + "', '" + this.postCategoryId + "'";
-	}
-
-	@Override
 	public JSONObject toJSONObject() {
 		
 		JSONObject jObject = new JSONObject();
@@ -101,9 +85,6 @@ public class Post implements IPojo{
 		jObject.put("tags", this.tags);
 		jObject.put("creationDate", this.creationDate);
 		jObject.put("creationTime", this.creationTime);
-		jObject.put("deleted", this.deleted);
-		jObject.put("deleteDate", this.deleteDate);
-		jObject.put("deleteTime", this.deleteTime);
 		jObject.put("likes", this.likes);
 		jObject.put("dislikes", this.dislikes);
 		jObject.put("userId", this.userId);
@@ -195,27 +176,4 @@ public class Post implements IPojo{
 		this.creationTime = creationTime;
 	}
 
-	
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-
-	public Date getDeleteDate() {
-		return deleteDate;
-	}
-	public void setDeleteDate(Date deleteDate) {
-		this.deleteDate = deleteDate;
-	}
-
-
-	public Time getDeleteTime() {
-		return deleteTime;
-	}
-	public void setDeleteTime(Time deleteTime) {
-		this.deleteTime = deleteTime;
-	}
 }

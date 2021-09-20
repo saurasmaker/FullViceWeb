@@ -8,12 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
+import com.fullvicie.daos.mysql.*;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.PermissionType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
-
-import com.fullvicie.daos.sql.*;
 import com.fullvicie.pojos.*;
 
 public class Create implements IAction{
@@ -45,7 +44,7 @@ public class Create implements IAction{
 			if(ptForum == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ForumSqlDao()).create(new Forum(request));
+			et = (new MySQLForumDAO()).create(new Forum(request));
 			url += "#forums-title";
 			
 			break;
@@ -62,7 +61,7 @@ public class Create implements IAction{
 			if(ptForumCategory == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ForumCategorySqlDao()).create(new ForumCategory(request));
+			et = MySQLForumCategoryDAO.getInstance().create(new ForumCategory(request));
 			url += "#forum-categories-title";
 			
 			break;
@@ -79,7 +78,7 @@ public class Create implements IAction{
 			if(ptForumMessage == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ForumMessageSqlDao()).create(new ForumMessage(request));
+			et = (new MySQLForumMessageDAO()).create(new ForumMessage(request));
 			url += "#forum-messages-title";
 			
 			break;
@@ -96,7 +95,7 @@ public class Create implements IAction{
 			if(ptForumMessageLike == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ForumMessageLikeSqlDao()).create(new ForumMessageLike(request));
+			et = (new MySQLForumMessageLikeDAO()).create(new ForumMessageLike(request));
 			url += "#forum-message-likes-title";
 			
 			break;
@@ -113,7 +112,7 @@ public class Create implements IAction{
 			if(ptGamerProfile == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new GamerProfileSqlDao()).create(new GamerProfile(request));
+			et = (new MySQLGamerProfileDAO()).create(new GamerProfile(request));
 			url += "#gamer-profile-title";
 			
 			break;	
@@ -130,7 +129,7 @@ public class Create implements IAction{
 			if(ptPost == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new PostSqlDao()).create(new Post(request));
+			et = (new MySQLPostDAO()).create(new Post(request));
 			url += "#posts-title";
 			
 			break;
@@ -147,7 +146,7 @@ public class Create implements IAction{
 			if(ptPostCategory == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new PostCategorySqlDao()).create(new PostCategory(request));
+			et = (new MySQLPostCategoryDAO()).create(new PostCategory(request));
 			url += "#post-categories-title";
 			
 			break;
@@ -164,7 +163,7 @@ public class Create implements IAction{
 			if(ptPostComment == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new PostCommentSqlDao()).create(new PostComment(request));
+			et = (new MySQLPostCommentDAO()).create(new PostComment(request));
 			url += "#post-comments-title";
 			break;
 			
@@ -180,7 +179,7 @@ public class Create implements IAction{
 			if(ptPostCommentLike == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new PostCommentLikeSqlDao()).create(new PostCommentLike(request));
+			et = (new MySQLPostCommentLikeDAO()).create(new PostCommentLike(request));
 			url += "#post-comment-likes-title";
 			break;
 		
@@ -196,7 +195,7 @@ public class Create implements IAction{
 			if(ptPostLike == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new PostLikeSqlDao()).create(new PostLike(request));
+			et = (new MySQLPostLikeDAO()).create(new PostLike(request));
 			url += "#post-likes-title";
 			
 			break;
@@ -213,7 +212,7 @@ public class Create implements IAction{
 			if(ptProfile == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ProfileSqlDao()).create(new Profile(request));
+			et = (new MySQLProfileDAO()).create(new PersonalInformation(request));
 			url += "#profiles-title";
 			
 			break;
@@ -230,7 +229,7 @@ public class Create implements IAction{
 			if(ptReport == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new ReportSqlDao()).create(new Report(request));
+			et = (new MySQLReportDAO()).create(new Report(request));
 			url += "#reports-title";
 			
 			break;
@@ -248,7 +247,7 @@ public class Create implements IAction{
 			
 			boolean canCreateTeam = false;
 			Team newTeam = new Team(request);
-			ArrayList<GamerProfile> gamerProfilesUser = new GamerProfileSqlDao().listBy(SearchBy.USER_ID, String.valueOf(newTeam.getUserCreatorId()));
+			ArrayList<GamerProfile> gamerProfilesUser = new MySQLGamerProfileDAO().listBy(SearchBy.USER_ID, String.valueOf(newTeam.getUserCreatorId()));
 			for(GamerProfile gp: gamerProfilesUser)
 				if(gp.getVideoGameId()==newTeam.getVideoGameId()) {
 					canCreateTeam = true;
@@ -259,7 +258,7 @@ public class Create implements IAction{
 			if(!canCreateTeam)
 				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.MUST_HAVE_CORRESPONDING_GAMER_PROFILE;
 			
-			et = (new TeamSqlDao()).create(newTeam);
+			et = (new MySQLTeamDAO()).create(newTeam);
 			url += "#teams-title";
 			
 			break;	
@@ -276,7 +275,7 @@ public class Create implements IAction{
 				if(ptTeamInvitation == PermissionType.NO_PERMISSION)
 						return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 				
-				et = (new TeamInvitationSqlDao()).create(new TeamInvitation(request));
+				et = (new MySQLTeamInvitationDAO()).create(new TeamInvitation(request));
 				url += "#team-invitations-title";
 				
 				break;
@@ -293,7 +292,7 @@ public class Create implements IAction{
 			if(ptUser == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new UserSqlDao()).create(new User(request));
+			et = (new MySQLUserDAO()).create(new User(request));
 			url += "#users-title";
 			
 			break;
@@ -311,7 +310,7 @@ public class Create implements IAction{
 			if(ptVideogame == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new VideoGameSqlDao()).create(new VideoGame(request));
+			et = (new MySQLVideoGameDAO()).create(new VideoGame(request));
 			url += "#videogames-title";
 			break;
 			

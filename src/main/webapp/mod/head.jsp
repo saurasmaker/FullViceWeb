@@ -25,6 +25,15 @@
 	<!-- Anuncios Google -->
 	<script data-ad-client="ca-pub-5731524801665513" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-207437236-1"></script>
+	<script>
+		 window.dataLayer = window.dataLayer || [];
+		 function gtag(){dataLayer.push(arguments);}
+		 gtag('js', new Date());
+		 gtag('config', 'UA-207437236-1');
+	</script>
+
 	
 	<!-- My Styles -->
 	<link type="text/css" rel="stylesheet" href="<%=request.getContextPath() %>/styles/my-styles.css">

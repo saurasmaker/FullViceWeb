@@ -32,9 +32,8 @@ public class PostComment implements IPojo{
 	 */
 	private int id, likes, dislikes, postId, userId;
 	private String message;
-	private boolean deleted;
-	private Date madeDate, lastEditDate, deleteDate;
-	private Time madeTime, lastEditTime, deleteTime;
+	private Date madeDate, lastEditDate;
+	private Time madeTime, lastEditTime;
 	
 	
 	
@@ -62,14 +61,6 @@ public class PostComment implements IPojo{
 		try{this.madeTime = Time.valueOf(request.getParameter(PARAM_POST_COMMENT_MADE_TIME));}
 		catch(Exception t) {this.madeTime = Time.valueOf(LocalTime.now());}
 		
-		this.deleted = request.getParameter(PARAM_POST_COMMENT_DELETED) != null ? true : false;
-		
-		try{this.deleteDate = Date.valueOf(request.getParameter(PARAM_POST_COMMENT_DELETE_DATE));}
-		catch(Exception t) {this.deleteDate = Date.valueOf(LocalDate.now());}
-		
-		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_POST_COMMENT_DELETE_TIME));}
-		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
-		
 		try{this.lastEditDate = Date.valueOf(request.getParameter(PARAM_POST_COMMENT_LAST_EDIT_DATE));}
 		catch(Exception t) {this.lastEditDate = Date.valueOf(LocalDate.now());}
 		
@@ -89,14 +80,6 @@ public class PostComment implements IPojo{
 	 * Methods
 	 */
 	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.message + "', '" + this.likes + "', '" + this.dislikes + "', '" + this.madeDate 
-			+ "', '" + this.madeTime + "', '" + this.deleted  + "', '" + this.deleteDate  + "', '" + this.deleteTime
-			+ "', '" + this.lastEditDate + "', '" + this.lastEditDate + "', '" + this.lastEditTime  + "', '" + this.postId
-			+ "', '" + this.userId + "'";
-	}
-
-	@Override
 	public JSONObject toJSONObject() {
 		
 		JSONObject jObject = new JSONObject();
@@ -107,9 +90,6 @@ public class PostComment implements IPojo{
 		jObject.put("dislikes", this.dislikes);
 		jObject.put("madeDate", this.madeDate);
 		jObject.put("madeTime", this.madeTime);
-		jObject.put("lastEditTime", this.deleted);
-		jObject.put("deleteDate", this.deleteDate);
-		jObject.put("deleteTime", this.deleteTime);
 		jObject.put("lastEditDate", this.lastEditDate);
 		jObject.put("lastEditTime", this.lastEditTime);
 		jObject.put("postId", this.postId);
@@ -200,30 +180,6 @@ public class PostComment implements IPojo{
 	}
 	public void setLastEditTime(Time lastEditTime) {
 		this.lastEditTime = lastEditTime;
-	}
-	
-	
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-	
-	
-	public Date getDeleteDate() {
-		return deleteDate;
-	}
-	public void setDeleteDate(Date deleteDate) {
-		this.deleteDate = deleteDate;
-	}
-	
-	
-	public Time getDeleteTime() {
-		return deleteTime;
-	}
-	public void setDeleteTime(Time deleteTime) {
-		this.deleteTime = deleteTime;
 	}
 	
 }

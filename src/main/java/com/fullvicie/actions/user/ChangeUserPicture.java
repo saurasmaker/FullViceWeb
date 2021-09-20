@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.UserSqlDao;
+import com.fullvicie.daos.mysql.MySQLUserDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -27,7 +27,7 @@ public class ChangeUserPicture implements IAction{
 			User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 			
 			if(u!=null) {
-				UserSqlDao usd = new UserSqlDao();
+				MySQLUserDAO usd = new MySQLUserDAO();
 				usd.updatePicture(String.valueOf(u.getId()), SearchBy.ID, request.getPart(User.PART_USER_PICTURE).getInputStream());
 			}
 			

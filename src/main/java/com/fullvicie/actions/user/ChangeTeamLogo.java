@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.TeamSqlDao;
+import com.fullvicie.daos.mysql.MySQLTeamDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -27,7 +27,7 @@ public class ChangeTeamLogo implements IAction{
 			Team t = (Team) request.getSession().getAttribute(Team.ATTR_TEAM_OBJ);
 			
 			if(t!=null) {
-				TeamSqlDao tsd = new TeamSqlDao();
+				MySQLTeamDAO tsd = new MySQLTeamDAO();
 				tsd.updatePicture(String.valueOf(t.getId()), SearchBy.ID, request.getPart(Team.PARAM_TEAM_LOGO).getInputStream());
 			}
 			

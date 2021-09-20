@@ -44,11 +44,6 @@ public class PostCategory implements IPojo{
 	 * Methods
 	 */
 	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.name + "', '" + this.description + "'";
-	}
-
-	@Override
 	public JSONObject toJSONObject() {
 		
 		JSONObject jObject = new JSONObject();

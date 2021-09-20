@@ -28,9 +28,8 @@ public class ForumMessage implements IPojo{
 	 */
 	private int id, forumId, userId;
 	private String  message;
-	private Date madeDate, lastEditDate, deleteDate;
-	private boolean deleted;
-	private Time madeTime, lastEditTime, deleteTime;
+	private Date madeDate, lastEditDate;
+	private Time madeTime, lastEditTime;
 	private int likes, dislikes;
 	
 	
@@ -56,14 +55,6 @@ public class ForumMessage implements IPojo{
 	 * Methods
 	 */
 	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.message + "', '" + this.madeDate + "', '" + this.madeTime
-				+ "', '" + this.lastEditDate + "', '" + this.lastEditTime + "', '" + this.deleted
-				+ "', '" + this.deleteDate + "', '" + this.deleteTime + "', '" + this.likes
-				+ "', '" + this.dislikes + "', '" + this.forumId + "', '" + this.userId + "'";
-	}
-
-	@Override
 	public JSONObject toJSONObject() {
 		
 		JSONObject jObject = new JSONObject();
@@ -74,9 +65,6 @@ public class ForumMessage implements IPojo{
 		jObject.put("madeTime", this.madeTime);
 		jObject.put("lastEditDate", this.lastEditDate);
 		jObject.put("lastEditTime", this.lastEditTime);
-		jObject.put("deleted", this.deleted);
-		jObject.put("deleteDate", this.deleteDate);
-		jObject.put("deleteTime", this.deleteTime);
 		jObject.put("likes", this.likes);
 		jObject.put("dislikes", this.dislikes);
 		jObject.put("forumId", this.forumId);
@@ -129,19 +117,11 @@ public class ForumMessage implements IPojo{
 	}
 
 	
-	public Date getLasEditDate() {
+	public Date getLastEditDate() {
 		return lastEditDate;
 	}
 	public void setLastEditDate(Date lastEditDate) {
 		this.lastEditDate = lastEditDate;
-	}
-
-	
-	public Date getDeleteDate() {
-		return deleteDate;
-	}
-	public void setDeleteDate(Date deleteDate) {
-		this.deleteDate = deleteDate;
 	}
 
 	
@@ -158,22 +138,6 @@ public class ForumMessage implements IPojo{
 	}
 	public void setLastEditTime(Time lastEditTime) {
 		this.lastEditTime = lastEditTime;
-	}
-
-	
-	public Time getDeleteTime() {
-		return deleteTime;
-	}
-	public void setDeleteTime(Time deleteTime) {
-		this.deleteTime = deleteTime;
-	}
-
-	
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	

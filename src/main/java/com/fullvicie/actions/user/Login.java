@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.UserSqlDao;
+import com.fullvicie.daos.mysql.MySQLUserDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -40,7 +40,7 @@ public class Login implements IAction{
 			userToCheck.setPassword(Encryptor.encrypt(userToCheck.getPassword()));
 			
 			// Logic to login 
-			UserSqlDao dao = new UserSqlDao();
+			MySQLUserDAO dao = new MySQLUserDAO();
 		    Matcher matcher = pattern.matcher(userToCheck.getUsername());
 		    if (matcher.matches()) 
 		    	userFinded = dao.read(userToCheck.getUsername(), SearchBy.EMAIL);

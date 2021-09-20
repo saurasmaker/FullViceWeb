@@ -1,25 +1,29 @@
 package com.fullvicie.interfaces;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.fullvicie.enums.*;
+import com.fullvicie.exceptions.DaoException;
 
 public interface IDao <Pojo> {
 	
 	/*
 	 * CRUD Methods
 	 */	
-	public abstract ErrorType create(Pojo pojo);
-	public abstract Pojo read(String search, SearchBy searchBy);
-	public abstract ErrorType update(String search, SearchBy searchBy, Pojo pojo);
-	public abstract ErrorType delete(String search, SearchBy searchBy);
-	public abstract ErrorType pseudoDelete(String search, SearchBy searchBy);
-	public abstract ArrayList<Pojo> listBy(SearchBy searchBy, String search);
+	public abstract ErrorType create(Pojo pojo) throws DaoException;
+	public abstract Pojo read(String search, SearchBy searchBy) throws DaoException;
+	public abstract ErrorType update(String search, SearchBy searchBy, Pojo pojo) throws DaoException;
+	public abstract ErrorType delete(String search, SearchBy searchBy) throws DaoException;
+	public abstract ArrayList<Pojo> listBy(String search, SearchBy searchBy) throws DaoException;
 
+	
 	/*
 	 * Static methods
 	 */
-	public static String appendSqlSearchBy(String s, SearchBy searchBy, String search) {
+	public static String appendMySqlSearchBy(String s, SearchBy searchBy, String search) {
 		
 		s += " WHERE ";
 		
@@ -68,4 +72,23 @@ public interface IDao <Pojo> {
 		return s  + search + "'";
 	}
 	
+	
+	public static void closeMySql(ResultSet rs, PreparedStatement stat) {
+		
+		if(rs != null) {
+			try {
+				rs.close();
+			} catch(SQLException ex) {
+				new DaoException("", ex);
+			}
+		}
+		
+		if(stat != null) {
+			try {
+				stat.close();
+			} catch(SQLException ex) {
+				new DaoException("", ex);
+			}
+		}
+	}
 }

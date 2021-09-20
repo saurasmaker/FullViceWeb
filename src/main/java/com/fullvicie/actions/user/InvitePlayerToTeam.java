@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.GamerProfileSqlDao;
-import com.fullvicie.daos.sql.TeamInvitationSqlDao;
-import com.fullvicie.daos.sql.TeamSqlDao;
+import com.fullvicie.daos.mysql.MySQLGamerProfileDAO;
+import com.fullvicie.daos.mysql.MySQLTeamInvitationDAO;
+import com.fullvicie.daos.mysql.MySQLTeamDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -33,19 +33,19 @@ public class InvitePlayerToTeam implements IAction{
 			if(teamInvitation.getReceiverUserId() < 1) 
 				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
 			
-			Team t = new TeamSqlDao().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
+			Team t = new MySQLTeamDAO().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
 			for(int gpId: t.getGamerProfiles()) {
-				GamerProfile gp = new GamerProfileSqlDao().read(String.valueOf(gpId), SearchBy.ID);
+				GamerProfile gp = new MySQLGamerProfileDAO().read(String.valueOf(gpId), SearchBy.ID);
 				if(gp!=null) if(teamInvitation.getReceiverUserId()==gp.getUserId())
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_IS_ALREADY_A_TEAM_MEMBER_ERROR;
 
 			}
-			ArrayList<TeamInvitation> tisUser = new TeamInvitationSqlDao().listBy(SearchBy.RECEIVER_USER_ID, String.valueOf(teamInvitation.getReceiverUserId()));
+			ArrayList<TeamInvitation> tisUser = new MySQLTeamInvitationDAO().listBy(SearchBy.RECEIVER_USER_ID, String.valueOf(teamInvitation.getReceiverUserId()));
 			for(TeamInvitation ti: tisUser)
 				if(ti.getTeamId() == teamInvitation.getTeamId())
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_IS_ALREADY_INVITED_TO_THIS_TEAM_ERROR;
 			
-			new TeamInvitationSqlDao().create(teamInvitation);
+			new MySQLTeamInvitationDAO().create(teamInvitation);
 			
 			return url;
 		}

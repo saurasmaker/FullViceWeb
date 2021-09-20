@@ -36,9 +36,9 @@ public class User implements IPojo{
 	 */
 	private int id;
 	private String username, email, passwrd, base64Picture;
-	private Date lastLogoutDate, signUpDate, deleteDate;
-	private Time lastLogoutTime, signUpTime, deleteTime;
-	private Boolean deleted, moderator, admin;
+	private Date lastLogoutDate, signUpDate;
+	private Time lastLogoutTime, signUpTime;
+	private Boolean moderator, admin;
 	
 	
 	/*
@@ -67,14 +67,6 @@ public class User implements IPojo{
 		
 		try{ this.lastLogoutTime = Time.valueOf(request.getParameter(PARAM_USER_LASTLOGOUTTIME)); }
 		catch(Exception t) { this.lastLogoutTime = Time.valueOf(LocalTime.now()); }
-
-		this.deleted = request.getParameter(PARAM_USER_DELETED) != null ? true : false;
-		
-		try{ this.deleteDate = Date.valueOf(request.getParameter(PARAM_USER_DELETE_DATE)); }
-		catch(Exception t) { this.deleteDate = null; }
-		
-		try{ this.deleteTime = Time.valueOf(request.getParameter(PARAM_USER_DELETE_TIME)); }
-		catch(Exception t) { this.deleteTime = null; }
 		
 		this.admin = request.getParameter(PARAM_USER_ISADMIN)!=null ? true : false;
 		this.moderator = request.getParameter(PARAM_USER_ISMODERATOR)!=null ? true : false;
@@ -91,11 +83,6 @@ public class User implements IPojo{
 	 * Methods
 	 */
 	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.username + "', '" + this.email + "', '" + this.moderator  + "', '" + this.admin + "'";
-	}
-	
-	@Override
 	public JSONObject toJSONObject() {
 		
 		JSONObject jObject = new JSONObject();
@@ -108,9 +95,6 @@ public class User implements IPojo{
 		jObject.put("sign_up_time", this.signUpTime);
 		jObject.put("last_logout_date", this.lastLogoutDate);
 		jObject.put("last_logout_time", this.lastLogoutTime);
-		jObject.put("deleted", this.deleted);
-		jObject.put("deleteDate", this.deleteDate);
-		jObject.put("deleteTime", this.deleteTime);
 		jObject.put("moderator", this.moderator);
 		jObject.put("admin", this.admin);
 		
@@ -208,30 +192,6 @@ public class User implements IPojo{
 	}
 	public void setPasswrd(String passwrd) {
 		this.passwrd = passwrd;
-	}
-
-	
-	public Date getDeleteDate() {
-		return deleteDate;
-	}
-	public void setDeleteDate(Date deleteDate) {
-		this.deleteDate = deleteDate;
-	}
-
-	
-	public Time getDeleteTime() {
-		return deleteTime;
-	}
-	public void setDeleteTime(Time deleteTime) {
-		this.deleteTime = deleteTime;
-	}
-
-	
-	public Boolean getDeleted() {
-		return deleted;
-	}
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	

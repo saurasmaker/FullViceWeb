@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.GamerProfileSqlDao;
-import com.fullvicie.daos.sql.TeamInvitationSqlDao;
-import com.fullvicie.daos.sql.TeamSqlDao;
-import com.fullvicie.daos.sql.UserSqlDao;
+import com.fullvicie.daos.mysql.MySQLGamerProfileDAO;
+import com.fullvicie.daos.mysql.MySQLTeamInvitationDAO;
+import com.fullvicie.daos.mysql.MySQLTeamDAO;
+import com.fullvicie.daos.mysql.MySQLUserDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -35,10 +35,10 @@ public class AcceptTeamInvitation implements IAction{
 		/*
 		 * Initialization necessary variables
 		 */
-		TeamInvitation teamInvitation = new TeamInvitationSqlDao().read(request.getParameter(TeamInvitation.PARAM_TEAM_INVITATION_ID), SearchBy.ID);
-		Team team = new TeamSqlDao().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
-		User receiver = new UserSqlDao().read(String.valueOf(teamInvitation.getReceiverUserId()), SearchBy.ID);
-		ArrayList<GamerProfile> userGamerProfiles = new GamerProfileSqlDao().listBy(SearchBy.USER_ID,String.valueOf(receiver.getId()));	
+		TeamInvitation teamInvitation = new MySQLTeamInvitationDAO().read(request.getParameter(TeamInvitation.PARAM_TEAM_INVITATION_ID), SearchBy.ID);
+		Team team = new MySQLTeamDAO().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
+		User receiver = new MySQLUserDAO().read(String.valueOf(teamInvitation.getReceiverUserId()), SearchBy.ID);
+		ArrayList<GamerProfile> userGamerProfiles = new MySQLGamerProfileDAO().listBy(SearchBy.USER_ID,String.valueOf(receiver.getId()));	
 		GamerProfile gamerProfile = null;
 		for(GamerProfile gp: userGamerProfiles)
 			if(gp.getVideoGameId()==team.getVideoGameId()) 
@@ -54,11 +54,11 @@ public class AcceptTeamInvitation implements IAction{
 				if(playersProfilesId[i] <= 0) {
 					playersProfilesId[i] = gamerProfile.getId();
 					team.setGamerProfiles(playersProfilesId);
-					ErrorType et = new TeamInvitationSqlDao().delete(String.valueOf(teamInvitation.getId()), SearchBy.ID);
+					ErrorType et = new MySQLTeamInvitationDAO().delete(String.valueOf(teamInvitation.getId()), SearchBy.ID);
 					if(et != ErrorType.NO_ERROR) 
 						return request.getContextPath() + ActionsController.ERROR_PAGE + et;
 					
-					et = new TeamSqlDao().update(String.valueOf(team.getId()), SearchBy.ID, team);
+					et = new MySQLTeamDAO().update(String.valueOf(team.getId()), SearchBy.ID, team);
 					if(et != ErrorType.NO_ERROR) 
 						return request.getContextPath() + ActionsController.ERROR_PAGE + et;
 					

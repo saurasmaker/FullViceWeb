@@ -3,13 +3,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.fullvicie.pojos.*, com.fullvicie.daos.sql.*, com.fullvicie.enums.*, com.fullvicie.actions.*, com.fullvicie.controllers.*" %>
+<%@ page import="com.fullvicie.pojos.*,com.fullvicie.daos.mysql.*, com.fullvicie.enums.*, com.fullvicie.actions.*, com.fullvicie.controllers.*" %>
 
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 
 <%
-	User userSession = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-	ArrayList<TeamInvitation> teamInvitations = new TeamInvitationSqlDao().listBy(SearchBy.RECEIVER_USER_ID, String.valueOf(userSession.getId()));
+User userSession = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+	ArrayList<TeamInvitation> teamInvitations = new MySQLTeamInvitationDAO().listBy(SearchBy.RECEIVER_USER_ID, String.valueOf(userSession.getId()));
 	
 	pageContext.setAttribute("teamInvitations", teamInvitations);
 %>
@@ -46,14 +46,15 @@
 					  	
 					  	<tbody>
 					  		<c:forEach var="teamInvitation" items="${teamInvitations}" varStatus="loop">
-					  			<% //Setting necesary variables
-					  			TeamInvitation teamInvitation = (TeamInvitation)pageContext.getAttribute("teamInvitation");
-					  			User transmitter = new UserSqlDao().read(String.valueOf(teamInvitation.getTransmitterUserId()), SearchBy.ID);
-					  			Team team = new TeamSqlDao().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
-					  			VideoGame videoGame = new VideoGameSqlDao().read(String.valueOf(team.getVideoGameId()), SearchBy.ID);
-					  			pageContext.setAttribute("transmitter", transmitter);
-					  			pageContext.setAttribute("team", team);
-					  			pageContext.setAttribute("videoGame", videoGame);
+					  			<%
+					  			//Setting necesary variables
+					  						  						  						  			TeamInvitation teamInvitation = (TeamInvitation)pageContext.getAttribute("teamInvitation");
+					  						  						  						  			User transmitter = new MySQLUserDAO().read(String.valueOf(teamInvitation.getTransmitterUserId()), SearchBy.ID);
+					  						  						  						  			Team team = new MySQLTeamDAO().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
+					  						  						  						  			VideoGame videoGame = new MySQLVideoGameDAO().read(String.valueOf(team.getVideoGameId()), SearchBy.ID);
+					  						  						  						  			pageContext.setAttribute("transmitter", transmitter);
+					  						  						  						  			pageContext.setAttribute("team", team);
+					  						  						  						  			pageContext.setAttribute("videoGame", videoGame);
 					  			%>
 					  			<tr>
 						  			<th scope="col">${loop.index}</th>

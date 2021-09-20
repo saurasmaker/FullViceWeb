@@ -32,9 +32,8 @@ public class Forum implements IPojo{
 	 */
 	private int id, forumCategoryId, userId;
 	private String name, description, tags;
-	private boolean deleted;
-	private Date creationDate, latestAnswerDate, deleteDate;
-	private Time creationTime, latestAnswerTime, deleteTime;
+	private Date creationDate, latestAnswerDate;
+	private Time creationTime, latestAnswerTime;
 	
 	
 	/*
@@ -63,15 +62,7 @@ public class Forum implements IPojo{
 		
 		try{this.latestAnswerTime = Time.valueOf(request.getParameter(PARAM_FORUM_LATEST_ANSWER_TIME));}
 		catch(Exception t) {this.latestAnswerTime = Time.valueOf(LocalTime.now());}
-		
-		this.deleted = request.getParameter(PARAM_FORUM_DELETED) != null ? true : false;
-		
-		try{this.deleteDate = Date.valueOf(request.getParameter(PARAM_FORUM_DELETE_DATE));}
-		catch(Exception t) {this.deleteDate = Date.valueOf(LocalDate.now());}
-		
-		try{this.deleteTime = Time.valueOf(request.getParameter(PARAM_FORUM_DELETE_TIME));}
-		catch(Exception t) {this.deleteTime = Time.valueOf(LocalTime.now());}
-		
+
 		try{this.forumCategoryId = Integer.parseInt(request.getParameter(PARAM_FORUM_FORUM_CATEGORY_ID));}
 		catch(Exception t) {this.id = -1;}
 		
@@ -83,13 +74,6 @@ public class Forum implements IPojo{
 	/*
 	 * Methods
 	 */
-	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.name + "', '" + this.description + "', '" + this.tags + "', '"  + 
-				this.creationDate + "', '" + this.creationTime + "', '" + this.latestAnswerDate + "', '" + 
-				this.latestAnswerTime + "', '" + this.deleteDate + "', '" + this.deleteTime + "'";
-	}
-
 	@Override
 	public JSONObject toJSONObject() {
 
@@ -103,9 +87,6 @@ public class Forum implements IPojo{
 		jObject.put("creationTime", this.creationTime);
 		jObject.put("latestAnswerDate", this.latestAnswerDate);
 		jObject.put("latestAnswerTime", this.latestAnswerTime);
-		jObject.put("deleted", deleted);
-		jObject.put("delete_date", this.deleteDate);
-		jObject.put("delete_time", this.deleteTime);
 		
 		return jObject;
 		
@@ -179,22 +160,6 @@ public class Forum implements IPojo{
 	}
 
 	
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-	
-	
-	public Date getDeleteDate() {
-		return deleteDate;
-	}
-	public void setDeleteDate(Date deleteDate) {
-		this.deleteDate = deleteDate;
-	}
-
-	
 	public Time getCreationTime() {
 		return creationTime;
 	}
@@ -210,12 +175,6 @@ public class Forum implements IPojo{
 		this.latestAnswerTime = latestAnswerTime;
 	}
 
-	
-	public Time getDeleteTime() {
-		return deleteTime;
-	}
-	public void setDeleteTime(Time deleteTime) {
-		this.deleteTime = deleteTime;
-	}
+
 
 }

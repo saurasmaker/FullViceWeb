@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.GamerProfileSqlDao;
-import com.fullvicie.daos.sql.TeamSqlDao;
+import com.fullvicie.daos.mysql.MySQLGamerProfileDAO;
+import com.fullvicie.daos.mysql.MySQLTeamDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -29,12 +29,12 @@ public class ChangeTeamOwner implements IAction{
 			if(u==null)
 				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			GamerProfile gamerProfile = new GamerProfileSqlDao().read(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID);
-			Team team = new TeamSqlDao().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
+			GamerProfile gamerProfile = new MySQLGamerProfileDAO().read(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID);
+			Team team = new MySQLTeamDAO().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
 			
 			team.setUserOwnerId(gamerProfile.getUserId());
 			
-			ErrorType et = new TeamSqlDao().update(String.valueOf(team.getId()), SearchBy.ID, team);
+			ErrorType et = new MySQLTeamDAO().update(String.valueOf(team.getId()), SearchBy.ID, team);
 			
 			if(et == ErrorType.NO_ERROR)
 				return request.getHeader("referer");

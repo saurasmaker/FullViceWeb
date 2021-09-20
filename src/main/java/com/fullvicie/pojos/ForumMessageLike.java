@@ -49,11 +49,6 @@ public class ForumMessageLike implements IPojo{
 	 * Methods
 	 */
 	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.dislike + "', '" + this.userId + "', '" + this.forumMessageId + "'";
-	}
-
-	@Override
 	public JSONObject toJSONObject() {
 		
 		JSONObject jObject = new JSONObject();

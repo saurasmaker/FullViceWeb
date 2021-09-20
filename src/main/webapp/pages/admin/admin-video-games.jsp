@@ -5,7 +5,7 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 
 <%@ page import = "com.fullvicie.pojos.VideoGame" %>
-<%@ page import = "com.fullvicie.daos.sql.VideoGameSqlDao" %>
+<%@ page import = "com.fullvicie.daos.mysql.MySQLVideoGameDAO" %>
 <%@ page import = "com.fullvicie.controllers.ActionsController" %>
 <%@ page import = "com.fullvicie.enums.SearchBy" %>
 
@@ -73,7 +73,9 @@
                	</thead>
                	
 			   	<tbody>
-			   		<% pageContext.setAttribute("videoGamesList", new VideoGameSqlDao().listBy(SearchBy.NONE, null)); %>
+			   		<%
+			   		pageContext.setAttribute("videoGamesList", new MySQLVideoGameDAO().listBy(SearchBy.NONE, null));
+			   		%>
 				   	<c:forEach var='videoGame' items='${videoGamesList}'>
 				   		<%
 				   		VideoGame v = (VideoGame) pageContext.getAttribute("videoGame");

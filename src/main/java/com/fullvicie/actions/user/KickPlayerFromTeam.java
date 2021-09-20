@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.TeamSqlDao;
+import com.fullvicie.daos.mysql.MySQLTeamDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -27,7 +27,7 @@ public class KickPlayerFromTeam implements IAction{
 		if(u==null)
 			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
-		Team team = new TeamSqlDao().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
+		Team team = new MySQLTeamDAO().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
 		int playerId = Integer.valueOf(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID));
 		
 		int[] playersId = team.getGamerProfiles();
@@ -35,7 +35,7 @@ public class KickPlayerFromTeam implements IAction{
 			if(playerId==playersId[i]) {
 				playersId[i] = -1;
 				team.setGamerProfiles(playersId);
-				ErrorType et = new TeamSqlDao().update(String.valueOf(team.getId()), SearchBy.ID, team);
+				ErrorType et = new MySQLTeamDAO().update(String.valueOf(team.getId()), SearchBy.ID, team);
 				if(et==ErrorType.NO_ERROR)
 					return request.getHeader("referer");
 				else

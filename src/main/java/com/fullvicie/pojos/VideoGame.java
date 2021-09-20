@@ -1,8 +1,5 @@
 package com.fullvicie.pojos;
 
-import java.sql.Date;
-import java.sql.Time;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONObject;
@@ -26,9 +23,6 @@ public class VideoGame implements IPojo{
 	 */
 	private int id;
 	private String name, description;
-	private boolean deleted;
-	private Date deleteDate;
-	private Time deleteTime;
 	
 	
 	
@@ -45,14 +39,6 @@ public class VideoGame implements IPojo{
 		
 		this.name = request.getParameter(PARAM_VIDEO_GAME_NAME);
 		this.description = request.getParameter(PARAM_VIDEO_GAME_DESCRIPTION);
-		
-		this.deleted = request.getParameter(PARAM_VIDEO_GAME_DELETED) != null ? true : false;
-		
-		try{ this.deleteDate = Date.valueOf(request.getParameter(PARAM_VIDEO_GAME_DELETE_DATE)); }
-		catch(Exception t) { this.deleteDate = null; }
-		
-		try{ this.deleteTime = Time.valueOf(request.getParameter(PARAM_VIDEO_GAME_DELETE_TIME)); }
-		catch(Exception t) { this.deleteTime = null; }
 	}
 	
 	
@@ -60,11 +46,6 @@ public class VideoGame implements IPojo{
 	/*
 	 * Methods
 	 */
-	@Override
-	public String toJavaScriptFunction() {
-		return "'" + this.id + "', '" + this.name + "', '" + this.description + "'";
-	}
-
 	@Override
 	public JSONObject toJSONObject() {
 		JSONObject jObject = new JSONObject();
@@ -98,24 +79,6 @@ public class VideoGame implements IPojo{
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-	public Date getDeleteDate() {
-		return deleteDate;
-	}
-	public void setDeleteDate(Date deleteDate) {
-		this.deleteDate = deleteDate;
-	}
-	public Time getDeleteTime() {
-		return deleteTime;
-	}
-	public void setDeleteTime(Time deleteTime) {
-		this.deleteTime = deleteTime;
 	}
 
 }

@@ -1,7 +1,7 @@
-<%@ page import="com.fullvicie.daos.sql.TeamSqlDao, com.fullvicie.daos.sql.VideoGameSqlDao"%>
-<%@ page import="com.fullvicie.pojos.Team, com.fullvicie.pojos.User, com.fullvicie.pojos.VideoGame" %>
+<%@ page import="com.fullvicie.daos.mysql.MySQLTeamDAO,com.fullvicie.daos.mysql.MySQLVideoGameDAO"%>
+<%@ page import="com.fullvicie.pojos.Team,com.fullvicie.pojos.User,com.fullvicie.pojos.VideoGame" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.fullvicie.controllers.ActionsController, com.fullvicie.actions.crud.Create, com.fullvicie.actions.user.ChangeTeamLogo" %>
+<%@ page import="com.fullvicie.controllers.ActionsController,com.fullvicie.actions.crud.Create,com.fullvicie.actions.user.ChangeTeamLogo" %>
 <%@ page import="com.fullvicie.enums.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -9,9 +9,9 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 
 <%
-	User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-	pageContext.setAttribute(Team.ATR_TEAMS_LIST, new TeamSqlDao().listByMemberId(String.valueOf(sessionUser.getId())));	
-	pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new VideoGameSqlDao().listBy(SearchBy.NONE, null));
+User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+	pageContext.setAttribute(Team.ATR_TEAMS_LIST, new MySQLTeamDAO().listByMemberId(String.valueOf(sessionUser.getId())));	
+	pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new MySQLVideoGameDAO().listBy(SearchBy.NONE, null));
 %>
     
 <!DOCTYPE html>
@@ -48,7 +48,9 @@
 				  	<c:forEach var="team" items="${ATR_TEAMS_LIST}">
 						<c:if test="${not team.deleted}">
 							<c:set var="teamVideoGameId" value="${team.videoGameId}" scope="request" />			
-							<% request.setAttribute(VideoGame.ATTR_VIDEO_GAME_OBJ, new VideoGameSqlDao().read(String.valueOf(request.getAttribute("teamVideoGameId")), SearchBy.ID)); %>
+							<%
+										request.setAttribute(VideoGame.ATTR_VIDEO_GAME_OBJ, new MySQLVideoGameDAO().read(String.valueOf(request.getAttribute("teamVideoGameId")), SearchBy.ID));
+										%>
 							<tbody id="div-team-${team.id}">
 						    	<tr>
 						      		<th scope="row"><img class="img-fluid rounded img-fit" src="data:image/png;base64, ${team.base64Logo}" alt="${team.name}'s logo"/></th>

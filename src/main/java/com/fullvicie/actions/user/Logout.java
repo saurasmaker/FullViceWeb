@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.UserSqlDao;
+import com.fullvicie.daos.mysql.MySQLUserDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
@@ -29,7 +29,7 @@ public class Logout implements IAction{
 		if(u==null)
 			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
-		new UserSqlDao().updateLastLogoutDatetime(String.valueOf(u.getId()), SearchBy.ID, Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+		new MySQLUserDAO().updateLastLogoutDatetime(String.valueOf(u.getId()), SearchBy.ID, Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 		request.getSession().removeAttribute(User.ATR_USER_LOGGED_OBJ);
 		
 		return request.getContextPath() + ActionsController.INDEX_PAGE;

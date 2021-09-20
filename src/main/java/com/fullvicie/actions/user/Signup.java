@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fullvicie.controllers.ActionsController;
-import com.fullvicie.daos.sql.ProfileSqlDao;
-import com.fullvicie.daos.sql.UserSqlDao;
+import com.fullvicie.daos.mysql.MySQLProfileDAO;
+import com.fullvicie.daos.mysql.MySQLUserDAO;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.interfaces.IAction;
-import com.fullvicie.pojos.Profile;
+import com.fullvicie.pojos.PersonalInformation;
 import com.fullvicie.pojos.User;
 
 public class Signup implements IAction{
@@ -26,8 +26,8 @@ public class Signup implements IAction{
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
 		
-		UserSqlDao udao = new UserSqlDao();
-		ProfileSqlDao pdao = new ProfileSqlDao(); 
+		MySQLUserDAO udao = new MySQLUserDAO();
+		MySQLProfileDAO pdao = new MySQLProfileDAO(); 
 		User user = new User(request);
 		user.setSignUpDate(Date.valueOf(LocalDate.now()));
 		user.setSignUpTime(Time.valueOf(LocalTime.now()));
@@ -42,7 +42,7 @@ public class Signup implements IAction{
 			user = udao.read(user.getUsername(), SearchBy.USERNAME);
 			
 			if(user!=null) {
-				Profile profile = new Profile();
+				PersonalInformation profile = new PersonalInformation();
 				profile.setUserId(user.getId());
 				pdao.create(profile);
 			}
