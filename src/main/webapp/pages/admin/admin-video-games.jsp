@@ -74,7 +74,7 @@
                	
 			   	<tbody>
 			   		<%
-			   		pageContext.setAttribute("videoGamesList", new MySQLVideoGameDAO().listBy(SearchBy.NONE, null));
+			   		pageContext.setAttribute("videoGamesList", MySQLVideoGameDAO.getInstance().listBy(null, SearchBy.NONE));
 			   		%>
 				   	<c:forEach var='videoGame' items='${videoGamesList}'>
 				   		<%
@@ -87,11 +87,11 @@
 	                        <td>${videoGame.description}</td>
 	                        
 	                        <td>
-	                            <button type = "submit" class="btn btn-warning" onclick = "updateVideoGame(<%=v.toJavaScriptFunction()%>)">Edit</button>
+	                            <button type = "submit" class="btn btn-warning" onclick = "updateVideoGame(${})">Edit</button>
 	                        </td>
 	                        <td>
 								<form action = "<%=request.getContextPath()%>/ActionsController" method = "POST">
-									<input type="hidden" name="<%=ActionsController.PARAM_SELECT_ACTION%>" value="<%=PseudoDelete.PARAM_PSEUDODELETE_ACTION%>"/>
+									<input type="hidden" name="<%=ActionsController.PARAM_SELECT_ACTION%>" value="<%=Delete.PARAM_DELETE_ACTION%>"/>
 	                           		<input type="hidden" name = "<%=VideoGame.PARAM_VIDEO_GAME_ID %>" value = '${videoGame.id}'>
 	                           		<input type="hidden" name = "<%=ActionsController.PARAM_OBJECT_CLASS%>" value = "<%=VideoGame.class.getName()%>">
 	                           		<button type="submit" class="btn btn-danger">Delete</button>

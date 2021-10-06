@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.VideoGame;
@@ -46,15 +45,20 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(VideoGame vg) throws DaoException {
+	public ErrorType create(VideoGame vg) {
 
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "(" 
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "(" 
 			+ NAME_COLUMN + ", "
-			+ DESCRIPTION_COLUMN + ") VALUES (?, ?)", vg);	
+			+ DESCRIPTION_COLUMN + ") VALUES (?, ?)", vg);
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_VIDEO_GAME_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public VideoGame read(String search, SearchBy searchBy) throws DaoException {
+	public VideoGame read(String search, SearchBy searchBy) throws SQLException {
 		
 		// Declaration of variables
 		PreparedStatement stat = null;
@@ -72,11 +76,11 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 			if(rs.next()) {
 				vg = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException("");
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -85,7 +89,7 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, VideoGame vg) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, VideoGame vg) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -94,26 +98,28 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 			+ DESCRIPTION_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, vg);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, vg))
+			et = ErrorType.UPDATE_VIDEO_GAME_ERROR;
 
 		return et;
 	}
 
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_VIDEO_GAME_ERROR;
 		
 		return et;
 	}
 	
 
 	@Override
-	public ArrayList<VideoGame> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<VideoGame> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -131,7 +137,7 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -144,8 +150,15 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, VideoGame vg) throws DaoException {
-		VideoGame actualVg = read(String.valueOf(vg.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, VideoGame vg) {
+		ErrorType et = ErrorType.NO_ERROR;
+		VideoGame actualVg = null;
+		try {
+			actualVg = read(String.valueOf(vg.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -162,12 +175,12 @@ public class MySQLVideoGameDAO implements IDao<VideoGame> {
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private VideoGame convert(ResultSet rs) throws SQLException {

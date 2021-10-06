@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.*;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.PostCategory;
@@ -45,15 +44,20 @@ public class MySQLPostCategoryDAO implements IDao<PostCategory>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(PostCategory pc) throws DaoException {
+	public ErrorType create(PostCategory pc) {
 
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
 			+ NAME_COLUMN + ", "
-			+ DESCRIPTION_COLUMN + ") VALUES (?, ?)", pc);	
+			+ DESCRIPTION_COLUMN + ") VALUES (?, ?)", pc);
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_POST_CATEGORY_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public PostCategory read(String search, SearchBy searchBy) throws DaoException {
+	public PostCategory read(String search, SearchBy searchBy) throws SQLException {
 
 		// Declaration of variables
 		PreparedStatement stat = null;
@@ -71,11 +75,11 @@ public class MySQLPostCategoryDAO implements IDao<PostCategory>{
 			if(rs.next()) {
 				pc = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException("");
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -84,7 +88,7 @@ public class MySQLPostCategoryDAO implements IDao<PostCategory>{
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, PostCategory pc) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, PostCategory pc) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -93,26 +97,28 @@ public class MySQLPostCategoryDAO implements IDao<PostCategory>{
 			+ DESCRIPTION_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, pc);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, pc))
+			et = ErrorType.UPDATE_POST_CATEGORY_ERROR;
 
 		return et;
 	}
 
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_POST_CATEGORY_ERROR;
 		
 		return et;
 	}
 
 
 	@Override
-	public ArrayList<PostCategory> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<PostCategory> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -130,7 +136,7 @@ public class MySQLPostCategoryDAO implements IDao<PostCategory>{
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -142,8 +148,15 @@ public class MySQLPostCategoryDAO implements IDao<PostCategory>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, PostCategory pc) throws DaoException {
-		PostCategory actualPc = read(String.valueOf(pc.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, PostCategory pc) {
+		ErrorType et = ErrorType.NO_ERROR;
+		PostCategory actualPc = null;
+		try {
+			actualPc = read(String.valueOf(pc.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -160,12 +173,12 @@ public class MySQLPostCategoryDAO implements IDao<PostCategory>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	

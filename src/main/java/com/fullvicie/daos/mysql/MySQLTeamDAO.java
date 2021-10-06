@@ -13,7 +13,6 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.Team;
@@ -51,8 +50,9 @@ public class MySQLTeamDAO implements IDao<Team>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(Team t) throws DaoException {
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
+	public ErrorType create(Team t) {
+		
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
 				+ NAME_COLUMN + ", "
 				+ DESCRIPTION_COLUMN + ", "
 				+ LOGO_COLUMN + ", "
@@ -60,11 +60,16 @@ public class MySQLTeamDAO implements IDao<Team>{
 				+ CREATION_TIME_COLUMN + ", "
 				+ VIDEO_GAME_ID_COLUMN + ", "
 				+ USER_OWNER_ID_COLUMN + ", "
-				+ USER_CREATOR_ID_COLUMN + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)", t);	
+				+ USER_CREATOR_ID_COLUMN + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)", t);
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_TEAM_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public Team read(String search, SearchBy searchBy) throws DaoException {
+	public Team read(String search, SearchBy searchBy) throws SQLException {
 		
 		// Declaration of variables
 		PreparedStatement stat = null;
@@ -82,11 +87,11 @@ public class MySQLTeamDAO implements IDao<Team>{
 			if(rs.next()) {
 				t = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException();
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException();
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -95,7 +100,7 @@ public class MySQLTeamDAO implements IDao<Team>{
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, Team t) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, Team t) {
 			
 		ErrorType et = ErrorType.NO_ERROR;
 
@@ -110,27 +115,29 @@ public class MySQLTeamDAO implements IDao<Team>{
 			+ USER_CREATOR_ID_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, t);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, t))
+			et = ErrorType.UPDATE_TEAM_ERROR;
 
 		return et;
 	}
 
 	
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_TEAM_ERROR;
 		
 		return et;
 	}
 
 
 	@Override
-	public ArrayList<Team> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<Team> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -148,7 +155,7 @@ public class MySQLTeamDAO implements IDao<Team>{
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException();
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -160,9 +167,15 @@ public class MySQLTeamDAO implements IDao<Team>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, Team t) throws DaoException {
-		
-		Team actualT = read(String.valueOf(t.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, Team t) {
+		ErrorType et = ErrorType.NO_ERROR;
+		Team actualT = null;
+		try {
+			actualT = read(String.valueOf(t.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -203,12 +216,12 @@ public class MySQLTeamDAO implements IDao<Team>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private Team convert(ResultSet rs) throws SQLException {

@@ -9,9 +9,9 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 
 <%
-User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-	pageContext.setAttribute(Team.ATR_TEAMS_LIST, new MySQLTeamDAO().listByMemberId(String.valueOf(sessionUser.getId())));	
-	pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new MySQLVideoGameDAO().listBy(SearchBy.NONE, null));
+	User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+	pageContext.setAttribute(Team.ATR_TEAMS_LIST, MySQLTeamDAO.getInstance().listBy(String.valueOf(sessionUser.getId()), SearchBy.USER_ID));	
+	pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, MySQLVideoGameDAO.getInstance().listBy(null, SearchBy.NONE));
 %>
     
 <!DOCTYPE html>
@@ -49,7 +49,7 @@ User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
 						<c:if test="${not team.deleted}">
 							<c:set var="teamVideoGameId" value="${team.videoGameId}" scope="request" />			
 							<%
-										request.setAttribute(VideoGame.ATTR_VIDEO_GAME_OBJ, new MySQLVideoGameDAO().read(String.valueOf(request.getAttribute("teamVideoGameId")), SearchBy.ID));
+										request.setAttribute(VideoGame.ATTR_VIDEO_GAME_OBJ, MySQLVideoGameDAO.getInstance().read(String.valueOf(request.getAttribute("teamVideoGameId")), SearchBy.ID));
 										%>
 							<tbody id="div-team-${team.id}">
 						    	<tr>

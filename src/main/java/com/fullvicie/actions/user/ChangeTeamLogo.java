@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+
 import com.fullvicie.controllers.ActionsController;
 import com.fullvicie.daos.mysql.MySQLTeamDAO;
 import com.fullvicie.enums.ErrorType;
@@ -17,26 +19,35 @@ public class ChangeTeamLogo implements IAction{
 	
 	public static final String PARAM_CHANGE_TEAM_LOGO_ACTION = "PARAM_CHANGE_TEAM_LOGO_ACTION";
 	
+	/*
+	 * Singleton
+	 */
+	private static ChangeTeamLogo instance;
+	private ChangeTeamLogo() {}
+	public static ChangeTeamLogo getInstance() {	
+		if(instance == null)
+			instance = new ChangeTeamLogo();	
+		return instance;
+	}
+	
+	
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		String url = request.getHeader("referer");
+		ErrorType et = ErrorType.NO_ERROR;
 		
-		try {
-			Team t = (Team) request.getSession().getAttribute(Team.ATTR_TEAM_OBJ);
+		Team t = (Team) request.getSession().getAttribute(Team.ATTR_TEAM_OBJ);
+		if(t!=null) {
+			t.setBase64Logo(Base64.encodeBase64String(request.getPart(Team.PARAM_TEAM_LOGO).getInputStream().readAllBytes()));
+			et = MySQLTeamDAO.getInstance().update(String.valueOf(t.getId()), SearchBy.ID, t);
 			
-			if(t!=null) {
-				MySQLTeamDAO tsd = new MySQLTeamDAO();
-				tsd.updatePicture(String.valueOf(t.getId()), SearchBy.ID, request.getPart(Team.PARAM_TEAM_LOGO).getInputStream());
-			}
+			if(et == ErrorType.NO_ERROR)
+				return request.getHeader("referer");
 			
-			return url;
-		}
-		catch(Exception e) {
-			
-		}
+			return  ActionsController.ERROR_PAGE + et;
+		}		
 		
-		return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
+		return ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
 	}
 }

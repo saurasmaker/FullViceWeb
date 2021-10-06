@@ -1,9 +1,8 @@
 package com.fullvicie.actions.user;
 
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,36 +21,69 @@ public class InvitePlayerToTeam implements IAction{
 
 	public static final String PARAM_INVITE_PLAYER_TO_TEAM_ACTION = "PARAM_INVITE_PLAYER_TO_TEAM_ACTION";
 	
+	
+	/*
+	 * Singleton
+	 */
+	private static InvitePlayerToTeam instance;
+	private InvitePlayerToTeam() {}
+	public static InvitePlayerToTeam getInstance() {	
+		if(instance == null)
+			instance = new InvitePlayerToTeam();	
+		return instance;
+	}
+	
+	
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-		String url = request.getHeader("referer");
+		ErrorType et = ErrorType.NO_ERROR;
 		
-		try {			
-			TeamInvitation teamInvitation = new TeamInvitation(request);
-			if(teamInvitation.getReceiverUserId() < 1) 
-				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
-			
-			Team t = new MySQLTeamDAO().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
-			for(int gpId: t.getGamerProfiles()) {
-				GamerProfile gp = new MySQLGamerProfileDAO().read(String.valueOf(gpId), SearchBy.ID);
-				if(gp!=null) if(teamInvitation.getReceiverUserId()==gp.getUserId())
-					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_IS_ALREADY_A_TEAM_MEMBER_ERROR;
-
-			}
-			ArrayList<TeamInvitation> tisUser = new MySQLTeamInvitationDAO().listBy(SearchBy.RECEIVER_USER_ID, String.valueOf(teamInvitation.getReceiverUserId()));
-			for(TeamInvitation ti: tisUser)
-				if(ti.getTeamId() == teamInvitation.getTeamId())
-					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_IS_ALREADY_INVITED_TO_THIS_TEAM_ERROR;
-			
-			new MySQLTeamInvitationDAO().create(teamInvitation);
-			
-			return url;
+		TeamInvitation teamInvitation = new TeamInvitation(request);
+		if(teamInvitation.getReceiverUserId() < 1) 
+			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
+		
+		Team t = null;
+		try {
+			t = MySQLTeamDAO.getInstance().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.READ_TEAM_ERROR;
 		}
-		catch(Exception e) { }
 		
-		return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.CREATE_TEAM_INVITATION_ERROR;
+		
+		for(int gpId: t.getGamerProfiles()) {
+			GamerProfile gp = null;
+			try {
+				gp = MySQLGamerProfileDAO.getInstance().read(String.valueOf(gpId), SearchBy.ID);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return ActionsController.ERROR_PAGE + ErrorType.READ_GAMER_PROFILE_ERROR;
+			}
+			if(gp!=null) if(teamInvitation.getReceiverUserId()==gp.getUserId())
+				return ActionsController.ERROR_PAGE + ErrorType.USER_IS_ALREADY_A_TEAM_MEMBER_ERROR;
+		}
+		
+		
+		ArrayList<TeamInvitation> tisUser = null;
+		try {
+			tisUser = MySQLTeamInvitationDAO.getInstance().listBy(String.valueOf(teamInvitation.getReceiverUserId()), SearchBy.RECEIVER_USER_ID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.LIST_TEAM_INVITATIONS_ERROR;
+		}
+		
+		
+		for(TeamInvitation ti: tisUser)
+			if(ti.getTeamId() == teamInvitation.getTeamId())
+				return ActionsController.ERROR_PAGE + ErrorType.USER_IS_ALREADY_INVITED_TO_THIS_TEAM_ERROR;
+		
+		et = MySQLTeamInvitationDAO.getInstance().create(teamInvitation);
+		
+		if(et == ErrorType.NO_ERROR)
+			return request.getHeader("referer");
+		
+		return ActionsController.ERROR_PAGE + ErrorType.CREATE_TEAM_INVITATION_ERROR;
 	}
 
 }

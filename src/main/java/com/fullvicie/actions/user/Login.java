@@ -1,10 +1,8 @@
 package com.fullvicie.actions.user;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,8 +22,20 @@ public class Login implements IAction{
 	private static String emailPattern = "^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$";
 
 	
+	/*
+	 * Singleton
+	 */
+	private static Login instance;
+	private Login() {}
+	public static Login getInstance() {	
+		if(instance == null)
+			instance = new Login();	
+		return instance;
+	}
+	
+	
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
 				
 		User userToCheck = new User();
 		userToCheck.setUsername(request.getParameter(User.PARAM_USER_USERNAME));
@@ -40,27 +50,31 @@ public class Login implements IAction{
 			userToCheck.setPassword(Encryptor.encrypt(userToCheck.getPassword()));
 			
 			// Logic to login 
-			MySQLUserDAO dao = new MySQLUserDAO();
 		    Matcher matcher = pattern.matcher(userToCheck.getUsername());
-		    if (matcher.matches()) 
-		    	userFinded = dao.read(userToCheck.getUsername(), SearchBy.EMAIL);
-		    else
-		    	userFinded = dao.read(userToCheck.getUsername(), SearchBy.USERNAME);
+		    try {
+			    if (matcher.matches())			
+					userFinded = MySQLUserDAO.getInstance().read(userToCheck.getUsername(), SearchBy.EMAIL);
+				else
+			    	userFinded = MySQLUserDAO.getInstance().read(userToCheck.getUsername(), SearchBy.USERNAME);
+		    }catch(Exception e) {
+		    	e.printStackTrace();
+		    	return ActionsController.ERROR_PAGE + ErrorType.READ_USER_ERROR;
+		    }
 		}
 		else {
-			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.LOGIN_ERROR;
+			return ActionsController.ERROR_PAGE + ErrorType.LOGIN_ERROR;
 		}
 				
-		if(userFinded != null && !userFinded.getDeleted()) {
+		if(userFinded != null) {
 			if(userToCheck.getPassword().equals(userFinded.getPassword())) {
 				request.getSession().setAttribute(User.ATR_USER_LOGGED_OBJ, userFinded);
 				return request.getHeader("referer");
 			}
 			else
-				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
+				return ActionsController.ERROR_PAGE + ErrorType.PASSWORDS_DOES_NOT_MATCHES_ERROR;
 		}
 		else {
-			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
+			return ActionsController.ERROR_PAGE + ErrorType.USER_DOES_NOT_EXIST_ERROR;
 		}
 		
 	}

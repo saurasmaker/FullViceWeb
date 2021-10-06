@@ -29,7 +29,6 @@ public class ActionsController extends HttpServlet {
 
 	private String url;
 
-
     public ActionsController() {
         super();
     }
@@ -37,7 +36,11 @@ public class ActionsController extends HttpServlet {
  
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-		response.sendRedirect(url);
+		//response.sendRedirect(request.getContextPath() + url);
+		if(url.contains("http"))
+			url = url.substring(url.indexOf(request.getContextPath())).substring(request.getContextPath().length()) ;
+		
+		request.getRequestDispatcher(url).forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,67 +50,63 @@ public class ActionsController extends HttpServlet {
 		switch(selectedAction) {
 		
 		case Logout.PARAM_LOGOUT_ACTION:
-			url = (new Logout()).execute(request, response);
+			url = Logout.getInstance().execute(request, response);
 			break;
 			
 		case Login.PARAM_LOGIN_ACTION:
-			url = (new Login()).execute(request, response);
+			url = Login.getInstance().execute(request, response);
 			break;
 			
 		case Signup.PARAM_SIGNUP_ACTION:
-			url = (new Signup()).execute(request, response);
+			url = Signup.getInstance().execute(request, response);
 			break;
 
 		case ChangeUserPicture.PARAM_CHANGE_USER_PICTURE_ACTION:
-			url = (new ChangeUserPicture()).execute(request, response);
+			url = ChangeUserPicture.getInstance().execute(request, response);
 			break;
 			
 		case ChangeTeamLogo.PARAM_CHANGE_TEAM_LOGO_ACTION:
-			url = (new ChangeTeamLogo()).execute(request, response);
+			url = ChangeTeamLogo.getInstance().execute(request, response);
 			break;
 		
 		case InvitePlayerToTeam.PARAM_INVITE_PLAYER_TO_TEAM_ACTION:
-			url = (new InvitePlayerToTeam()).execute(request, response);
+			url = InvitePlayerToTeam.getInstance().execute(request, response);
 			break;
 			
 		case AcceptTeamInvitation.PARAM_ACCEPT_TEAM_INVITATION_ACTION:
-			url = new AcceptTeamInvitation().execute(request, response);
+			url = AcceptTeamInvitation.getInstance().execute(request, response);
 			break;
 			
 		case RejectTeamInvitation.PARAM_REJECT_TEAM_INVITATION_ACTION:
-			url = new RejectTeamInvitation().execute(request, response);
+			url = RejectTeamInvitation.getInstance().execute(request, response);
 			break;
 			
 		case LeaveTeam.PARAM_LEAVE_TEAM_ACTION:
-			url = new LeaveTeam().execute(request, response);
+			url = LeaveTeam.getInstance().execute(request, response);
 			break;	
 		
 		case KickPlayerFromTeam.PARAM_KICK_PLAYER_FROM_TEAM_ACTION:
-			url = new KickPlayerFromTeam().execute(request, response);
+			url = KickPlayerFromTeam.getInstance().execute(request, response);
 			break;
 			
 		case ChangeTeamOwner.PARAM_CHANGE_TEAM_OWNER_ACTION:
-			url = new ChangeTeamOwner().execute(request, response);
+			url = ChangeTeamOwner.getInstance().execute(request, response);
 			break;
 			
 		case Create.PARAM_CREATE_ACTION:
-			url = (new Create()).execute(request, response);
+			url = Create.getInstance().execute(request, response);
 			break;
 				
 		case Read.PARAM_READ_ACTION:
-			url = (new Read()).execute(request, response);
+			url = Read.getInstance().execute(request, response);
 			break;
 			
 		case Update.PARAM_UPDATE_ACTION:
-			url = (new Update()).execute(request, response);
+			url = Update.getInstance().execute(request, response);
 			break;
 			
 		case Delete.PARAM_DELETE_ACTION:
-			url = (new Delete()).execute(request, response);
-			break;
-			
-		case PseudoDelete.PARAM_PSEUDODELETE_ACTION:
-			url = (new PseudoDelete()).execute(request, response);
+			url = Delete.getInstance().execute(request, response);
 			break;
 				
 		}

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.*;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.PostComment;
@@ -46,8 +45,8 @@ public class MySQLPostCommentDAO implements IDao<PostComment>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(PostComment pc) throws DaoException {
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
+	public ErrorType create(PostComment pc) {
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
 			+ MESSAGE_COLUMN + ", "
 			+ LIKES_COLUMN + ", " 
 			+ DISLIKES_COLUMN + ", "
@@ -57,11 +56,15 @@ public class MySQLPostCommentDAO implements IDao<PostComment>{
 			+ LAST_EDIT_TIME_COLUMN + ", "
 			+ POST_ID_COLUMN + ", "
 			+ USER_ID_COLUMN + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", pc);	
-
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_POST_COMMENT_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public PostComment read(String search, SearchBy searchBy) throws DaoException {
+	public PostComment read(String search, SearchBy searchBy) throws SQLException {
 		
 		// Declaration of variables
 		PreparedStatement stat = null;
@@ -79,11 +82,11 @@ public class MySQLPostCommentDAO implements IDao<PostComment>{
 			if(rs.next()) {
 				pc = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException("");
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -92,7 +95,7 @@ public class MySQLPostCommentDAO implements IDao<PostComment>{
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, PostComment pc) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, PostComment pc) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -108,25 +111,27 @@ public class MySQLPostCommentDAO implements IDao<PostComment>{
 			+ USER_ID_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, pc);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, pc))
+			et = ErrorType.UPDATE_POST_COMMENT_ERROR;
 
 		return et;
 	}
 
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_POST_COMMENT_ERROR;
 		
 		return et;
 	}
 
 	@Override
-	public ArrayList<PostComment> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<PostComment> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -144,7 +149,7 @@ public class MySQLPostCommentDAO implements IDao<PostComment>{
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -156,9 +161,15 @@ public class MySQLPostCommentDAO implements IDao<PostComment>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, PostComment pc) throws DaoException {
-
-		PostComment actualPc = read(String.valueOf(pc.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, PostComment pc) {
+		ErrorType et = ErrorType.NO_ERROR;
+		PostComment actualPc;
+		try {
+			actualPc = read(String.valueOf(pc.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -203,12 +214,12 @@ public class MySQLPostCommentDAO implements IDao<PostComment>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private PostComment convert(ResultSet rs) throws SQLException {

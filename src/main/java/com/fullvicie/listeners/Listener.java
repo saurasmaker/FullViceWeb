@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import com.fullvicie.daos.mysql.MySQLUserDAO;
-import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.SearchBy;
 import com.fullvicie.pojos.User;
 
@@ -46,19 +45,16 @@ public class Listener implements ServletContextListener, ServletRequestListener,
     
 	@Override
     public void contextInitialized(ServletContextEvent arg0)  { 
-    	System.out.println(MySqlConnection.connect());
     }
 
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		System.out.println(MySqlConnection.disconnect());
 	}
 
 	
 	@Override
 	public void sessionCreated(HttpSessionEvent arg0) {
-		System.out.println(MySqlConnection.connect());
 	}
 
 
@@ -66,7 +62,9 @@ public class Listener implements ServletContextListener, ServletRequestListener,
 	public void sessionDestroyed(HttpSessionEvent arg0) {
 		try {
 			User u = (User) arg0.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
-			new MySQLUserDAO().updateLastLogoutDatetime(String.valueOf(u.getId()), SearchBy.ID, Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+			u.setLastLogoutDate(Date.valueOf(LocalDate.now()));
+			u.setLastLogoutTime(Time.valueOf(LocalTime.now()));
+			MySQLUserDAO.getInstance().update(String.valueOf(u.getId()), SearchBy.ID, u);
 			arg0.getSession().removeAttribute(User.ATR_USER_LOGGED_OBJ);
 		}catch(Exception e) {}
 	}

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.TeamInvitation;
@@ -44,18 +43,23 @@ public class MySQLTeamInvitationDAO implements IDao<TeamInvitation> {
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(TeamInvitation ti) throws DaoException {
+	public ErrorType create(TeamInvitation ti) {
 		
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "(" 
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "(" 
 			+ TEAM_ID_COLUMN + ", "
 			+ TRANSMITTER_USER_ID_COLUMN + ", "
 			+ RECEIVER_USER_ID_COLUMN + ", " 
 			+ SENDING_DATE_COLUMN + ", " 
 			+ SENDING_TIME_COLUMN + ") VALUES (?, ?, ?, ?, ?)", ti);
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_FORUM_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public TeamInvitation read(String search, SearchBy searchBy) throws DaoException {
+	public TeamInvitation read(String search, SearchBy searchBy) throws SQLException {
 		// Declaration of variables
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -72,11 +76,11 @@ public class MySQLTeamInvitationDAO implements IDao<TeamInvitation> {
 			if(rs.next()) {
 				ti = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException("");
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -85,7 +89,7 @@ public class MySQLTeamInvitationDAO implements IDao<TeamInvitation> {
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, TeamInvitation ti) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, TeamInvitation ti) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -97,26 +101,28 @@ public class MySQLTeamInvitationDAO implements IDao<TeamInvitation> {
 			+ SENDING_TIME_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, ti);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, ti))
+			et = ErrorType.UPDATE_TEAM_INVITATION_ERROR;
 
 		return et;
 	}
 
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_TEAM_INVITATION_ERROR;
 		
 		return et;
 	}
 
 
 	@Override
-	public ArrayList<TeamInvitation> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<TeamInvitation> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -134,7 +140,7 @@ public class MySQLTeamInvitationDAO implements IDao<TeamInvitation> {
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -147,9 +153,15 @@ public class MySQLTeamInvitationDAO implements IDao<TeamInvitation> {
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, TeamInvitation ti) throws DaoException {
-		
-		TeamInvitation actualTi = read(String.valueOf(ti.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, TeamInvitation ti) {
+		ErrorType et = ErrorType.NO_ERROR;
+		TeamInvitation actualTi = null;
+		try {
+			actualTi = read(String.valueOf(ti.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			et = ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -178,12 +190,12 @@ public class MySQLTeamInvitationDAO implements IDao<TeamInvitation> {
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private TeamInvitation convert(ResultSet rs) throws SQLException {

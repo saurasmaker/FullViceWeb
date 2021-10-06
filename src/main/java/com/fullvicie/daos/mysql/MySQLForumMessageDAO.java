@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.*;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.ForumMessage;
@@ -45,9 +44,9 @@ public class MySQLForumMessageDAO implements IDao<ForumMessage>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(ForumMessage fm) throws DaoException {
+	public ErrorType create(ForumMessage fm) {
 	
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "(" 
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "(" 
 			+ MESSAGE_COLUMN + ", "
 			+ MADE_DATE_COLUMN + ", " 
 			+ MADE_TIME_COLUMN + ", "
@@ -57,10 +56,15 @@ public class MySQLForumMessageDAO implements IDao<ForumMessage>{
 			+ DISLIKES_COLUMN + ", "
 			+ FORUM_ID_COLUMN + ", "
 			+ USER_ID_COLUMN + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", fm);	
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_FORUM_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public ForumMessage read(String search, SearchBy searchBy) throws DaoException {
+	public ForumMessage read(String search, SearchBy searchBy) throws SQLException {
 		// Declaration of variables
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -77,11 +81,11 @@ public class MySQLForumMessageDAO implements IDao<ForumMessage>{
 			if(rs.next()) {
 				fm = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException("");
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -91,7 +95,7 @@ public class MySQLForumMessageDAO implements IDao<ForumMessage>{
 	
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, ForumMessage fc) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, ForumMessage fm) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -107,26 +111,28 @@ public class MySQLForumMessageDAO implements IDao<ForumMessage>{
 			+ USER_ID_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, fc);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, fm))
+			et =ErrorType.UPDATE_FORUM_MESSAGE_ERROR;
 
 		return et;
 	}
 
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_FORUM_MESSAGE_ERROR;
 		
 		return et;
 	}
 
 	
 	@Override
-	public ArrayList<ForumMessage> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<ForumMessage> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -144,7 +150,7 @@ public class MySQLForumMessageDAO implements IDao<ForumMessage>{
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -157,9 +163,15 @@ public class MySQLForumMessageDAO implements IDao<ForumMessage>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, ForumMessage fm) throws DaoException {
-
-		ForumMessage actualFm = read(String.valueOf(fm.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, ForumMessage fm) {
+		ErrorType et = ErrorType.NO_ERROR;
+		ForumMessage actualFm;
+		try {
+			actualFm = read(String.valueOf(fm.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -204,12 +216,12 @@ public class MySQLForumMessageDAO implements IDao<ForumMessage>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private ForumMessage convert(ResultSet rs) throws SQLException {

@@ -14,16 +14,16 @@
 <%@ page import="com.fullvicie.actions.crud.Update,com.fullvicie.actions.user.ChangeTeamLogo,com.fullvicie.actions.user.InvitePlayerToTeam,com.fullvicie.actions.user.KickPlayerFromTeam,com.fullvicie.actions.user.LeaveTeam" %>
 
 <%
-Team team = new MySQLTeamDAO().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
+	Team team = MySQLTeamDAO.getInstance().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
 	
 	if(team == null)
 		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_TEAM_ERROR);
 	
 	User sessionUser = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-	ArrayList<TeamInvitation> teamInvitations = new MySQLTeamInvitationDAO().listBy(SearchBy.TEAM_ID, String.valueOf(team.getId()));
+	ArrayList<TeamInvitation> teamInvitations = MySQLTeamInvitationDAO.getInstance().listBy(String.valueOf(team.getId()), SearchBy.TEAM_ID);
 	
 	session.setAttribute(Team.ATTR_TEAM_OBJ, team);
-	pageContext.setAttribute("videogamesList", new MySQLVideoGameDAO().listBy(SearchBy.NONE, null));
+	pageContext.setAttribute("videogamesList", MySQLVideoGameDAO.getInstance().listBy(null, SearchBy.NONE));
 	pageContext.setAttribute("teamInvitations", teamInvitations);
 %>
     
@@ -204,14 +204,14 @@ Team team = new MySQLTeamDAO().read(request.getParameter(Team.PARAM_TEAM_ID), Se
 					  	<c:forEach var="gamerProfileId" items="${ATTR_TEAM_OBJ.gamerProfiles}" varStatus="loop">
 					  		<%
 					  		//Logic show Kick or Leave from Team				  		
-					  					  					  					  		GamerProfile gamerP = null; 
-					  					  					  					  		User user = null; 
-					  					  					  					  		try{
-					  					  					  					  			gamerP = new MySQLGamerProfileDAO().read(String.valueOf(pageContext.getAttribute("gamerProfileId")), SearchBy.ID);
-					  					  					  					  			user = new MySQLUserDAO().read(String.valueOf(gamerP.getUserId()), SearchBy.ID);
-					  					  					  					  			
-					  					  					  						  		pageContext.setAttribute("user", user);
-					  					  					  							  	pageContext.setAttribute("gamerProfile", gamerP);
+  					  		GamerProfile gamerP = null; 
+  					  		User user = null; 
+  					  		try{
+  					  			gamerP = MySQLGamerProfileDAO.getInstance().read(String.valueOf(pageContext.getAttribute("gamerProfileId")), SearchBy.ID);
+  					  			user = MySQLUserDAO.getInstance().read(String.valueOf(gamerP.getUserId()), SearchBy.ID);
+  					  			
+  						  		pageContext.setAttribute("user", user);
+  							  	pageContext.setAttribute("gamerProfile", gamerP);
 					  		%>
 					  		
 						  			<tbody id="tbody-gamer-profile-${loop.index}">
@@ -268,8 +268,8 @@ Team team = new MySQLTeamDAO().read(request.getParameter(Team.PARAM_TEAM_ID), Se
 												</th>
 												
 								    		<%
-																				    		}
-																				    		%>
+								    		}
+								    		%>
 								    	</tr>			
 								  	</tbody>
 							<%
@@ -278,15 +278,15 @@ Team team = new MySQLTeamDAO().read(request.getParameter(Team.PARAM_TEAM_ID), Se
 						</c:forEach>
 						
 						<%
-												if(sessionUser!=null) if (team.getUserOwnerId() == sessionUser.getId()) {
-												%>
+						if(sessionUser!=null) if (team.getUserOwnerId() == sessionUser.getId()) {
+						%>
 						<c:forEach var="teamInvitation" items="${teamInvitations}" varStatus="loop">
 					  		<%
 					  		//Logic show Kick or Leave from Team	
-					  					  		TeamInvitation teamInvitation = (TeamInvitation) pageContext.getAttribute("teamInvitation");
-					  					  		User user = new MySQLUserDAO().read(String.valueOf(teamInvitation.getReceiverUserId()), SearchBy.ID);
-					  					  		try{
-					  						  		pageContext.setAttribute("user", user);
+  					  		TeamInvitation teamInvitation = (TeamInvitation) pageContext.getAttribute("teamInvitation");
+  					  		User user = MySQLUserDAO.getInstance().read(String.valueOf(teamInvitation.getReceiverUserId()), SearchBy.ID);
+  					  		try{
+  						  		pageContext.setAttribute("user", user);
 					  		%>
 					  		
 						  			<tbody id="tbody-gamer-profile-${loop.index}">

@@ -1,9 +1,7 @@
 package com.fullvicie.actions.user;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,21 +22,62 @@ public class AcceptTeamInvitation implements IAction{
 
 	public static final String PARAM_ACCEPT_TEAM_INVITATION_ACTION = "PARAM_ACCEPT_TEAM_INVITATION_ACTION";
 	
+	
+	/*
+	 * Singleton
+	 */
+	private static AcceptTeamInvitation instance;
+	private AcceptTeamInvitation() {}
+	public static AcceptTeamInvitation getInstance() {	
+		if(instance == null)
+			instance = new AcceptTeamInvitation();	
+		return instance;
+	}
+	
+	
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(u==null)
-			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
 		/*
 		 * Initialization necessary variables
 		 */
-		TeamInvitation teamInvitation = new MySQLTeamInvitationDAO().read(request.getParameter(TeamInvitation.PARAM_TEAM_INVITATION_ID), SearchBy.ID);
-		Team team = new MySQLTeamDAO().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
-		User receiver = new MySQLUserDAO().read(String.valueOf(teamInvitation.getReceiverUserId()), SearchBy.ID);
-		ArrayList<GamerProfile> userGamerProfiles = new MySQLGamerProfileDAO().listBy(SearchBy.USER_ID,String.valueOf(receiver.getId()));	
+		TeamInvitation teamInvitation = null;
+		Team team = null;
+		User receiver = null;
+		ArrayList<GamerProfile> userGamerProfiles = null;	
+		
+		try{
+			teamInvitation = MySQLTeamInvitationDAO.getInstance().read(request.getParameter(TeamInvitation.PARAM_TEAM_INVITATION_ID), SearchBy.ID);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.READ_TEAM_INVITATION_ERROR;
+		}
+		
+		try {
+			team = MySQLTeamDAO.getInstance().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.READ_TEAM_ERROR;
+		}
+		
+		try {
+			receiver = MySQLUserDAO.getInstance().read(String.valueOf(teamInvitation.getReceiverUserId()), SearchBy.ID);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.READ_USER_ERROR;
+		}
+		
+		try {
+			userGamerProfiles = MySQLGamerProfileDAO.getInstance().listBy(String.valueOf(receiver.getId()), SearchBy.USER_ID);	
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.LIST_GAMER_PROFILES_ERROR;
+		}
+		
 		GamerProfile gamerProfile = null;
 		for(GamerProfile gp: userGamerProfiles)
 			if(gp.getVideoGameId()==team.getVideoGameId()) 
@@ -54,21 +93,21 @@ public class AcceptTeamInvitation implements IAction{
 				if(playersProfilesId[i] <= 0) {
 					playersProfilesId[i] = gamerProfile.getId();
 					team.setGamerProfiles(playersProfilesId);
-					ErrorType et = new MySQLTeamInvitationDAO().delete(String.valueOf(teamInvitation.getId()), SearchBy.ID);
+					ErrorType et = MySQLTeamInvitationDAO.getInstance().delete(String.valueOf(teamInvitation.getId()), SearchBy.ID);
 					if(et != ErrorType.NO_ERROR) 
-						return request.getContextPath() + ActionsController.ERROR_PAGE + et;
+						return ActionsController.ERROR_PAGE + et;
 					
-					et = new MySQLTeamDAO().update(String.valueOf(team.getId()), SearchBy.ID, team);
+					et = MySQLTeamDAO.getInstance().update(String.valueOf(team.getId()), SearchBy.ID, team);
 					if(et != ErrorType.NO_ERROR) 
-						return request.getContextPath() + ActionsController.ERROR_PAGE + et;
+						return ActionsController.ERROR_PAGE + et;
 					
-					return request.getContextPath() + "/pages/team.jsp?PARAM_TEAM_ID=" + team.getId();
+					return "/pages/team.jsp?PARAM_TEAM_ID=" + team.getId();
 
 				}
 			}
 		}
 		
-		return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.MUST_HAVE_GAMER_PROFILE_TO_ACCEPT_INVITATION_ERROR;
+		return ActionsController.ERROR_PAGE + ErrorType.MUST_HAVE_GAMER_PROFILE_TO_ACCEPT_INVITATION_ERROR;
 	}
 
 }

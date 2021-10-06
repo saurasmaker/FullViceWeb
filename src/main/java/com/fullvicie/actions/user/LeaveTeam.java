@@ -1,9 +1,8 @@
 package com.fullvicie.actions.user;
 
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,20 +20,45 @@ public class LeaveTeam implements IAction{
 
 	public static final String PARAM_LEAVE_TEAM_ACTION = "PARAM_LEAVE_TEAM_ACTION";
 	
+	
+	/*
+	 * Singleton
+	 */
+	private static LeaveTeam instance;
+	private LeaveTeam() {}
+	public static LeaveTeam getInstance() {	
+		if(instance == null)
+			instance = new LeaveTeam();	
+		return instance;
+	}
+	
+	
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
 
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(u==null)
-			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
-		Team team = new MySQLTeamDAO().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
+		Team team = null;
+		try {
+			team = MySQLTeamDAO.getInstance().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.READ_TEAM_ERROR;
+		}
 		if(team.getUserOwnerId()==u.getId())
-			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.CAN_NOT_LEAVE_TEAM_IF_YOU_ARE_OWNER_ERROR;
+			return ActionsController.ERROR_PAGE + ErrorType.CAN_NOT_LEAVE_TEAM_IF_YOU_ARE_OWNER_ERROR;
 		
 		
-		ArrayList<GamerProfile> gamerProfiles = new MySQLGamerProfileDAO().listBy(SearchBy.USER_ID, String.valueOf(u.getId()));
+		ArrayList<GamerProfile> gamerProfiles = null;
+		try {
+			gamerProfiles = MySQLGamerProfileDAO.getInstance().listBy(String.valueOf(u.getId()), SearchBy.USER_ID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.LIST_GAMER_PROFILES_ERROR;
+		}
+		
 		GamerProfile userGamerProfile = null;
 		for(GamerProfile gp: gamerProfiles)
 			if(gp.getVideoGameId()==team.getVideoGameId()) {
@@ -48,13 +72,13 @@ public class LeaveTeam implements IAction{
 				playersId[i] = -1;
 				team.setGamerProfiles(playersId);
 				
-				ErrorType et = new MySQLTeamDAO().update(String.valueOf(team.getId()), SearchBy.ID, team);
+				ErrorType et = MySQLTeamDAO.getInstance().update(String.valueOf(team.getId()), SearchBy.ID, team);
 				if(et == ErrorType.NO_ERROR)
 					return request.getHeader("referer");
 				
-				return request.getContextPath() + ActionsController.ERROR_PAGE + et;
+				return ActionsController.ERROR_PAGE + et;
 			}	
 		
-		return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.PLAYER_IS_NOT_TEAM_MEMBER_ERROR;
+		return ActionsController.ERROR_PAGE + ErrorType.PLAYER_IS_NOT_TEAM_MEMBER_ERROR;
 	}
 }

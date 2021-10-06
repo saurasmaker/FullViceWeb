@@ -27,6 +27,8 @@ public class MySqlConnection implements IDataBaseConnection {
 		this.databaseName = "fullvicie";
 		this.databaseUsername = "root";
 		this.databasePassword = "";
+		
+		this.connect();
 	}
 	
 	

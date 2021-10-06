@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.*;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.ForumCategory;
@@ -45,16 +44,21 @@ public class MySQLForumCategoryDAO implements IDao<ForumCategory>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(ForumCategory fc) throws DaoException {		
+	public ErrorType create(ForumCategory fc) {		
 		
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
 			+ NAME_COLUMN + ", "
-			+ DESCRIPTION_COLUMN + ") VALUES (?, ?)", fc);	
+			+ DESCRIPTION_COLUMN + ") VALUES (?, ?)", fc);
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_FORUM_CATEGORY_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	
 	@Override
-	public ForumCategory read(String search, SearchBy searchBy) throws DaoException {
+	public ForumCategory read(String search, SearchBy searchBy) throws SQLException {
 		
 		// Declaration of variables
 		PreparedStatement stat = null;
@@ -72,11 +76,11 @@ public class MySQLForumCategoryDAO implements IDao<ForumCategory>{
 			if(rs.next()) {
 				fc = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException();
 			} 
 			rs.close();
-		} catch (SQLException e)  {
-			throw new DaoException("", e);
+		} catch (Exception e)  {
+			throw new SQLException();
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -86,7 +90,7 @@ public class MySQLForumCategoryDAO implements IDao<ForumCategory>{
 	
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, ForumCategory fc) throws DaoException{
+	public ErrorType update(String search, SearchBy searchBy, ForumCategory fc) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -95,27 +99,30 @@ public class MySQLForumCategoryDAO implements IDao<ForumCategory>{
 			+ DESCRIPTION_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, fc);
 
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, fc));
+			et = ErrorType.UPDATE_FORUM_CATEGORY_ERROR;
+			
 		return et;
 	}
 
 	
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_FORUM_CATEGORY_ERROR;
 		
 		return et;
 	}
 
 	
 	@Override
-	public ArrayList<ForumCategory> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<ForumCategory> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -132,8 +139,8 @@ public class MySQLForumCategoryDAO implements IDao<ForumCategory>{
 				forumCategoriesList.add(convert(rs));
 			}	
 			rs.close();
-		} catch (SQLException e)  {
-			throw new DaoException("", e);
+		} catch (Exception e)  {
+			throw new SQLException();
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -146,9 +153,15 @@ public class MySQLForumCategoryDAO implements IDao<ForumCategory>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, ForumCategory fc) throws DaoException {
-		
-		ForumCategory actualFc = read(String.valueOf(fc.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, ForumCategory fc) {
+		ErrorType et = ErrorType.NO_ERROR;
+		ForumCategory actualFc = null;
+		try {
+			actualFc = read(String.valueOf(fc.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -165,12 +178,13 @@ public class MySQLForumCategoryDAO implements IDao<ForumCategory>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			e.printStackTrace();
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private ForumCategory convert(ResultSet rs) throws SQLException {

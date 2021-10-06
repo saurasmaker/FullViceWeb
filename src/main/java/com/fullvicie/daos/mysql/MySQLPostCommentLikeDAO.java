@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.*;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.PostCommentLike;
@@ -44,17 +43,22 @@ public class MySQLPostCommentLikeDAO implements IDao<PostCommentLike>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(PostCommentLike pcl) throws DaoException {
+	public ErrorType create(PostCommentLike pcl) {
 		
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
 			+ DISLIKE_COLUMN + ", "
 			+ POST_COMMENT_ID_COLUMN + ", "
-			+ USER_ID_COLUMN + ") VALUES (?, ?, ?)", pcl);	
+			+ USER_ID_COLUMN + ") VALUES (?, ?, ?)", pcl);
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_POST_COMMENT_LIKE_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	
 	@Override
-	public PostCommentLike read(String search, SearchBy searchBy) throws DaoException {
+	public PostCommentLike read(String search, SearchBy searchBy) throws SQLException {
 		
 		// Declaration of variables
 		PreparedStatement stat = null;
@@ -72,11 +76,11 @@ public class MySQLPostCommentLikeDAO implements IDao<PostCommentLike>{
 			if(rs.next()) {
 				pcl = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException("");
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -86,7 +90,7 @@ public class MySQLPostCommentLikeDAO implements IDao<PostCommentLike>{
 
 	
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, PostCommentLike pcl) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, PostCommentLike pcl) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -96,27 +100,29 @@ public class MySQLPostCommentLikeDAO implements IDao<PostCommentLike>{
 			+ USER_ID_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, pcl);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, pcl))
+			et = ErrorType.UPDATE_POST_COMMENT_LIKE_ERROR;
 
 		return et;
 	}
 
 	
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_POST_COMMENT_LIKE_ERROR;
 		
 		return et;
 	}
 
 	
 	@Override
-	public ArrayList<PostCommentLike> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<PostCommentLike> listBy(String search, SearchBy searchBy) throws SQLException {
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -134,7 +140,7 @@ public class MySQLPostCommentLikeDAO implements IDao<PostCommentLike>{
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -146,9 +152,15 @@ public class MySQLPostCommentLikeDAO implements IDao<PostCommentLike>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, PostCommentLike pcl) throws DaoException {
-
-		PostCommentLike actualPcl = read(String.valueOf(pcl.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, PostCommentLike pcl) {
+		ErrorType et = ErrorType.NO_ERROR;
+		PostCommentLike actualPcl = null;
+		try {
+			actualPcl = read(String.valueOf(pcl.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -167,12 +179,12 @@ public class MySQLPostCommentLikeDAO implements IDao<PostCommentLike>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	

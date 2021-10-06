@@ -96,7 +96,7 @@
                	
 			   	<tbody>
 			   		<%
-			   		pageContext.setAttribute("usersList", new MySQLUserDAO().listBy(SearchBy.NONE, null));
+			   		pageContext.setAttribute("usersList", MySQLUserDAO.getInstance().listBy(null, SearchBy.NONE));
 			   		%>
 				   	<c:forEach var='user' items='${usersList}'>
 				   		<c:if test="${not user.deleted}">
@@ -114,11 +114,12 @@
 	                        <td>${user.admin}</td>
 	                        
 	                        <td>
-	                            <button type = "submit" class="btn btn-warning" onclick = "updateUser(<%=u.toJavaScriptFunction() %>)">Edit</button>
+	                            <button type = "submit" class="btn btn-warning" onclick = "updateUser(${})">Edit</button>
 	                        </td>
+	                        
 	                        <td>
 								<form action = "<%= request.getContextPath() %>/ActionsController" method = "POST">
-									<input type='hidden' name='<%= ActionsController.PARAM_SELECT_ACTION %>' value='<%= PseudoDelete.PARAM_PSEUDODELETE_ACTION %>'/>
+									<input type='hidden' name='<%= ActionsController.PARAM_SELECT_ACTION %>' value='<%= Delete.PARAM_DELETE_ACTION %>'/>
 	                           		<input type = "hidden" name = "<%=User.PARAM_USER_ID %>" value = '${user.id}'>
 	                           		<input type = "hidden" name = "<%=ActionsController.PARAM_OBJECT_CLASS %>" value = "<%=User.class.getName() %>">
 	                           		<button type = "submit" class="btn btn-danger">Delete</button>

@@ -1,12 +1,10 @@
 package com.fullvicie.actions.user;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,17 +20,32 @@ public class Logout implements IAction{
 
 	public static final String PARAM_LOGOUT_ACTION = "PARAM_LOGOUT_ACTION";
 
+	
+	/*
+	 * Singleton
+	 */
+	private static Logout instance;
+	private Logout() {}
+	public static Logout getInstance() {	
+		if(instance == null)
+			instance = new Logout();	
+		return instance;
+	}
+	
+	
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		
 		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		if(u==null)
-			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
+			return ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
-		new MySQLUserDAO().updateLastLogoutDatetime(String.valueOf(u.getId()), SearchBy.ID, Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+		u.setLastLogoutDate(Date.valueOf(LocalDate.now()));
+		u.setLastLogoutTime(Time.valueOf(LocalTime.now()));
+		MySQLUserDAO.getInstance().update(String.valueOf(u.getId()), SearchBy.ID, u);
 		request.getSession().removeAttribute(User.ATR_USER_LOGGED_OBJ);
 		
-		return request.getContextPath() + ActionsController.INDEX_PAGE;
+		return ActionsController.INDEX_PAGE;
 	}
 	
 }

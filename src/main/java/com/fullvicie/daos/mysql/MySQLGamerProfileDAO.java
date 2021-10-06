@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.GamerProfile;
@@ -46,18 +45,23 @@ public class MySQLGamerProfileDAO implements IDao<GamerProfile>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(GamerProfile player) throws DaoException {
+	public ErrorType create(GamerProfile player) {
 		
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + " (" 
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + " (" 
 				+ NAME_IN_GAME_COLUMN + ", " 
 				+ ANALYSIS_PAGE_COLUMN + ", " 
 				+ POINTS_COLUMN + ", "
 				+ VIDEO_GAME_ID_COLUMN + ", " 
 				+ USER_ID_COLUMN + ") VALUES (?, ?, ?, ?, ?)", player);	
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_GAMER_PROFILE_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public GamerProfile read(String search, SearchBy searchBy) throws DaoException {
+	public GamerProfile read(String search, SearchBy searchBy) throws SQLException {
 		
 		// Declaration of variables
 		PreparedStatement stat = null;
@@ -75,11 +79,11 @@ public class MySQLGamerProfileDAO implements IDao<GamerProfile>{
 			if(rs.next()) {
 				gp = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException();
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException();
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -88,7 +92,7 @@ public class MySQLGamerProfileDAO implements IDao<GamerProfile>{
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, GamerProfile gp) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, GamerProfile gp) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -100,7 +104,8 @@ public class MySQLGamerProfileDAO implements IDao<GamerProfile>{
 			+ USER_ID_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, gp);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, gp))
+			et = ErrorType.UPDATE_GAMER_PROFILE_ERROR;
 
 		return et;
 	}
@@ -108,20 +113,21 @@ public class MySQLGamerProfileDAO implements IDao<GamerProfile>{
 	
 	
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_GAMER_PROFILE_ERROR;
 		
 		return et;
 	}
 
 
 	@Override
-	public ArrayList<GamerProfile> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<GamerProfile> listBy(String search, SearchBy searchBy) throws SQLException {
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -139,7 +145,7 @@ public class MySQLGamerProfileDAO implements IDao<GamerProfile>{
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException();
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -151,10 +157,17 @@ public class MySQLGamerProfileDAO implements IDao<GamerProfile>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, GamerProfile gp) throws DaoException {
-		
-		GamerProfile actualGp = read(String.valueOf(gp.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, GamerProfile gp) {
+		ErrorType et = ErrorType.NO_ERROR;
+		GamerProfile actualGp = null;
+		try {
+			actualGp = read(String.valueOf(gp.getId()), SearchBy.ID);
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
+		
 		
 		PreparedStatement stat = null;
 		try {
@@ -182,12 +195,12 @@ public class MySQLGamerProfileDAO implements IDao<GamerProfile>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private GamerProfile convert(ResultSet rs) throws SQLException {

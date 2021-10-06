@@ -13,7 +13,6 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.User;
@@ -27,7 +26,7 @@ public class MySQLUserDAO implements IDao<User>{
 	public static String TABLE_NAME = "users", ID_COLUMN="id", USERNAME_COLUMN="username", EMAIL_COLUMN="email", PASSWORD_COLUMN="passwrd",
 			SIGN_UP_DATE_COLUMN="sign_up_date", SIGN_UP_TIME_COLUMN="sign_up_time",
 			LAST_LOGOUT_DATE_COLUMN="last_logout_date", LAST_LOGOUT_TIME_COLUMN="last_logout_time",
-			IS_MODERATOR_COLUMN="moderator", IS_ADMIN_COLUMN="admin", PICTURE_COLUMN="picture";
+			IS_MODERATOR_COLUMN="is_moderator", IS_ADMINISTRATOR_COLUMN="is_administrator", PICTURE_COLUMN="picture";
 	
 	
 	/*
@@ -52,9 +51,9 @@ public class MySQLUserDAO implements IDao<User>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(User user) throws DaoException {
+	public ErrorType create(User user) {
 
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + " (" 
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + " (" 
 			+ USERNAME_COLUMN + ", " 
 			+ EMAIL_COLUMN + ", "
 			+ PASSWORD_COLUMN + ", "
@@ -64,12 +63,17 @@ public class MySQLUserDAO implements IDao<User>{
 			+ LAST_LOGOUT_DATE_COLUMN + ", " 
 			+ LAST_LOGOUT_TIME_COLUMN + ", " 
 			+ IS_MODERATOR_COLUMN + ", " 
-			+ IS_ADMIN_COLUMN + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", user);	
+			+ IS_ADMINISTRATOR_COLUMN + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", user);
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_USER_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	
 	@Override
-	public User read(String search, SearchBy searchBy) throws DaoException {
+	public User read(String search, SearchBy searchBy) throws SQLException {
 		
 		// Declaration of variables
 		PreparedStatement stat = null;
@@ -87,11 +91,11 @@ public class MySQLUserDAO implements IDao<User>{
 			if(rs.next()) {
 				u = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException();
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			e.printStackTrace();
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -101,7 +105,7 @@ public class MySQLUserDAO implements IDao<User>{
 
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, User u) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, User u) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -115,30 +119,32 @@ public class MySQLUserDAO implements IDao<User>{
 			+ LAST_LOGOUT_DATE_COLUMN + " = ?, "
 			+ LAST_LOGOUT_TIME_COLUMN + " = ?, "
 			+ IS_MODERATOR_COLUMN + " = ?, "
-			+ IS_ADMIN_COLUMN + " = ? ";
+			+ IS_ADMINISTRATOR_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, u);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, u))
+			et = ErrorType.UPDATE_USER_ERROR;
 
 		return et;
 	}
 
 
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_USER_ERROR;
 		
 		return et;
 	}
 
 	
 	@Override
-	public ArrayList<User> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<User> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -156,7 +162,7 @@ public class MySQLUserDAO implements IDao<User>{
 			}	
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException();
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -168,9 +174,15 @@ public class MySQLUserDAO implements IDao<User>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, User u) throws DaoException {
-		
-		User actuarU = read(String.valueOf(u.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, User u) {
+		ErrorType et = ErrorType.NO_ERROR;
+		User actuarU = null;
+		try {
+			actuarU = read(String.valueOf(u.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -214,12 +226,12 @@ public class MySQLUserDAO implements IDao<User>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private User convert(ResultSet rs) throws SQLException{
@@ -234,8 +246,8 @@ public class MySQLUserDAO implements IDao<User>{
 		user.setSignUpTime(rs.getTime(SIGN_UP_TIME_COLUMN));
 		user.setLastLogoutDate(rs.getDate(LAST_LOGOUT_DATE_COLUMN));
 		user.setLastLogoutTime(rs.getTime(LAST_LOGOUT_TIME_COLUMN));
-		user.setAdmin(rs.getBoolean(IS_ADMIN_COLUMN));
 		user.setModerator(rs.getBoolean(IS_MODERATOR_COLUMN));
+		user.setAdmin(rs.getBoolean(IS_ADMINISTRATOR_COLUMN));
 		
 		return user;
 	}

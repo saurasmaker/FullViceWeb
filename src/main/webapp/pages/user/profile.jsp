@@ -7,38 +7,38 @@
 
 <%@ page import="java.util.ArrayList" %>
 
-<%@ page import="com.fullvicie.controllers.ActionsController,com.fullvicie.actions.crud.Update,com.fullvicie.actions.crud.Create,com.fullvicie.actions.crud.PseudoDelete,com.fullvicie.actions.user.ChangeUserPicture" %>
+<%@ page import="com.fullvicie.controllers.ActionsController,com.fullvicie.actions.crud.Update,com.fullvicie.actions.crud.Create, com.fullvicie.actions.crud.Delete, com.fullvicie.actions.user.ChangeUserPicture" %>
 <%@ page import="com.fullvicie.pojos.User,com.fullvicie.pojos.PersonalInformation,com.fullvicie.pojos.GamerProfile,com.fullvicie.pojos.VideoGame" %>
-<%@ page import="com.fullvicie.daos.mysql.MySQLUserDAO,com.fullvicie.daos.mysql.MySQLProfileDAO,com.fullvicie.daos.mysql.MySQLGamerProfileDAO,com.fullvicie.daos.mysql.MySQLVideoGameDAO" %>
+<%@ page import="com.fullvicie.daos.mysql.MySQLUserDAO, com.fullvicie.daos.mysql.MySQLPersonalInformationDAO, com.fullvicie.daos.mysql.MySQLGamerProfileDAO,com.fullvicie.daos.mysql.MySQLVideoGameDAO" %>
 <%@ page import="com.fullvicie.enums.*" %>
  
  <%
   // Profile JSP Logic.
 
-               	PersonalInformation profile = null;
-               	try {
-               		User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-               		user = new MySQLUserDAO().read(String.valueOf(user.getId()), SearchBy.ID);
-               		profile = new MySQLProfileDAO().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-               		if(profile==null){
-            		   	profile = new PersonalInformation();
-            		   	profile.setUserId(user.getId());
-            		   	(new MySQLProfileDAO()).create(profile);
-            		   	profile = new MySQLProfileDAO().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
-               		}
-               		
-               		session.setAttribute(User.ATR_USER_LOGGED_OBJ, user);
-               		session.setAttribute(PersonalInformation.ATTR_PROFILE_OBJ, profile);
-               		pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, new MySQLVideoGameDAO().listBy(SearchBy.NONE, null));
-               		session.setAttribute(GamerProfile.ATTR_GAMER_PROFILES_LIST, new MySQLGamerProfileDAO().listBy(SearchBy.USER_ID,String.valueOf(user.getId())));
-               		
-               	}
-               	catch(Exception e){
-               		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
-               	}
-               	
-               	if(profile==null)
-               		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
+	PersonalInformation profile = null;
+	try {
+		User user = (User)session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+		user = MySQLUserDAO.getInstance().read(String.valueOf(user.getId()), SearchBy.ID);
+		profile = MySQLPersonalInformationDAO.getInstance().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
+		if(profile==null){
+	 	profile = new PersonalInformation();
+	 	profile.setUserId(user.getId());
+	 	MySQLPersonalInformationDAO.getInstance().create(profile);
+	 	profile = MySQLPersonalInformationDAO.getInstance().read(String.valueOf(user.getId()), SearchBy.USER_ID); 
+		}
+		
+		session.setAttribute(User.ATR_USER_LOGGED_OBJ, user);
+		session.setAttribute(PersonalInformation.ATTR_PERSONAL_INFORMATION_OBJ, profile);
+		pageContext.setAttribute(VideoGame.ATTR_VIDEO_GAMES_LIST, MySQLVideoGameDAO.getInstance().listBy(null, SearchBy.NONE));
+		session.setAttribute(GamerProfile.ATTR_GAMER_PROFILES_LIST, MySQLGamerProfileDAO.getInstance().listBy(String.valueOf(user.getId()), SearchBy.USER_ID));
+		
+	}
+	catch(Exception e){
+		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR); 
+	}
+	
+	if(profile==null)
+		((HttpServletResponse)response).sendRedirect(request.getContextPath() + "/pages/error.jsp?ERROR_TYPE="+ErrorType.READ_PROFILE_ERROR);
   %>
  
  
@@ -94,32 +94,32 @@
 			        	<form id="update-user-form" class="form-group" action="<%=request.getContextPath()%>/ActionsController" method="POST" >
 				            <input id="update-profile-input-action" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=Update.PARAM_UPDATE_ACTION%>'/>
 							<input id="update-profile-input-object-class" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS%>" value="<%=PersonalInformation.class.getName()%>" />
-							<input id="update-profile-input-id" type = "hidden" class="form-control" name="<%=Profile.PARAM_PROFILE_ID %>" value="${ATTR_PROFILE_OBJ.id}"/>
-							<input id="update-profile-input-id" type = "hidden" class="form-control" name="<%=Profile.PARAM_PROFILE_USER_ID %>" value="${ATTR_PROFILE_OBJ.userId}"/>
+							<input id="update-profile-input-id" type = "hidden" class="form-control" name="<%= PersonalInformation.PARAM_PERSONAL_INFORMATION_ID %>" value="${ATTR_PROFILE_OBJ.id}"/>
+							<input id="update-profile-input-id" type = "hidden" class="form-control" name="<%= PersonalInformation.PARAM_PERSONAL_INFORMATION_USER_ID %>" value="${ATTR_PROFILE_OBJ.userId}"/>
 								
 							<label for="update-profile-input-name"><i class="fas fa-address-card"></i> Name: </label>
 							<span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="click here to change your name">
 							  <button class="btn btn-link text-white" type="button" onclick="enableNameInput()"><i class="fas fa-edit"></i></button>
 							</span>	
-							<p><input id="update-profile-input-name" type = "text" class="form-control" name="<%=Profile.PARAM_PROFILE_NAME %>" value="${ATTR_PROFILE_OBJ.name}" disabled /></p>
+							<p><input id="update-profile-input-name" type = "text" class="form-control" name="<%=PersonalInformation.PARAM_PERSONAL_INFORMATION_NAME %>" value="${ATTR_PROFILE_OBJ.name}" disabled /></p>
 				
 						    <label for="update-profile-input-surnames"><i class="fas fa-address-card"></i> Surnames: </label>
 						    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="click here to change your surnames">
 							  <button class="btn btn-link text-white" type="button" onclick="enableSurnamesInput()"><i class="fas fa-edit"></i></button>
 							</span>	
-							<p><input id="update-profile-input-surnames" type = "text" class="form-control" name = "<%= Profile.PARAM_PROFILE_SURNAMES %>" value="${ATTR_PROFILE_OBJ.surnames}" disabled /></p>
+							<p><input id="update-profile-input-surnames" type = "text" class="form-control" name = "<%= PersonalInformation.PARAM_PERSONAL_INFORMATION_SURNAMES %>" value="${ATTR_PROFILE_OBJ.surnames}" disabled /></p>
 			
 							<label for="update-profile-input-biography"><i class="fas fa-address-card"></i> Biography: </label>
 						    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="click here to change your biography">
 							  <button class="btn btn-link text-white" type="button" onclick="enableBiographyInput()"><i class="fas fa-edit"></i></button>
 							</span>	
-							<p><textarea id="update-profile-input-biography" class="form-control" name = "<%=PersonalInformation.PARAM_PROFILE_BIOGRAPHY%>" disabled>${ATTR_PROFILE_OBJ.biography}</textarea></p>
+							<p><textarea id="update-profile-input-biography" class="form-control" name = "<%=PersonalInformation.PARAM_PERSONAL_INFORMATION_BIOGRAPHY%>" disabled>${ATTR_PROFILE_OBJ.biography}</textarea></p>
 							
 							<label for="update-user-input-birthday"><i class="fas fa-birthday-cake"></i> Birthday: </label>
 						    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="click here to change your birthday date">
 							  <button class="btn btn-link text-white" type="button" onclick="enableBirthdayInput()"><i class="fas fa-edit"></i></button>
 							</span>	
-							<p><input id="update-profile-input-birthday" class="form-control" type="date" class="form-control" name="<%=Profile.PARAM_PROFILE_BIRTHDAY %>" value="${ATTR_PROFILE_OBJ.birthday}" disabled /></p>
+							<p><input id="update-profile-input-birthday" class="form-control" type="date" class="form-control" name="<%= PersonalInformation.PARAM_PERSONAL_INFORMATION_BIRTHDAY %>" value="${ATTR_PROFILE_OBJ.birthday}" disabled /></p>
 							<br/>
 							
 				            <p>
@@ -189,7 +189,7 @@
 									      		<td><a class="btn btn-primary" data-bs-toggle="collapse" href="#update-gamer-profile-collapse-${videoGame.id}" role="button" aria-expanded="false" aria-controls="update-gamer-profile-collapse-${videoGame.id}">Edit</a></td>
 									      		<td>
 									      			<form id = "remove-create-gamer-profile-form-${videoGame.id}" class = "form-group" action="<%=request.getContextPath()%>/ActionsController" method = "POST" onsubmit="return removeGamerProfile()" >
-											            <input id="remove-gamer-profile-input-action-${videoGame.id}" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=PseudoDelete.PARAM_PSEUDODELETE_ACTION%>'/>
+											            <input id="remove-gamer-profile-input-action-${videoGame.id}" type='hidden' name='<%=ActionsController.PARAM_SELECT_ACTION%>' value='<%=Delete.PARAM_DELETE_ACTION %>'/>
 														<input id="remove-gamer-profile-input-object-class-${videoGame.id}" type="hidden" name="<%=ActionsController.PARAM_OBJECT_CLASS%>" value="<%=GamerProfile.class.getName()%>" />
 							      						<input id="remove-gamer-profile-input-id-${videoGame.id}" type="hidden" name="<%=GamerProfile.PARAM_GAMER_PROFILE_ID%>" value="${gamerProfile.id}" />
 							      						<input id="remove-gamer-profile-input-confirm-${videoGame.id}" type="submit" class="btn btn-danger" value="Remove"/>

@@ -8,8 +8,8 @@
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
 
 <%
-User userSession = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
-	ArrayList<TeamInvitation> teamInvitations = new MySQLTeamInvitationDAO().listBy(SearchBy.RECEIVER_USER_ID, String.valueOf(userSession.getId()));
+	User userSession = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
+	ArrayList<TeamInvitation> teamInvitations = MySQLTeamInvitationDAO.getInstance().listBy(String.valueOf(userSession.getId()), SearchBy.RECEIVER_USER_ID);
 	
 	pageContext.setAttribute("teamInvitations", teamInvitations);
 %>
@@ -48,13 +48,13 @@ User userSession = (User) session.getAttribute(User.ATR_USER_LOGGED_OBJ);
 					  		<c:forEach var="teamInvitation" items="${teamInvitations}" varStatus="loop">
 					  			<%
 					  			//Setting necesary variables
-					  						  						  						  			TeamInvitation teamInvitation = (TeamInvitation)pageContext.getAttribute("teamInvitation");
-					  						  						  						  			User transmitter = new MySQLUserDAO().read(String.valueOf(teamInvitation.getTransmitterUserId()), SearchBy.ID);
-					  						  						  						  			Team team = new MySQLTeamDAO().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
-					  						  						  						  			VideoGame videoGame = new MySQLVideoGameDAO().read(String.valueOf(team.getVideoGameId()), SearchBy.ID);
-					  						  						  						  			pageContext.setAttribute("transmitter", transmitter);
-					  						  						  						  			pageContext.setAttribute("team", team);
-					  						  						  						  			pageContext.setAttribute("videoGame", videoGame);
+					  			TeamInvitation teamInvitation = (TeamInvitation)pageContext.getAttribute("teamInvitation");
+					  			User transmitter = MySQLUserDAO.getInstance().read(String.valueOf(teamInvitation.getTransmitterUserId()), SearchBy.ID);
+					  			Team team = MySQLTeamDAO.getInstance().read(String.valueOf(teamInvitation.getTeamId()), SearchBy.ID);
+					  			VideoGame videoGame = MySQLVideoGameDAO.getInstance().read(String.valueOf(team.getVideoGameId()), SearchBy.ID);
+					  			pageContext.setAttribute("transmitter", transmitter);
+					  			pageContext.setAttribute("team", team);
+					  			pageContext.setAttribute("videoGame", videoGame);
 					  			%>
 					  			<tr>
 						  			<th scope="col">${loop.index}</th>

@@ -1,9 +1,8 @@
 package com.fullvicie.actions.crud;
 
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,8 +18,21 @@ public class Create implements IAction{
 	
 	public static final String PARAM_CREATE_ACTION = "PARAM_CREATE_ACTION";
 	
+	
+	/*
+	 * Singleton
+	 */
+	private static Create instance;
+	private Create() {}
+	public static Create getInstance() {	
+		if(instance == null)
+			instance = new Create();	
+		return instance;
+	}
+	
+	
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		
 		User sessionUser = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
 		
@@ -44,7 +56,7 @@ public class Create implements IAction{
 			if(ptForum == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLForumDAO()).create(new Forum(request));
+			et = MySQLForumDAO.getInstance().create(new Forum(request));
 			url += "#forums-title";
 			
 			break;
@@ -78,7 +90,7 @@ public class Create implements IAction{
 			if(ptForumMessage == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLForumMessageDAO()).create(new ForumMessage(request));
+			et = MySQLForumMessageDAO.getInstance().create(new ForumMessage(request));
 			url += "#forum-messages-title";
 			
 			break;
@@ -95,7 +107,7 @@ public class Create implements IAction{
 			if(ptForumMessageLike == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLForumMessageLikeDAO()).create(new ForumMessageLike(request));
+			et = MySQLForumMessageLikeDAO.getInstance().create(new ForumMessageLike(request));
 			url += "#forum-message-likes-title";
 			
 			break;
@@ -112,7 +124,7 @@ public class Create implements IAction{
 			if(ptGamerProfile == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLGamerProfileDAO()).create(new GamerProfile(request));
+			et = MySQLGamerProfileDAO.getInstance().create(new GamerProfile(request));
 			url += "#gamer-profile-title";
 			
 			break;	
@@ -129,7 +141,7 @@ public class Create implements IAction{
 			if(ptPost == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLPostDAO()).create(new Post(request));
+			et = MySQLPostDAO.getInstance().create(new Post(request));
 			url += "#posts-title";
 			
 			break;
@@ -146,7 +158,7 @@ public class Create implements IAction{
 			if(ptPostCategory == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLPostCategoryDAO()).create(new PostCategory(request));
+			et = MySQLPostCategoryDAO.getInstance().create(new PostCategory(request));
 			url += "#post-categories-title";
 			
 			break;
@@ -163,7 +175,7 @@ public class Create implements IAction{
 			if(ptPostComment == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLPostCommentDAO()).create(new PostComment(request));
+			et = MySQLPostCommentDAO.getInstance().create(new PostComment(request));
 			url += "#post-comments-title";
 			break;
 			
@@ -179,7 +191,7 @@ public class Create implements IAction{
 			if(ptPostCommentLike == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLPostCommentLikeDAO()).create(new PostCommentLike(request));
+			et = MySQLPostCommentLikeDAO.getInstance().create(new PostCommentLike(request));
 			url += "#post-comment-likes-title";
 			break;
 		
@@ -195,7 +207,7 @@ public class Create implements IAction{
 			if(ptPostLike == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLPostLikeDAO()).create(new PostLike(request));
+			et = MySQLPostLikeDAO.getInstance().create(new PostLike(request));
 			url += "#post-likes-title";
 			
 			break;
@@ -212,7 +224,7 @@ public class Create implements IAction{
 			if(ptProfile == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLProfileDAO()).create(new PersonalInformation(request));
+			et = MySQLPersonalInformationDAO.getInstance().create(new PersonalInformation(request));
 			url += "#profiles-title";
 			
 			break;
@@ -229,7 +241,7 @@ public class Create implements IAction{
 			if(ptReport == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLReportDAO()).create(new Report(request));
+			et = MySQLReportDAO.getInstance().create(new Report(request));
 			url += "#reports-title";
 			
 			break;
@@ -245,20 +257,29 @@ public class Create implements IAction{
 			if(ptTeam == PermissionType.NO_PERMISSION)
 				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			boolean canCreateTeam = false;
 			Team newTeam = new Team(request);
-			ArrayList<GamerProfile> gamerProfilesUser = new MySQLGamerProfileDAO().listBy(SearchBy.USER_ID, String.valueOf(newTeam.getUserCreatorId()));
+			ArrayList<GamerProfile> gamerProfilesUser = null;
+			try {
+				gamerProfilesUser = MySQLGamerProfileDAO.getInstance().listBy(String.valueOf(newTeam.getUserCreatorId()), SearchBy.USER_ID);
+			} catch (SQLException e) {
+				et = ErrorType.LIST_GAMER_PROFILES_ERROR;
+				e.printStackTrace();
+			}
+			
+			if(et != ErrorType.NO_ERROR)
+				return request.getContextPath() + et;
+				
 			for(GamerProfile gp: gamerProfilesUser)
 				if(gp.getVideoGameId()==newTeam.getVideoGameId()) {
-					canCreateTeam = true;
+					et = ErrorType.MUST_HAVE_CORRESPONDING_GAMER_PROFILE;
 					newTeam.getGamerProfiles()[0] = gp.getId();
 					break;
 				}
 			
-			if(!canCreateTeam)
-				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.MUST_HAVE_CORRESPONDING_GAMER_PROFILE;
+			if(et != ErrorType.NO_ERROR)
+				return request.getContextPath() + et;
 			
-			et = (new MySQLTeamDAO()).create(newTeam);
+			et = MySQLTeamDAO.getInstance().create(newTeam);
 			url += "#teams-title";
 			
 			break;	
@@ -275,7 +296,7 @@ public class Create implements IAction{
 				if(ptTeamInvitation == PermissionType.NO_PERMISSION)
 						return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 				
-				et = (new MySQLTeamInvitationDAO()).create(new TeamInvitation(request));
+				et = MySQLTeamInvitationDAO.getInstance().create(new TeamInvitation(request));
 				url += "#team-invitations-title";
 				
 				break;
@@ -292,7 +313,7 @@ public class Create implements IAction{
 			if(ptUser == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLUserDAO()).create(new User(request));
+			et = MySQLUserDAO.getInstance().create(new User(request));
 			url += "#users-title";
 			
 			break;
@@ -310,7 +331,7 @@ public class Create implements IAction{
 			if(ptVideogame == PermissionType.NO_PERMISSION)
 					return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 			
-			et = (new MySQLVideoGameDAO()).create(new VideoGame(request));
+			et = MySQLVideoGameDAO.getInstance().create(new VideoGame(request));
 			url += "#videogames-title";
 			break;
 			
@@ -321,7 +342,7 @@ public class Create implements IAction{
 		
 		
 		if(et != ErrorType.NO_ERROR)
-			return request.getContextPath() + ActionsController.ERROR_PAGE + et;
+			return ActionsController.ERROR_PAGE + et;
 		else
 			return url;
 	}

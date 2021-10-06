@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.PostLike;
@@ -45,16 +44,21 @@ public class MySQLPostLikeDAO implements IDao<PostLike>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(PostLike pl) throws DaoException {
+	public ErrorType create(PostLike pl) {
 		
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
 				+ DISLIKE_COLUMN + ", "
 				+ POST_ID_COLUMN + ", "
 				+ USER_ID_COLUMN + ") VALUES (?, ?, ?)", pl);	
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_POST_LIKE_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public PostLike read(String search, SearchBy searchBy) throws DaoException {
+	public PostLike read(String search, SearchBy searchBy) throws SQLException {
 		// Declaration of variables
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -71,11 +75,11 @@ public class MySQLPostLikeDAO implements IDao<PostLike>{
 			if(rs.next()) {
 				pl = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException("");
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -84,7 +88,7 @@ public class MySQLPostLikeDAO implements IDao<PostLike>{
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, PostLike pl) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, PostLike pl) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -94,25 +98,27 @@ public class MySQLPostLikeDAO implements IDao<PostLike>{
 			+ USER_ID_COLUMN + " = ? ";
 		
 		updateQuery = IDao.appendMySqlSearchBy(updateQuery, searchBy, search);			
-		et = executeQueryWithParameters(updateQuery, pl);
+		if(ErrorType.ERROR == executeQueryWithParameters(updateQuery, pl))
+			et = ErrorType.UPDATE_POST_LIKE_ERROR;
 
 		return et;
 	}
 
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 		
 		ErrorType et = ErrorType.NO_ERROR;
 		
 		String deleteQuery = "DELETE FROM " + TABLE_NAME;
 		deleteQuery = IDao.appendMySqlSearchBy(deleteQuery, searchBy, search);
-		et = executeQueryWithParameters(deleteQuery, null);
+		if(ErrorType.ERROR == executeQueryWithParameters(deleteQuery, null))
+			et = ErrorType.DELETE_POST_LIKE_ERROR;
 		
 		return et;
 	}
 	
 	@Override
-	public ArrayList<PostLike> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<PostLike> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -129,8 +135,8 @@ public class MySQLPostLikeDAO implements IDao<PostLike>{
 				postLikesList.add(convert(rs));
 			}	
 			rs.close();
-		} catch (SQLException e)  {
-			throw new DaoException("", e);
+		} catch (Exception e)  {
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -142,9 +148,15 @@ public class MySQLPostLikeDAO implements IDao<PostLike>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, PostLike pl) throws DaoException {
-
-		PostLike actualPl = read(String.valueOf(pl.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, PostLike pl) {
+		ErrorType et = ErrorType.NO_ERROR;
+		PostLike actualPl = null;
+		try {
+			actualPl = read(String.valueOf(pl.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			et = ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -163,12 +175,12 @@ public class MySQLPostLikeDAO implements IDao<PostLike>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private PostLike convert(ResultSet rs) throws SQLException {

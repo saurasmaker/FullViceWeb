@@ -6,18 +6,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.fullvicie.enums.*;
-import com.fullvicie.exceptions.DaoException;
 
 public interface IDao <Pojo> {
 	
 	/*
 	 * CRUD Methods
 	 */	
-	public abstract ErrorType create(Pojo pojo) throws DaoException;
-	public abstract Pojo read(String search, SearchBy searchBy) throws DaoException;
-	public abstract ErrorType update(String search, SearchBy searchBy, Pojo pojo) throws DaoException;
-	public abstract ErrorType delete(String search, SearchBy searchBy) throws DaoException;
-	public abstract ArrayList<Pojo> listBy(String search, SearchBy searchBy) throws DaoException;
+	public abstract ErrorType create(Pojo pojo);
+	public abstract Pojo read(String search, SearchBy searchBy) throws SQLException;
+	public abstract ErrorType update(String search, SearchBy searchBy, Pojo pojo);
+	public abstract ErrorType delete(String search, SearchBy searchBy);
+	public abstract ArrayList<Pojo> listBy(String search, SearchBy searchBy) throws SQLException;
 
 	
 	/*
@@ -79,7 +78,7 @@ public interface IDao <Pojo> {
 			try {
 				rs.close();
 			} catch(SQLException ex) {
-				new DaoException("", ex);
+				ex.getStackTrace();
 			}
 		}
 		
@@ -87,7 +86,7 @@ public interface IDao <Pojo> {
 			try {
 				stat.close();
 			} catch(SQLException ex) {
-				new DaoException("", ex);
+				ex.getStackTrace();
 			}
 		}
 	}

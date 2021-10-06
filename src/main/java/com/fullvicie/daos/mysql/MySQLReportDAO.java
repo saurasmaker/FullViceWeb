@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import com.fullvicie.database.connections.MySqlConnection;
 import com.fullvicie.enums.ErrorType;
 import com.fullvicie.enums.SearchBy;
-import com.fullvicie.exceptions.DaoException;
 import com.fullvicie.factories.DataBaseConnectionFactory;
 import com.fullvicie.interfaces.IDao;
 import com.fullvicie.pojos.Report;
@@ -47,9 +46,9 @@ public class MySQLReportDAO implements IDao<Report>{
 	 * Methods
 	 */
 	@Override
-	public ErrorType create(Report r) throws DaoException {
+	public ErrorType create(Report r) {
 
-		return executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
+		ErrorType et = executeQueryWithParameters("INSERT INTO " + TABLE_NAME + "("
 			+ DESCRIPTION_COLUMN + ", "
 			+ REPORT_DATE_COLUMN + ", "
 			+ REPORT_TIME_COLUMN + ", "
@@ -59,10 +58,15 @@ public class MySQLReportDAO implements IDao<Report>{
 			+ MODERATOR_ID_COLUMN + ", "
 			+ ACCUSED_ID_COLUMN + ", "
 			+ WHISTLEBLOWER_ID_COLUMN + ") VALUES (?, ?)", r);	
+		
+		if(et == ErrorType.ERROR)
+			return ErrorType.CREATE_REPORT_ERROR;
+		
+		return ErrorType.NO_ERROR;
 	}
 
 	@Override
-	public Report read(String search, SearchBy searchBy) throws DaoException {
+	public Report read(String search, SearchBy searchBy) throws SQLException {
 		// Declaration of variables
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -79,11 +83,11 @@ public class MySQLReportDAO implements IDao<Report>{
 			if(rs.next()) {
 				r = convert(rs);
 			} else { 
-				throw new DaoException("");
+				throw new SQLException("");
 			} 
 			rs.close();
 		} catch (SQLException e)  {
-			throw new DaoException("", e);
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -92,7 +96,7 @@ public class MySQLReportDAO implements IDao<Report>{
 	}
 
 	@Override
-	public ErrorType update(String search, SearchBy searchBy, Report r) throws DaoException {
+	public ErrorType update(String search, SearchBy searchBy, Report r) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -114,7 +118,7 @@ public class MySQLReportDAO implements IDao<Report>{
 	}
 
 	@Override
-	public ErrorType delete(String search, SearchBy searchBy) throws DaoException {
+	public ErrorType delete(String search, SearchBy searchBy) {
 
 		ErrorType et = ErrorType.NO_ERROR;
 		
@@ -126,7 +130,7 @@ public class MySQLReportDAO implements IDao<Report>{
 	}
 	
 	@Override
-	public ArrayList<Report> listBy(String search, SearchBy searchBy) throws DaoException {
+	public ArrayList<Report> listBy(String search, SearchBy searchBy) throws SQLException {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -143,8 +147,8 @@ public class MySQLReportDAO implements IDao<Report>{
 				reportsList.add(convert(rs));
 			}	
 			rs.close();
-		} catch (SQLException e)  {
-			throw new DaoException("", e);
+		} catch (Exception e)  {
+			throw new SQLException("", e);
 		} finally {
 			IDao.closeMySql(rs, stat);
 		}
@@ -156,9 +160,15 @@ public class MySQLReportDAO implements IDao<Report>{
 	/*
 	 * Tool Methods
 	 */
-	private ErrorType executeQueryWithParameters(String query, Report r) throws DaoException {
-		
-		Report actualR = read(String.valueOf(r.getId()), SearchBy.ID);
+	private ErrorType executeQueryWithParameters(String query, Report r) {
+		ErrorType et = ErrorType.NO_ERROR;
+		Report actualR = null;
+		try {
+			actualR = read(String.valueOf(r.getId()), SearchBy.ID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return ErrorType.ERROR;
+		}
 		int pos = 1;
 		
 		PreparedStatement stat = null;
@@ -203,12 +213,12 @@ public class MySQLReportDAO implements IDao<Report>{
 			}
 			stat.execute();
 		} catch (SQLException e) {
-			throw new DaoException("");
+			et = ErrorType.ERROR;
 		} finally {
 			IDao.closeMySql(null, stat);
 		}
 		
-		return ErrorType.NO_ERROR;
+		return et;
 	}
 	
 	private Report convert(ResultSet rs) throws SQLException {

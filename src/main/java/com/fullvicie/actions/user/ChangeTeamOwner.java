@@ -1,8 +1,7 @@
 package com.fullvicie.actions.user;
 
-import java.io.IOException;
+import java.sql.SQLException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,30 +19,48 @@ public class ChangeTeamOwner implements IAction{
 
 	public static final String PARAM_CHANGE_TEAM_OWNER_ACTION = "PARAM_CHANGE_TEAM_OWNER_ACTION";
 	
+	
+	/*
+	 * Singleton
+	 */
+	private static ChangeTeamOwner instance;
+	private ChangeTeamOwner() {}
+	public static ChangeTeamOwner getInstance() {	
+		if(instance == null)
+			instance = new ChangeTeamOwner();	
+		return instance;
+	}
+	
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-		try {
-			User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
-			if(u==null)
-				return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
-			
-			GamerProfile gamerProfile = new MySQLGamerProfileDAO().read(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID);
-			Team team = new MySQLTeamDAO().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
-			
-			team.setUserOwnerId(gamerProfile.getUserId());
-			
-			ErrorType et = new MySQLTeamDAO().update(String.valueOf(team.getId()), SearchBy.ID, team);
-			
-			if(et == ErrorType.NO_ERROR)
-				return request.getHeader("referer");
-			
-			return request.getContextPath() + ActionsController.ERROR_PAGE + et;
-			
-		}catch(Exception t) { }
+		User u = (User) request.getSession().getAttribute(User.ATR_USER_LOGGED_OBJ);
+		if(u==null)
+			return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.ACCESS_DENIED_ERROR;
 		
-		return request.getContextPath() + ActionsController.ERROR_PAGE + ErrorType.CHANGE_TEAM_OWNER_ERROR;
+		GamerProfile gamerProfile = null;
+		try {
+			gamerProfile = MySQLGamerProfileDAO.getInstance().read(request.getParameter(GamerProfile.PARAM_GAMER_PROFILE_ID), SearchBy.ID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.READ_GAMER_PROFILE_ERROR;
+		}
+		Team team = null;
+		try {
+			team = MySQLTeamDAO.getInstance().read(request.getParameter(Team.PARAM_TEAM_ID), SearchBy.ID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return ActionsController.ERROR_PAGE + ErrorType.READ_TEAM_ERROR;
+		}
+		
+		team.setUserOwnerId(gamerProfile.getUserId());
+		
+		ErrorType et = MySQLTeamDAO.getInstance().update(String.valueOf(team.getId()), SearchBy.ID, team);
+		
+		if(et == ErrorType.NO_ERROR)
+			return request.getHeader("referer");
+		
+		return ActionsController.ERROR_PAGE + et;
 	}
 
 }

@@ -54,7 +54,7 @@ public class TeamInvitation implements IPojo {
 		try{this.receiverUserId = Integer.parseInt(request.getParameter(PARAM_TEAM_INVITATION_RECEIVER_USER_ID));}
 		catch(Exception t) {
 			try {
-				User receiverUser = new MySQLUserDAO().read(request.getParameter(PARAM_TEAM_INVITATION_RECEIVER_USER_NAME), SearchBy.USERNAME);
+				User receiverUser = MySQLUserDAO.getInstance().read(request.getParameter(PARAM_TEAM_INVITATION_RECEIVER_USER_NAME), SearchBy.USERNAME);
 				this.receiverUserId = receiverUser.getId();
 			}catch(Exception e) {this.receiverUserId = -1;}
 		}
